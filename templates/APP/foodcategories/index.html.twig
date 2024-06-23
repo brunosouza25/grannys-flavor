@@ -1,0 +1,76 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+
+{% block body %}
+<div class="main-wrap catagories-wide mb-xxl">
+    <div class="section-p-t">
+        <div class="catagories-wrap">
+            <!-- Catagories Filter Start -->
+            <div class="nav" id="catagories-tab-sk" role="tablist" aria-orientation="vertical">
+                {% for category in categories %}
+                {% if loop.first %}
+                <div class="nav-link" id="catagories{{category.id}}-tab-sk" data-bs-toggle="pill" data-bs-target="#catagories{{category.id}}-sk" role="tab" aria-controls="catagories{{category.id}}-sk" aria-selected="true" >
+                    {% else %}
+                    <div class="nav-link" id="catagories{{category.id}}-tab-sk" data-bs-toggle="pill" data-bs-target="#catagories{{category.id}}-sk" role="tab" aria-controls="catagories{{category.id}}-sk" aria-selected="false" >
+                        {% endif %}
+                        <div class="content">
+                            <div class="img"><img src="{{ bo_url }}{{ category.image }}"> </div>
+                            <span class="font-xs title-color sk-1">{{category.name}}</span>
+                            <span class="font-xs title-color sk-2"></span>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+            </div>
+            <!-- Catagories Filter End -->
+
+            <!-- Catagories Content Start -->
+            <div class="tab-content ratio2_1" id="catagories-tab-skContent" style=" position: sticky;top: 10px;">
+                {% for categoryP in categories %}
+                {% if loop.first %}
+                <div class="tab-pane fade show active" id="catagories{{categoryP.id}}-sk" role="tabpanel" aria-labelledby="catagories{{categoryP.id}}-sk">
+                    {% else %}
+                    <div class="tab-pane fade" id="catagories{{categoryP.id}}-sk" role="tabpanel" aria-labelledby="catagories{{categoryP.id}}-sk">
+                        {% endif %}
+                        {% for slide in sliders %}
+                            {% if slide.id == categoryP.id %}
+                                <div class="banner-box">
+                                    <img src="{{ bo_url }}{{ slide.image }}" alt="banner" class="bg-img" />
+                                </div>
+
+                            {% endif %}
+                        {% endfor %}
+                    <div class="row g-3">
+                        {% for item in items %}
+                        {% if categoryP.id == item.idcategory %}
+                        <!-- Staples Box Start -->
+                        <div class="col-4">
+                            <a href="{{ path('app/app_product_detail', {'reference': item.id}) }}">
+                                <div class="staples-box">
+                                    <div>
+                                        {% if item.image|length > 0 %}
+                                            <img class="img-fluid item-list-img" src="{{bo_url}}{{ item.image }}" alt="{{item.name}}" />
+                                        {% else %}
+                                            <img class="img-fluid item-list-img" src="{{ asset('images/logo.png') }}" alt="{{item.name}}" />
+
+                                        {% endif %}
+                                    </div>
+                                    <h4>{{ item.name }}</h4>
+                                </div>
+                            </a>
+                        </div>
+
+                            <!-- Staples Box End -->
+                        {% endif %}
+                        <!-- Staples Box End -->
+                        {% endfor %}
+                    </div>
+                </div>
+                    {% endfor %}
+            </div>
+            <!-- Catagories Content End -->
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,254 @@
+{% extends 'costumer_profile/base-costumer.html.twig' %}
+
+{#{% block title %}Admin Dashboard{% endblock %}#}
+
+{% block body %}
+
+{#    <div class="row">#}
+{#        <div class="col-xl-3 col-lg-3 col-sm-6">#}
+{#            <div class="card overflow-hidden">#}
+{#                <div class="card-header media border-0 pb-0">#}
+{#                    <div class="media-body">#}
+{#                        <h2 class="text-black">{{ productsQuantity }}</h2>#}
+{#                        <p class="mb-0 text-black">Produtos</p>#}
+{#                    </div>#}
+{#                    <svg width="36" height="28" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">#}
+{#                        <span class="icon-dash-card mdi mdi-coffee"></span>#}
+{#                    </svg>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="col-xl-3 col-lg-3 col-sm-6">#}
+{#            <div class="card overflow-hidden">#}
+{#                <div class="card-header media border-0 pb-0">#}
+{#                    <div class="media-body">#}
+{#                        <h2 class="text-black">{{ ordersQuantity }}</h2>#}
+{#                        <p class="mb-0 text-black">Pedidos</p>#}
+{#                    </div>#}
+{#                    <svg width="32" height="31" viewBox="0 0 32 31" fill="none" xmlns="http://www.w3.org/2000/svg">#}
+{#                        <span class="icon-dash-card mdi mdi-newspaper-variant-outline"></span>#}
+{#                    </svg>#}
+{#                </div>#}
+
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+    Dashboard Recent Orders
+    <div class="row">
+        <div class="col-xl-12 col-xxl-12 col-lg-12 col-sm-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div>
+                        <h4 class="card-title mb-2">Encomendas mais Recentes</h4>
+                    </div>
+
+                </div>
+                <div class="card-body  p-0">
+                    <div class="table-responsive ">
+                        <table id="tableOrders" class="table">
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th>Nome</th>
+                                    <th>Nova Mensagem</th>
+                                    <th>Pagamento</th>
+                                    <th>Endereço</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders">
+
+                            </tbody>
+                        </table>
+{#                        <div class="card-footer border-0 pt-0 text-center">#}
+{#                            <a href="ecom-product-list.html" class="btn-link">View More &gt;&gt;</a>#}
+{#                        </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        getOrders();
+
+        var limit = 10;
+
+        /**
+         * Função para buscar produtos que estão no carrinho
+         */
+        function getOrders() {
+            // let products = JSON.parse(localStorage.getItem('products')) == null ? [] : JSON.parse(localStorage.getItem('products'));
+
+            const htmlOrders = document.getElementById('orders');
+            htmlOrders.innerHTML = '';
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('get_costumer_orders') }}",
+                data: {limit: limit},
+                success: function (json) {
+                    // $('#itemsQuantity').text(`Preço (${json['products'].length} Itens)`)
+                    // $('#productsTotal').text(`${json['total']}€`)
+                    // $('#totalFee').text(`10€`)
+                    // $('#total').text(`${json['total']}€`)
+
+                    for (const order of json['orders']) {
+                        var status = '';
+                        var payment = '';
+
+                        if (order.status == 0) {
+                            status = '<a class="btn bgl-danger ext-danger" href="javascript:;">Cancelado</a>';
+                        } else if(order.status == 1) {
+                            status = '<a class="btn btn-dark ttext-light" href="javascript:;">Pendente</a>';
+                        } else if(order.status == 2) {
+                            status = '<a class="btn bgl-secondary text-secondary" href="javascript:;">A preparar</a>';
+                        } else if(order.status == 3) {
+                            status = '<a class="btn bgl-warning text-warning" href="javascript:;">Enviado</a>';
+                        } else if(order.status == 4) {
+                            status = '<a class="btn bgl-success text-success" href="javascript:;">Entregue</a>';
+                        }
+
+                        if(order.paymentStatus.status == 1) {
+                            payment = '<a class="btn bgl-success text-success" href="javascript:;">PAGO</a>';
+                        } else {
+                            payment =  '<a class="btn bgl-danger ext-danger" href="javascript:;">NÃO PAGO</a>';
+                        }
+
+
+                        htmlOrders.innerHTML += `
+                            <tr class="order" onclick="openOrder(${ order.id })" data-id="${ order.id }" style="cursor: pointer">
+                                <td>
+                                    <div class="media align-items-center">
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-2"><a class="text-black" href="#"><span class="mb-0 " style="color: #1c346c">${ order.id }</span></a></h5>
+
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <h5 class="mb-2 text-black wspace-no">${ order.costumer }</h5>
+                                </td>
+
+                                <td>
+                                    <h5 class="mb-2 text-black wspace-no">${ order.admin_comment ? '<a class="btn bgl-success text-warning" href="javascript:;">Nova mensagem</a>' : '<a class="btn bgl-secondary text-secondary" href="javascript:;">Não tens novas mensagens</a>' }</h5>
+                                </td>
+
+                                <td>
+                                    ${payment}
+                                </td>
+                                <td>
+                                   <span>${order.deliveryAddress.street +'-'+  order.deliveryAddress.city +'-'+ order.deliveryAddress.postalcode}</span>
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <h4 class="mb-0 me-3 fs-20 text-black d-inline-block">${order.total}</h4>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        ${status}
+                                    </div>
+                                </td>
+                            </tr>`
+
+                    }
+                    var table = $('#tableOrders').DataTable();
+                    table.destroy();
+                    $('#tableOrders').DataTable({
+                        "order": [[0, "desc"]] // Ordenar pela primeira coluna (índice 0) em ordem ascendente
+                    });
+
+
+
+                    {#$('.order').click(function () {#}
+                    {#    var orderId = $(this).attr('data-id');#}
+                    {#    $.ajax({#}
+                    {#        type: "POST",#}
+                    {#        url: '{{ path('get_order') }}',#}
+                    {#        data: ({orderId: orderId}),#}
+                    {#        success: function (data) {#}
+                    {#            $.confirm({#}
+                    {#                async: true,#}
+                    {#                title: `Pedido #${orderId}`,#}
+                    {#                columnClass: 'col-md-12',#}
+                    {#                content: data,#}
+                    {#                buttons: {#}
+                    {#                    fechar: function () {#}
+                    {#                    }#}
+                    {#                }#}
+                    {#            });#}
+                    {#        }#}
+                    {#    })#}
+
+                    {#})#}
+                    
+
+                    {#$('.removeProduct').click(function () {#}
+                    {#    const productCartId = $(this).data('id');#}
+                    {#    $.confirm({#}
+                    {#        title: 'Apagar!',#}
+                    {#        content: `Apagar este produto do carrinho?`,#}
+                    {#        buttons: {#}
+                    {#            confirm: function () {#}
+                    {#                $.ajax({#}
+                    {#                    url: `{{ path('delete_product_cart') }}`,#}
+                    {#                    type: 'POST',#}
+                    {#                    async: false,#}
+                    {#                    data: ({productCartId:productCartId}),#}
+                    {#                    success: function () {#}
+                    {#                        getProducts()#}
+                    {#                        $.alert({#}
+                    {#                            title: 'Sucesso!',#}
+                    {#                            content: 'Apagado com sucesso',#}
+                    {#                        });#}
+                    {#                    },#}
+                    {#                    error: function (e) {#}
+                    {#                        $.alert({#}
+                    {#                            title: 'Alert!',#}
+                    {#                            content: 'Error!',#}
+                    {#                        });#}
+                    {#                    }#}
+                    {#                });#}
+                    {#            },#}
+                    {#            Cancelar: function () {#}
+
+                    {#            }#}
+
+                    {#        }#}
+                    {#    });#}
+
+                    {#});#}
+
+                }, error: function (e) {
+                    console.log(e)
+                }
+            });
+        }
+        function openOrder(orderId) {
+            $.ajax({
+                type: "POST",
+                url: '{{ path('get_order_user') }}',
+                data: ({orderId: orderId}),
+                success: function (data) {
+                    $.confirm({
+                        async: true,
+                        title: `Pedido #${orderId}`,
+                        columnClass: 'col-md-12',
+                        content: data,
+                        buttons: {
+                            fechar: function () {
+                                getOrders();
+                            }
+                        }
+                    });
+                }
+            })
+        }
+    </script>
+
+{% endblock %}

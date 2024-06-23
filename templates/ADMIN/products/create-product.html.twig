@@ -1,0 +1,212 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+
+{% block body %}
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="row">
+                    <form id="form_new_product" class="row">
+
+                        <div class="col-3 ">
+                            <!-- Tab panes -->
+
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade show active" id="first">
+                                    <img class="img-fluid product-bo-image" src="/images/profile/noimagelist.png"
+                                         alt="no-photo">
+                                </div>
+                                <div class="input-group custom_file_input mb-3">
+                                    <div class="form-file">
+                                        <input type="file" name="files[]"
+                                               class="form-file-input form-control" value="Upload"
+                                               multiple id="image" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Tab slider End-->
+                        <div class="col-xl-9 col-lg-6  col-md-6 col-xxl-7 col-sm-12">
+                            <div class="product-detail-content">
+                                <!--Product details-->
+                                <div class="new-arrival-content pr">
+                                    <label for="productName">Nome do produto</label>
+                                    <br>
+                                    <input type="text" name="productName" value="" required>
+                                    <br>
+                                    <br>
+                                    <div class="col-3">
+                                        <label for="productPrice">Preço do produto</label>
+
+                                        <input name="productPrice" id="productPrice" class="col-9 value" step="any"
+                                               type="number"
+                                               value="0" required> €
+                                    </div>
+                                    <br>
+                                    {#                                    <div class="col-3"> #}
+                                    {#                                        <label for="productPrice">IVA %</label> #}
+
+                                    {#                                        <input name="productIva" id="productIva" class="col-9 value" step="any" type="number" #}
+                                    {#                                               value="0"> % #}
+                                    {#                                    </div> #}
+                                    <br>
+                                    {#                                    <div class="col-3"> #}
+                                    {#                                        <label for="productPriceIva">Valor final com IVA</label> #}
+
+                                    {#                                        <input name="productPriceIva" id="productPriceIva" class="col-9" step="any" type="number" #}
+                                    {#                                               value="" disabled> € #}
+                                    {#                                    </div> #}
+                                    <br>
+
+                                    <div class="col-3">
+                                        <label for="productCode">Código do produto</label>
+
+                                        <input name="productCode" class="col-9" type="text"
+                                               value="">
+                                    </div>
+
+                                    <div class="col-3 mt-3">
+                                        <span class="col-12">ZoneSoft Código</span>
+                                        <select class="select col-12" id="zoneSoftCodes" theme="google" placeholder="Código Zonesoft" name="zonesoftcode" data-search="true">
+
+                                        </select>
+                                    </div>
+
+                                    <br>
+                                    {#                                    <p>Estado: <span class="item"> #}
+
+                                    {#                                                <b data-id-product="" #}
+                                    {#                                                   class="state-change alert-success p-2">Ativo</b> #}
+                                    {#                                        </span></p> #}
+                                    <hr>
+
+                                    <label>Descrição do Produto</label>
+                                    <textarea rows="6" class="form-control"
+                                              name="productDescription"></textarea>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-4">
+                            <label>Categoria</label><br>
+                            <select class="select" theme="google" placeholder="Código Zonesoft" name="categoryId"
+                                    data-search="true" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}
+                                        - {{ category.id }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label>Marca</label><br>
+                            <select class="select" theme="google" placeholder="Código Zonesoft" name="brandId"
+                                    data-search="true">
+                                {% for brand in brands %}
+                                    <option value="{{ brand.id }}">{{ brand.name }} - {{ brand.id }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-sm">Criar</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+
+        $('#form_new_product').submit(function (e) {
+            e.preventDefault();
+
+            var fd = new FormData(this);
+            const file = [];
+
+            Array.from(document.getElementById('image').files).forEach(image => {
+                file.push(image);
+            });
+
+            // var file = $('#image').prop('files');
+            const productId = $('#productId').val();
+            fd.append('file', file);
+
+            fd.append('productId', productId);
+
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: false,
+                url: "{{ path('admin/create_new_product') }}",
+                data: fd, // serializes the form's elements.
+                success: function (data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function () {
+                        window.location.href =  'products';
+                    }, 1000);
+
+                }
+            });
+        });
+
+        function calculateIva() {
+            const productValue = $('#productPrice').val();
+            const iva = $('#productIva').val();
+
+            const productPrice = productValue * (iva / 100 + 1);
+
+            $('#productPriceIva').val(productPrice.toFixed(2));
+        }
+
+        $(".value").change(function () {
+            calculateIva();
+
+        });
+        loadZonesoftCodes();
+
+        function loadZonesoftCodes() {
+
+
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/load_zone_soft_codes') }}',
+                // data: ({productId:productId}),
+                success: function(zoneSoftCodes)
+                {
+                    var htmlSelect = document.getElementById('zoneSoftCodes');
+
+                    htmlSelect.innerHTML += `<option value="-1"disabled>Selecione</option>`
+
+                    for (const zoneSoftCode of zoneSoftCodes) {
+
+                        var code = zoneSoftCode.zone_soft_code;
+                        htmlSelect.innerHTML += `<option value="${code}">${code}</option>
+                        `
+                    }
+
+                }
+            })
+        }
+    </script>
+
+{% endblock %}

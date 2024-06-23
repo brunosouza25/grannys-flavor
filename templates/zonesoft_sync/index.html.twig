@@ -1,0 +1,173 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}Admin - Zonesoft Sync{% endblock %}
+
+{% block body %}
+    <div class="row page-titles mx-0">
+        <div class="col-sm-6">
+            <div class="welcome-text">
+                <h4>Dados do Zonesoft</h4>
+                <span>Dados para sincronizar os Produtos, Familia, grupo de opções do ZSBMS Zonesoft</span>
+            </div>
+        </div>
+        <div class="col-sm-6  justify-content-sm-end mt-2 mt-sm-0 d-flex">
+            <div class="loding-bars">
+                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+            <div class="sucess-sinc">
+                <img src="{{ asset('images/svg/done.svg') }}">
+            </div>
+            <button class="syncbtn btn btn-primary btn-sm">Sincronizar</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-6 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Dados Zonesoft</span>
+                </div>
+                <div class="card-body">
+                    <div class="basic-form">
+                        <form id="zonesoftData">
+                            <div class="mb-3">
+                                <label class="form-label">NIF</label>
+                                <input type="text" class="form-control input-default "  name="nif" placeholder="NIF" value="{{ zonesoftdata.nif }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-control input-default " name="username" placeholder="Username" value="{{ zonesoftdata.username }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="text" class="form-control input-default " name="password" placeholder="Password" value="{{ zonesoftdata.password }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Loja</label>
+                                <input type="text" class="form-control input-default " name="loja" placeholder="Loja" value="{{ zonesoftdata.store }}">
+                            </div>
+                            <div class="mb-3">
+                            <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Dados API ordering </span>
+                </div>
+                <div class="card-body">
+                    <div class="basic-form">
+                        <form id="zonesoftAPI">
+                            <div class="mb-3">
+                                <label class="form-label">APP SECRET</label>
+                                <input type="text" class="form-control input-default " name="app_secret" placeholder="APP SECRET" value="{{ zonesoftapi.appsecret }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">APP KEY</label>
+                                <input type="text" class="form-control input-default " name="app_key" placeholder="APP KEY" value="{{ zonesoftapi.appkey }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">STORE ID</label>
+                                <input type="text" class="form-control input-default " name="store_id" placeholder="STORE ID" value="{{ zonesoftapi.storeid }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">TOKEN</label>
+                                <input type="text" class="form-control input-default " name="token" placeholder="TOKEN" value="{{ zonesoftapi.token }}">
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+    $('.syncbtn').click(function () {
+
+        $('.syncbtn').slideUp(function () {
+            $('.loding-bars').slideDown();
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '{{ path('admin/zonesoft_sync_data') }}',
+            data: '',
+            success: function(data)
+            {
+                $('.loding-bars').slideUp(function () {
+                    $('.sucess-sinc').slideDown();
+                });
+            // setTimeout(function() {
+            //     location.reload();
+            // }, 2000);
+            }
+        });
+
+    });
+
+
+    $("#zonesoftData").submit(function(form_subscribe) {
+        form_subscribe.preventDefault(); // avoid to execute the actual submit of the form.
+        var form = $(this);
+
+        $.ajax({
+            type: "POST",
+            url: '{{ path('admin/zonesoft_data_save') }}',
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Dados Atualizados',
+                    showConfirmButton: false,
+                    timer: 2500
+                });
+
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+
+            }
+        });
+    });
+
+    $("#zonesoftAPI").submit(function(form_subscribe) {
+        form_subscribe.preventDefault(); // avoid to execute the actual submit of the form.
+        var form = $(this);
+
+        $.ajax({
+            type: "POST",
+            url: '{{ path('admin/zonesoft_data_save_api') }}',
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Dados Atualizados',
+                    showConfirmButton: false,
+                    timer: 2500
+                });
+
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+
+            }
+        });
+    });
+
+</script>
+{% endblock %}
+

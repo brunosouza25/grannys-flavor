@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <div class="mad-breadcrumb with-bg-image" data-bg-image-src="{{ banner.path }}">
+        <div class="container">
+            <h1 class="mad-page-title">Galeria</h1>
+            <nav class="mad-breadcrumb-path"><span><a href="{{ path('app_default') }}">Home</a></span> / <span>Galeria</span>
+            </nav>
+        </div>
+    </div>
+    <!--================ End of Breadcrumb ================-->
+    <div class="mad-content">
+        <div class="container wide">
+
+                <div class="row">
+                {% for image in images %}
+                    <div class="col-lg-3">
+                    <div class="mad-gallery-item">
+{#                        <a href="front/images/comida.jpg" data-fancybox="gallery"><img class="image-gallery-front" src="front/images/comida.jpg" alt="{{ image.title }}"></a>#}
+                        <a href="{{bo_url}}{{ image.image }}" data-fancybox="gallery"><img class="image-gallery-front" src="{{bo_url}}{{ image.image }}" alt="{{ image.title }}"></a>
+                    </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="mad-section">
+        <div class="mad-banners">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-6">
+                        <div class="mad-banner with-icon">
+                            <i class="mad-banner-icon"><img src="yummi_svg_icons/delivery3.svg" alt="" class="svg"></i>
+                            <div class="mad-banner-content">
+                                <h4 class="mad-page-title"><span>Entrega Rápida e</span>
+                                    Confiável</h4>
+                                <a href="#" class="mad-read-more small-size order-frame-btn">Encomendar Agora</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6">
+                        <div class="mad-banner with-icon">
+                            <i class="mad-banner-icon"><img src="yummi_svg_icons/24_7_preorder.svg" alt="" class="svg"></i>
+                            <div class="mad-banner-content">
+                                <h4 class="mad-page-title"><span>24/7 Pré-encomenda </span>
+                                    Disponível</h4>
+                                <a href="#" class="mad-read-more small-size order-frame-btn">Encomendar Agora</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-6">
+                        <div class="mad-banner with-icon">
+                            <i class="mad-banner-icon"><img src="yummi_svg_icons/rewards_program.svg" alt="" class="svg"></i>
+                            <div class="mad-banner-content">
+                                <h4 class="mad-page-title"><span>Junte-se a Nossa<br></span>
+                                    Equipa</h4>
+                                <a href="/contacto" class="mad-read-more small-size">Contactar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

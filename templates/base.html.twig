@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title-base"></title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+    {% block stylesheets %}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <link href="{{ asset('front/css/josefin.css') }}" rel="stylesheet" onload="this.media='all'">
+        <link href="{{ asset('front/css/materialicons.css') }}" rel="stylesheet" onload="this.media='all'">
+
+        <!--================ Vendor CSS ================-->
+        <link rel="stylesheet" href="{{ asset('front/css/fontawesome-all.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('front/css/linearicons.css') }}">
+        <link rel="stylesheet" href="{{ asset('front/vendors/owl-carousel/assets/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('front/vendors/arcticmodal/jquery.arcticmodal-0.3.css') }}">
+        <link rel="stylesheet" href="{{ asset('front/vendors/revolution/css/settings.css') }}">
+        <link rel="stylesheet" href="{{ asset('front/vendors/revolution/css/layers.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('front/vendors/revolution/css/navigation.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('front/css/animate.min.css') }}">
+
+        <!--================ Theme CSS ================-->
+{#        <link rel="stylesheet" href="{{ asset('front/css/style.css') }}">#}
+{#        <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">A#}
+
+{#        <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}">A#}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/fontawesome.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
+
+        <link rel="stylesheet" href="{{ asset('css/media.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" integrity="sha512-aD9ophpFQ61nFZP6hXYu4Q/b/USW7rpLCQLX6Bi0WJHXNO7Js/fUENpBQf/+P4NtpzNX0jSgR5zVvPOJp+W2Kg==" crossorigin="anonymous" referrerpolicy="no-referrer" />        <!--================ Vendor JS ================-->
+
+    {% endblock %}
+
+
+</head>
+<body>
+
+{#<div class="ordering-frame">#}
+{#    <button class="close-frame-showing">Fechar</button>#}
+{#    <iframe class="frame-showing" src="{{ path('app_ordering') }}"></iframe>#}
+{#</div>#}
+
+{#<div class="mad-preloader"></div>#}
+{#<div id="mad-page-wrapper" class="mad-page-wrapper">#}
+    <!--================ End of Search Modal ================-->
+
+    {% include 'front-header.html.twig' %}
+    {% block body %}{% endblock %}
+    {% include 'front-footer.html.twig' %}
+{#</div>#}
+</body>
+</html>
+
+{% block javascripts %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js" integrity="sha512-4MvcHwcbqXKUHB6Lx3Zb5CEAVoE9u84qN+ZSMM6s7z8IeJriExrV3ND5zRze9mxNlABJ6k864P/Vl8m0Sd3DtQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $('.order-frame-btn').click(function () {
+            $('.ordering-frame').fadeIn();
+            $('body').addClass('scroll-none');
+        });
+
+        $('.close-frame-showing').click(function () {
+            $('.ordering-frame').fadeOut();
+            $('body').removeClass('scroll-none');
+        });
+
+
+        var lastScrollTop = 0;
+        $(window).scroll(function(event){
+            var st = $(this).scrollTop();
+
+            if(st === 0){
+                $('.regularlogo').removeClass('logostslide');
+                $('.regularlogo').addClass('logost');
+            }else{
+                $('.regularlogo').addClass('logostslide');
+                $('.regularlogo').removeClass('logost');
+            }
+        });
+
+        $( document ).ready(function() {
+            $.ajax({
+                url: '{{ path('admin/get_config') }}',
+                type: 'POST',
+
+                success: function (data) {
+                    $('#title-base').text(data.companyname)
+                    $('#footer-address').text(data.address)
+                    // $('#aboutus-hours-open').text(data.hoursopen)
+                    $('#footer-copyrights').text(`Developed By intouchbiz.com © ${new Date().getFullYear()} ${data.companyname}.`)
+                    $('#header-address').text(data.address)
+                    $('#footer-phone1').text(data.phone1)
+                    $('#footer-email').text(data.email)
+                    $('#footer-email-contact').text(data.emailContact)
+                    $('#location').attr('src', data.location)
+                    $('#footer-hours-open').text(data.hoursopen)
+                    $('#aboutus-hours-open').text(data.hoursopen)
+                    $('#header-hours-open').text(data.hoursopen)
+                    $('.footer-instagram-link').attr("href",('https://www.instagram.com/'+data.instagram));
+                    $('.footer-facebook').attr("href",('https://www.facebook.com/'+data.facebook));
+                    $('.footer-youtube').attr("href",('https://www.youtube.com/'+data.youtube));
+                    $('.info-email').text(data.contactEmail);
+                    $('.info-telemovel').text(data.contactPhone);
+                    $('.info-morada-principal').text(data.contactAddress);
+
+
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+
+            });
+
+        /**
+         *
+         * @param {int} id id tag
+         * @param {int} size number of columns
+         * @param {int} rows number of rows
+         */
+        function productCarousel(id, size, rows) {
+            $(function () {
+
+                $(`#${id}`).slick({
+                    dots: true,
+                    arrows: true,
+                    // // appendDots: '.slider-dots',
+                    rows: rows,
+                    // prevArrow: '.prev',
+                    // nextArrow: ".next",
+                    infinite: false,
+                    slidesToScroll: size,
+                    slidesToShow: size,
+                    accessibility: true,
+                    variableWidth: false,
+                    focusOnSelect: false,
+                    centerMode: false,
+                    responsive: [
+                        {
+                            breakpoint: 992,
+                            settings: {
+                                slidesToScroll: size-1,
+                                slidesToShow: size-1
+                            }
+                        },
+                        {
+                            breakpoint: 600,
+                            settings: {
+                                slidesToScroll: size-2,
+                                slidesToShow: size-2
+                            }
+                        }
+                    ]
+                });
+
+                $('.img').click(function () {
+                    $('#mainImage').attr('src', $(this).data('src'))
+                })
+
+            });
+        }
+
+        loadQuantityProductsCart();
+
+        function loadQuantityProductsCart() {
+            $.ajax({
+                url: `/get_quantity_products_cart`,
+                type: 'GET',
+                success: function (quantity) {
+                    $('.lblCartCount').text(quantity)
+                }
+            })
+        }
+
+        function addToCart(product) {
+            if ($('.size').length > 0 & $('.size.active').length < 1) {
+                $.alert({
+                    title: 'Escolha um tamanho!',
+                    content: 'Você deve escolher um tamanho!',
+                });
+                return 0
+
+            }
+
+            if ($('.color').length > 0 & $('.color.active').length < 1) {
+                $.alert({
+                    title: 'Escolha uma cor!',
+                    content: 'Você deve escolher uma cor!',
+                });
+                return 0;
+
+            }
+// falta verificar
+            $.ajax({
+                url: `{{ bo_url }}add_product_to_cart`,
+                type: 'POST',
+                data: {product: product},
+                success: function (data) {
+                    if(data.status) {
+                        loadQuantityProductsCart();
+                        $.alert({
+                            title: 'Sucesso!',
+                            content: 'Produto adicionado ao carrinho!',
+
+                        });
+                    }else
+                    {
+                        $.alert({
+                            type: 'red',
+                            title: 'Falha!',
+                            content: 'Quantidade excede estoque!',
+                            boxWidth: '400px',
+                            useBootstrap: false,
+                            containerFluid: false,
+                            columnClass: 'col-md-6 col-md-offset-3',
+                            backgroundDismiss: true,
+                            onClose: function() {
+                            },
+                            onOpen: function() {
+
+                                $('.jconfirm-content').css('color', 'red');
+                            }
+                        });
+                    }
+                }
+            })
+            return 1;
+        }
+
+        function createCategoryMenu(categories, ul, ulMobile) {
+
+            for (const category of categories) {
+                const li = document.createElement('li');
+                const liMobile = document.createElement('li');
+
+                li.classList.add('ps-3');
+                liMobile.classList.add('ps-3');
+
+                ul.appendChild(li);
+                ulMobile.appendChild(liMobile);
+
+                const div = document.createElement('div');
+                const divMobile = document.createElement('div');
+
+                div.classList.add('form-check');
+                divMobile.classList.add('form-check');
+
+                li.appendChild(div);
+                liMobile.appendChild(divMobile);
+
+                const checkbox = document.createElement('input');
+
+                const checkboxMobile = document.createElement('input');
+
+                checkbox.classList.add('form-check-input', 'checkbox-item', 'ipt-menu', 'categories-checkbox', 'categories', category.name.replaceAll(' ',''));
+                checkbox.setAttribute('type', 'checkbox');
+                checkbox.setAttribute('name', `categories[]`);
+                checkbox.setAttribute('id', `flexCheckDefault-${category.id}`);
+                checkbox.setAttribute('value', category.id);
+                checkbox.setAttribute('data-name', category.name);
+                div.appendChild(checkbox);
+
+                checkboxMobile.classList.add('form-check-input', 'checkbox-item', 'ipt-menu', 'categories-checkbox', 'categories-mobile', category.name.replaceAll(' ',''));
+                checkboxMobile.setAttribute('type', 'checkbox');
+                checkboxMobile.setAttribute('name', `categories-mobile[]`);
+                checkboxMobile.setAttribute('id', `flexCheckDefault-${category.id}`);
+                checkboxMobile.setAttribute('value', category.id);
+                checkboxMobile.setAttribute('data-name', category.name);
+                divMobile.appendChild(checkboxMobile);
+
+                const label = document.createElement('label');
+                const labelMobile = document.createElement('label');
+
+                label.classList.add('form-check-label', 'fs-5', 'lb-menu', 'ps-2');
+                labelMobile.classList.add('form-check-label', 'fs-5', 'lb-menu', 'ps-2');
+
+                if (category.subcategories.length == 0) {
+                    label.setAttribute('for', `flexCheckDefault-${category.id}`);
+                    labelMobile.setAttribute('for', `flexCheckDefault-${category.id}`);
+
+                }
+                label.textContent = category.name;
+                labelMobile.textContent = category.name;
+
+                div.appendChild(label);
+                divMobile.appendChild(labelMobile);
+
+                if (category.subcategories.length > 0) {
+                    const subUl = document.createElement('ul');
+                    const subUlMobile = document.createElement('ul');
+
+                    subUl.classList.add('sub-menu');
+                    subUlMobile.classList.add('sub-menu');
+
+                    li.appendChild(subUl);
+                    liMobile.appendChild(subUlMobile);
+
+                    createCategoryMenu(category.subcategories, subUl, subUlMobile);
+
+                    const caret = document.createElement('span');
+                    const caretMobile = document.createElement('span');
+
+                    caret.classList.add('dropdown-caret');
+                    caretMobile.classList.add('dropdown-caret');
+
+                    caret.textContent = '▼';
+                    caretMobile.textContent = '▼';
+
+                    label.appendChild(caret);
+                    labelMobile.appendChild(caretMobile);
+
+                    // Adicionar evento de clique para abrir/fechar o submenu dropdown
+                    label.addEventListener('click', () => {
+                        subUl.classList.toggle('active');
+                        caret.textContent = subUl.classList.contains('active') ? '▲' : '▼';
+
+                        const isChecked = checkbox.checked;
+                        if (isChecked) {
+                            selectedCategories.push(checkbox.getAttribute('value'));
+                        } else {
+                            const index = selectedCategories.indexOf(checkbox.getAttribute('value'));
+                            if (index !== -1) {
+                                selectedCategories.splice(index, 1);
+                            }
+                        }
+                    });
+
+                    // Adicionar evento de clique para abrir/fechar o submenu dropdown
+                    labelMobile.addEventListener('click', () => {
+                        subUlMobile.classList.toggle('active');
+                        caretMobile.textContent = subUlMobile.classList.contains('active') ? '▲' : '▼';
+
+                        const isCheckedMobile = checkboxMobile.checked;
+                        if (isCheckedMobile) {
+                            selectedCategories.push(checkboxMobile.getAttribute('value'));
+                        } else {
+                            const indexMobile = selectedCategories.indexOf(checkboxMobile.getAttribute('value'));
+                            if (indexMobile !== -1) {
+                                selectedCategories.splice(indexMobile, 1);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+
+    </script>
+
+
+{% endblock %}

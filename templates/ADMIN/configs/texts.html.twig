@@ -1,0 +1,114 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+
+{% block body %}
+
+    <div class="col-lg-12">
+        <div class="dsp container">
+            <h1>Textos</h1>
+            <br>
+            <form action="method" name="upload-file" id="save-texts" enctype="multipart/form-data">
+                <div class="container px-4">
+                    <div class="row">
+                        <h2>Texto 1</h2>
+
+                        <div class="col-12">
+                            <label for="text1-subject">Título</label>
+                            <input name="text1-subject" id="text1-subject" type="text" value="{{ texts.0.subject }}" class="col-12">
+
+                            <label for="text1-text">Texto</label>
+                            <textarea name="text1-text" id="text1" cols="30" rows="10" class="col-12">{{ texts.0.description }}</textarea>
+                        </div>
+                        <hr>
+                        <h2>Texto 2</h2>
+
+                        <div class="col-12">
+                            <label for="text2-subject">Título</label>
+                            <input name="text2-subject" id="text2-subject" type="text" value="{{ texts.1.subject }}" class="col-12">
+
+                            <label for="text2-text">Texto</label>
+                            <textarea name="text2-text" id="text2-text" cols="30" rows="10" class="col-12">{{ texts.1.description }}</textarea>
+                        </div>
+                        <hr>
+                        <h2>Texto 3</h2>
+
+                        <div class="col-12">
+                            <label for="text3-subject">Título</label>
+                            <input name="text3-subject" id="text3-subject" type="text" value="{{ texts.2.subject }}" class="col-12">
+
+                            <label for="text3-text">Texto</label>
+                            <textarea name="text3-text" id="text3-text" cols="30" rows="10" class="col-12">{{ texts.2.description }}</textarea>
+                        </div>
+{#                        <hr>#}
+{#                        <h2>Texto 4</h2>#}
+
+{#                        <div class="col-12">#}
+{#                            <label for="subject4">Título</label>#}
+{#                            <input name="subject4" id="subject4" type="text" value="{{ texts.3.subject }}" class="col-12">#}
+
+{#                            <label for="text4">Texto</label>#}
+{#                            <textarea name="text4" id="text4" cols="30" rows="10" class="col-12">{{ texts.3.description }}</textarea>#}
+{#                        </div>#}
+                    </div>
+                    <hr>
+
+
+                    <br>
+                    <br>
+                    <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">
+                        Salvar configurações
+                    </button>
+                    <div class="col-lg-12" id="display_product_list">
+                        <ul></ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $("form#save-texts").submit(function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            $.ajax({
+                url: '{{ path('admin/set_text') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+
+                success: function (data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Atualizado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function (e) {
+                    console.log(e);
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

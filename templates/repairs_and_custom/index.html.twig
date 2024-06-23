@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RepairsAndCustomController!{% endblock %}
+
+{% block body %}
+
+    <!--================ End of Breadcrumb ================-->
+    <div class="mad-content no-pd">
+        <div style="background-image:url('{{ asset('uploads/img/main.jpg') }}');"
+             class="bannerrepair pt-2 text-light d-flex flex-column align-items-center justify-content-center ">
+            <div>
+                <h1 class="text-white">Repairs and Customization</h1>
+                <h5 class="text-white">HOME / Repairs and Customization</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1 d-none d-xl-block d-xxl-block">
+                <!-- linhas verticais -->
+                <div class="container-linhas d-flex flex-column align-items-center ">
+                    <div class="line-1 mb-4 mt-2"></div>
+
+                    <div class="icon-1 mb-4">
+                        <a class="footer-facebook" target="_blank" ><i class="bi bi-facebook text-black-50 media"></i></a>
+
+                    </div>
+
+                    <div class="line-2 mb-3 mt-2"></div>
+
+                    <div class="icon-1 mb-4">
+                        <a class="footer-instagram-link" target="_blank" ><i class="bi bi-instagram text-black-50 media"></i></a>
+                    </div>
+
+                    <div class="line-2 mb-3 mt-2"></div>
+
+                    <div class="icon-1 mb-3 mt-2">
+                        <a class="footer-youtube" target="_blank"><i class="bi bi-youtube text-black-50 media"></i></a>
+                    </div>
+                    <div class="line-1 mb-4 mt-2"></div>
+                </div>
+                <!-- .. -->
+
+            </div>
+            <!-- hero -->
+            <div class="col-xl-10 col-lg-12">
+            <div class="row mt-4 mb-4">
+
+                <div class="col-6 d-flex align-items-center">
+                    <div class="box-img-text border-danger">
+                        <h4 class="lead">STRIP IT DOWN. BUILD IT UP.</h4>
+                        <h3 class="display-6"> Repairs, Upgrades & Custom Builds.</h3>
+                        <p class="text-justify pp">Wether it's been a while since your last service, something isn't working
+                            quite right or yout just want something a bit more fresh, and snappy, RYOT can help!</p>
+                        <p class="text-justify pp">Our workshop has access to the best aftermarket parts on the market and
+                            knowhow to get your gun up to peak performance. Get in contact with us or visit us at our store
+                            in Silves and have a chat with us about what we can do for you.</p>
+                        <p class="text-justify pp">
+                            If you're looking for something a bit extra, check out uor pre-upgraded builds!
+                        </p>
+                        <button class="btn btn-dark px-5 rounded d-block">Saber Mais</button>
+                        <div class="col-12 form-email row">
+                            <h5>Join our newsletter to know more!</h5>
+                            <form id="form-join-us" class="row" >
+                                <div class="col-6">
+                                    <label for="name">Nome</label>
+                                    <input name="name" class="col-12 inputText" type="text">
+                                </div>
+                                <div  class="col-6">
+                                    <label for="email">E-mail</label>
+                                    <input name="email" class="col-12 inputText"  type="text">
+
+                                </div>
+                                <button class="btn btn-dark px-5 rounded d-block" type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-6 d-flex align-items-center">
+                    <div class="image-box-3 img-box-2" style="background-image:url('{% if banner2 is not empty %} {{ banner2.path }} {% endif %}');"></div>
+                </div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+        {#        <img src="{{ asset('uploads/banner1.jpg') }}" alt=""> #}
+    </div>
+
+    <script src="{{ asset('front/vendors/jquery-3.3.1.min.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="acf7b526-51e0-4633-a755-c34f12e4f734" name="casino (project level)" url="http://casinodaursa.com/">
+        <fileTransfer rootFolder="/public_html" host="casinodaursa.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="f7cbee2c-47e2-45ef-95a8-7bd9083bf07f" name="pitombo (project level)" url="http://casinodaursa.com/">
+        <fileTransfer rootFolder="/dev" host="ftp.pitombolanches.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="c99ccf8b-19b4-49cc-b113-e3b8e2c076f3" name="fabios" url="http://casinodaursa.com/">
+        <fileTransfer rootFolder="/fabios-ordering" host="ftp.integrated-erp.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="c2934969-f4df-44c8-8f07-9e260530a71d" name="pitombo-app (project level)" url="http://casinodaursa.com/">
+        <fileTransfer rootFolder="/pitombo" host="ftp.pitombolanches.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="e1af9936-7ba2-48c1-b928-336151f4024f" name="ryot" url="http://ftp.ryot.pt">
+        <fileTransfer rootFolder="/public_html" host="ftp.ryot.pt" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="1e320662-4b67-4118-a710-d2eb67940901" name="siltronica" url="http://ftp.siltronica.pt">
+        <fileTransfer rootFolder="/dev2" host="ftp.siltronica.pt" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="3e440d40-5bd0-4d10-a7ca-0bf04e634e56" name="fpf" url="http://ftp.fpfsistemas.com">
+        <fileTransfer rootFolder="/dev-ordering" host="ftp.fpfsistemas.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="89141d62-a33f-4a0a-948f-c651f10b28d5" name="ryotprod" url="http://ftp.ryot.pt">
+        <fileTransfer rootFolder="/dev2" host="ftp.ryot.pt" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="5a997250-b651-43d0-b6e8-3229d3835019" name="royalty-chauffeurs" url="http://ftp.intouchbiz.com">
+        <fileTransfer host="ftp.intouchbiz.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

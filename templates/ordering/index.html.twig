@@ -1,0 +1,849 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RepairsAndCustomController!{% endblock %}
+
+{% block body %}
+
+    <!--================ End of Breadcrumb ================-->
+    <div class="container">
+        <div class="row pt-5 mt-5">
+            <div class="col-1 d-none d-xl-block d-xxl-block">
+                <!-- linhas verticais -->
+                <div class="container-linhas d-flex flex-column align-items-center ">
+                    <div class="line-1 mb-4 mt-2"></div>
+
+                    <div class="icon-1 mb-4">
+                        <a class="footer-facebook" target="_blank"><i
+                                    class="bi bi-facebook text-black-50 media"></i></a>
+                    </div>
+
+                    <div class="line-2 mb-3 mt-2"></div>
+
+                    <div class="icon-1 mb-4">
+                        <a class="footer-instagram-link" target="_blank" ><i class="bi bi-instagram text-black-50 media"></i></a>
+                    </div>
+
+                    <div class="line-2 mb-3 mt-2"></div>
+
+                    <div class="icon-1 mb-3 mt-2">
+                        <a class="footer-youtube" target="_blank"><i class="bi bi-youtube text-black-50 media"></i></a>
+                    </div>
+                    <div class="line-1 mb-4 mt-2"></div>
+                </div>
+                <!-- .. -->
+
+            </div>
+
+
+            <div id="products" class="col-11 ms-3 me-5 col-sm-11 col-lg-6 divMainImageCart  mb-5 px-0">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                1 - Morada de Entrega
+                            </button>
+
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show mb-5" aria-labelledby="headingOne"
+                             data-bs-parent="#accordionExample">
+                            <div class="accordion-body" id="delivery-addresses">
+
+                            </div>
+
+                            <button class="col-lg-4 col-5 btn btn-primary btn-default float-end ms-4 me-3 mb-3 select-delivery-address border-0" style="background-color: #1c346c">
+                                Selecionar Morada
+                            </button>
+                            <button class="col-lg-4 col-5 btn btn-primary btn-dark float-end ms-2 mb-3 add_new_address">
+                                Adicionar Morada
+                            </button>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                2 - Dados de Faturação
+                            </button>
+                        </h2>
+
+                        <div id="collapseTwo" class="accordion-collapse collapse mb-5 " aria-labelledby="headingTwo"
+                             data-bs-parent="#accordionExample">
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <div class="col-12 mb-4">
+                                        <div class="card-header py-3">
+                                            <h5 class="mb-0">Dados (Não obrigatórios)</h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <!-- Text input -->
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="street">Nome</label>
+                                                <input type="text" id="name" class="form-control"/>
+                                            </div>
+
+                                            <!-- Email input -->
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="city">Nif</label>
+                                                <input type="text" id="nif" class="form-control"/>
+                                            </div>
+
+                                            <!-- Number input -->
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="postalCode">Email</label>
+                                                <input type="text" id="email" class="form-control"/>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-body" id="invoicing-addresses">
+
+                            </div>
+
+
+                            <button class="col-lg-4 col-5 btn btn-primary btn-default float-end ms-2 me-2 mb-3 select-invoicing-address border-0" style="background-color: #1c346c">
+                                Selecionar Morada
+                            </button>
+                            <button class="col-lg-4 col-5 btn btn-primary btn-dark float-end ms-4 mb-3 add_new_address">
+                                Adicionar Morada
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                3 - Método de pagamento
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse  mb-5"
+                             aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                            <div class="accordion-body p-0 row">
+
+                                <div id="online_debit">
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="bankName" class="paymentMethod" value="Stripe"><img  class="ms-3" width="59px" src="/images/pngwing.com.png"><br> Cartão
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="bankName" class="paymentMethod" value="MultiBanco"><img src="/icons/PSicons/mbMultibanco.png"><br> MultiBanco
+                                        </label>
+{#                                        <label class="btn btn-default">#}
+{#                                            <input type="radio" name="bankName" value="BRADESCO"><img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/68x30/bradesco.png"><br> Banco Bradesco#}
+{#                                        </label>#}
+{#                                        <label class="btn btn-default">#}
+{#                                            <input type="radio" name="bankName" value="HSBC"><img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/68x30/hsbc.png"><br> Banco HSBC#}
+{#                                        </label>#}
+{#                                        <label class="btn btn-default">#}
+{#                                            <input type="radio" name="bankName" value="ITAU"><img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/68x30/itau.png"><br> Banco Itaú#}
+{#                                        </label>#}
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <button class="col-7 col-lg-4 btn btn-primary btn-default float-end ms-4 mb-3 me-2 select-payment-method border-0" style="background-color: #1c346c">
+                                Selecionar método de pagamento
+                            </button>
+                        </div>
+                    </div>
+
+{#                    <div class="accordion-item">#}
+{#                        <h2 class="accordion-header" id="headingFour">#}
+{#                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"#}
+{#                                    data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">#}
+{#                                3 - Método de pagamento#}
+{#                            </button>#}
+{#                        </h2>#}
+{#                        <div id="collapseFour" class="accordion-collapse collapse  mb-5"#}
+{#                             aria-labelledby="headingFour" data-bs-parent="#accordionExample">#}
+{#                            <div class="accordion-body p-0 row">#}
+
+{#                                <label for="paymentMethod1" class="paymentMethod p-0 m-3 col-6 col-sm-2">#}
+{#                                    <div class="payment-box border-dark border-radius-size col-12 ms-2 mb-3 ">#}
+{#                                        <div class="inputsAddress ms-2 mt-1 col-1 pb-0">#}
+{#                                            <input type="radio" style="    transform: scale(3.5);" class="paymentMethod" id="paymentMethod1" name="radios"#}
+{#                                                   value="Stripe">#}
+{#                                            <label for="paymentMethod1" class="inputsAddressLabel"></label>#}
+{#                                        </div>#}
+{#                                        <div class="col-9 m-0 mt-2 ms-4 p-0 m-3">#}
+
+{#                                            <img class="col-12 ms-2" style="width: 94%;" src="/images/stripe.png" alt="Stripe">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </label>#}
+
+{#                            </div>#}
+{#                            <button class="col-12 col-lg-4 btn btn-primary btn-default float-end ms-4 mb-3 select-payment-method">#}
+{#                                Selecionar método de pagamento#}
+{#                            </button>#}
+{#                        </div>#}
+{#                    </div>#}
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                4 - Revisão da Encomenda
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+                             data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+
+                                <div id="address-delivery-selected">
+
+                                </div>
+
+                                <div id="address-invoicing-selected">
+
+                                </div>
+
+                                <div id="invoicing-details-selected">
+
+                                </div>
+
+                                <div id="paymentMethod-selected">
+
+                                </div>
+
+                                <div class="container mt-4 mb-5">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="agreeCheckbox">
+                                            Você concorda que ao finalizar a compra você deverá efetuar o pagamento
+
+                                        <input class="form-check-input" type="checkbox" id="agreeCheckbox">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <button class="col-lg-4 col-6 btn btn-primary btn-dark float-end ms-4 mb-3 border-0" id="payment" style="background-color: #1c346c">
+                                        Realizar pagamento
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-lg-3 col-12 h-25 p-0 row">
+                <div class="divLabelCartHeader p-0 labelPrice pb-0" style="background-color: #1c346c">
+                    <label style="height: 20px" class="mt-3 ms-3">
+                        Detalhes do valor
+                    </label>
+                </div>
+
+                <div class="divLabelCart pt-3 p-0 ms-0 row t-0">
+                    <div class="col-8 col-lg-8 pb-0">
+                        <label id="itemsQuantity" for="">Preço ({{ array.quantity }} Itens)</label>
+                    </div>
+
+                    <div class="col-4 col-lg-4 pb-0 float-end">
+                        <label id="productsTotal" class="float-end" for="">{{array.total|number_format(2, '.', ',')}}€</label>
+                    </div>
+
+                    <hr>
+
+                    <div class="col-8 col-lg-8 pb-0">
+                        <label for="">Preço de envio</label>
+                    </div>
+
+                    <div class="col-4 pb-0 col-lg-4 float-end">
+                        <label id="totalFee" class="float-end" for="">{{ array.fee|number_format(2, '.', ',') }}€</label>
+                    </div>
+
+                    <hr>
+                    <div class="col-12 col-lg-12 pb-0 row ps-0 pe-0">
+                        <div class="col-8 col-lg-8 pb-0">
+                            <label for="" >Voucher</label>
+
+                        </div>
+
+                        <div class="col-4 pb-0 col-lg-4 float-end">
+                            <label for="" class="float-end text-success ">{% if array.voucher is defined%} -{{ array.voucher.voucherDiscountValue|number_format(2, '.', ',') }}€{% endif %}</label>
+
+                        </div>
+
+                        <div class="col-6">
+                            <label for="" class="float-end text-success "> <input type="text" id="voucher" class="mb-2 form-control col-8" value="{% if array.voucher is defined%} {{ array.voucher.voucher }} {% endif %}"></label>
+
+                        </div>
+
+                        <div class="col-2" id="delete-voucher">
+                            {% if array.voucher is defined%}<a href="#" class="delete-voucher" onclick="deleteVoucher({{ array.voucher.orderCartId }})"><i class="bi bi-trash black 50 text-danger" style="font-size: 24px"></i></a>  {% endif %}
+
+                            {#                            <input type="text" id="voucher" class="mb-2 form-control col-8">#}
+                        </div>
+
+                        <div class="col-4">
+
+                            <button class=" btn btn-primary float-end" id="apply-voucher">Aplicar</button>
+                        </div>
+                    </div>
+
+                    <div class="col-4 pb-0 col-lg-4 float-end">
+                        <label id="totalFee" class="float-end" for=""></label>
+                    </div>
+
+                    <hr>
+
+                    <div class="col-8 col-lg-8 pb-0" style="color: #1c346c">
+                        <label for="">Valor a Pagar</label>
+                    </div>
+
+                    <div class="col-4 pb-0 col-lg-4 float-end" style="color: #1c346c">
+                        <label id="total" class="float-end font-weight-bold" for="">{% if array.voucher is defined %} {{ (array.total + array.fee - array.voucher.voucherDiscountValue)|number_format(2, '.', ',') }}{% else %} {{ (array.total + array.fee)|number_format(2, '.', ',') }} {% endif %}€</label>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <template id="teste">
+        <iframe id="iframevivawallet" type="hidden" class="" style="height: calc(90vh  - 100px); width: 100%"  allowpaymentrequest allow="payment"></iframe>
+    </template>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+
+        $(document).ready(function () {
+            var cartStock;
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: '/get_quantity_cart',
+                success: function (data) {
+                    cartStock = data.status;
+                }
+            });
+
+            if(!cartStock){
+                $.alert({
+                    type: 'red',
+                    title: 'ATENÇÃO!',
+                    content: 'Os produtos escolhidos excedem a quantidade do stock!',
+                    boxWidth: '400px',
+                    useBootstrap: false,
+                    containerFluid: false,
+                    columnClass: 'col-md-6 col-md-offset-3',
+                    backgroundDismiss: true,
+                    onClose: function() {
+                    },
+                    onOpen: function() {
+
+                        $('.jconfirm-content').css('color', 'red');
+                    }
+                });
+            }
+
+        })
+
+        function prepareFrame(url) {
+
+            var template = document.getElementById('teste')
+            let clon = template.content.cloneNode(true);
+
+
+
+            var iframe = clon.querySelector('iframe');
+
+            var width = 0;
+
+
+            iframe.setAttribute('src', url);
+
+            $.confirm({
+                title: 'Pagamento!',
+                content: clon,
+                minHeight: '90vra',
+                columnClass: 'col-12',
+                buttons: {
+                    fechar: function () {
+                        location.replace('/');
+                    },
+                    cancelar: function () {
+                        location.replace('/');
+                    }
+                }
+            });
+
+        }
+
+        $("#payment").click(function(e) {
+            var cartStock;
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: '/get_quantity_cart',
+                success: function (data) {
+                    cartStock = data.status;
+                }
+            });
+            if(!cartStock){
+                $.alert({
+                    type: 'red',
+                    title: 'ATENÇÃO!',
+                    content: 'Os produtos escolhidos excedem a quantidade do stock!',
+                    boxWidth: '400px',
+                    useBootstrap: false,
+                    containerFluid: false,
+                    columnClass: 'col-md-6 col-md-offset-3',
+                    backgroundDismiss: true,
+                    onClose: function() {
+                    },
+                    onOpen: function() {
+
+                        $('.jconfirm-content').css('color', 'red');
+                    }
+                });
+                return;
+            }
+
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            // if ($('input[class=invoicingAddress]:checked').length < 1 || $('#name').val() == '' || $('#nif').val() == '' || $('#email').val() == '') {
+
+            const paymentType = $('input[class=paymentMethod]:checked').val() == undefined ? '' : $('input[class=paymentMethod]:checked').val();
+            const deliveryAddressId = $('input[class=deliveryAddress]:checked').val()  == undefined ? '' : $('input[class=deliveryAddress]:checked').val();
+            const invoicingAddressId = $('input[class=invoicingAddress]:checked').val()  == undefined ? '' : $('input[class=invoicingAddress]:checked').val();
+            const invoingName = $("#name").val();
+            const invoingNif = $("#nif").val();
+            const invoingEmail = $("#email").val();
+
+            if(!$('#agreeCheckbox').is(':checked')) {
+                $.alert({
+                    title: 'Alerta!',
+                    content: 'Falta selecionar que você concorda que ao finalizar a compra você deverá efetuar o pagamento',
+                });
+                return;
+            }
+
+            if(paymentType.length < 1 || deliveryAddressId.length < 1 ) {
+                $.alert({
+                    title: 'Alerta!',
+                    content: 'Estão a faltar dados!',
+                });
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                beforeSend: function () {
+                    Swal.fire({
+                        title: 'Carregando',
+                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                        // allowOutsideClick: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                url: "{{path('/create_order')}}",
+                data: {paymentType: paymentType,
+                       deliveryAddressId:deliveryAddressId,
+                       invoicingAddressId:invoicingAddressId,
+                       invoingName:invoingName,
+                       invoingNif:invoingNif,
+                       invoingEmail:invoingEmail}, // serializes the form's elements.
+                success: function(data)
+                {
+                    // var acessToken = data.acessToken;
+                    var sessionR = data.session;
+                    var onlineP = data.online;
+                    let orderType = 'Delivery'
+                    var orderId = data.reference;
+                    const url = data.url;
+
+                    if (onlineP === 0) {
+
+                        var ordernr = data.ordernr;
+                        location.replace('/confirmed-regular-order/' + ordernr);
+                    } else {
+                        if (paymentType == "MultiBanco") {
+                            location.replace(data.url);
+
+
+                            // var total = document.getElementById("total").innerText.trim();
+                            // var amount = parseFloat(total.replace(/[^\d.-]/g, ''));
+                            // amount = amount.toFixed(2);
+                            // debugger;
+                            // $.ajax({
+                            //     type: "POST",
+                            //     url: '/payment/payment_by_ifthenpay',
+                            //     data: ({
+                            //         id: orderId,
+                            //         amount: amount
+                            //     }),
+                            //     success: function (urlIfthenpay) {
+                            //         location.replace(urlIfthenpay.urlPagamento);
+                            //     }
+                            // });
+                        } else {
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ path('set_payment_code') }}",
+                                data: ({
+                                    // acessToken: acessToken,
+                                    sessionR: sessionR,
+                                    referenceO: orderId,
+                                    orderType: orderType,
+                                    url: url
+                                }), // serializes the form's elements.
+                                success: function (dataOrder) {
+                                    const url = `https://checkout.stripe.com/c/pay/${dataOrder.ordercode}`
+                                    location.replace(url);
+                                    // prepareFrame(url)
+                                }
+                            });
+
+                        }
+                    }
+
+                        // $('.order-to-confirme').hide();
+                        //
+                        // $('.modal-code-info').fadeIn(function () {
+                        //     $('.order-sucess-info').slideDown();
+                        // });
+
+
+                    // Swal.fire({
+                    //     position: 'top-end',
+                    //     icon: 'success',
+                    //     title: 'Adicionado',
+                    //     showConfirmButton: false,
+                    //     timer: 1000
+                    // });
+                    //
+                    //
+                    //
+                    // setTimeout(function() {
+                    //
+                    //     var currentUrl = window.location.href+'#cart';
+                    //     location.replace(currentUrl);
+                    //     location.reload();
+                    // }, 1000);
+
+                }
+            });
+        });
+
+
+        $('.select-delivery-address').click(function (e) {
+            if ($('input[class=deliveryAddress]:checked').length < 1) {
+                $.alert({
+                    title: 'Alerta!',
+                    content: 'Morada de entrega não selecionada',
+                });
+                return;
+            } else {
+
+                var selectedAddressId  = $('input[class=deliveryAddress]:checked').val();
+                var selectedAddress  = $(`.inputAddressDelivery-${selectedAddressId}`).text();
+                var deliveryAddress = document.getElementById('address-delivery-selected');
+
+                deliveryAddress.innerHTML = '';
+                deliveryAddress.innerHTML = `<span>Endereço de entrega:</span>
+                                <div class="inputAddress row mb-3 p-3">
+                                    <div class="inputsAddress col-1 pb-0" >
+                                        <label for="deliveryAddress${selectedAddressId}" class="inputsAddressLabel"></label>
+                                    </div>
+                                    <div class="col-6  pb-0">
+                                        <span class="col-12">${selectedAddress}</span>
+                                        <input type="text" hidden id="delivery-address-selected-id" value="${selectedAddressId}">
+
+                                    </div>
+
+                                </div>`;
+
+
+
+            }
+
+            // $("#collapseOne").collapse("toggle");
+            $("#collapseTwo").collapse("show");
+        })
+
+
+        $('.select-invoicing-address').click(function () {
+
+                // $("#collapseTwo").collapse("toggle");
+                $("#collapseThree").collapse("show");
+
+        });
+
+        $('.select-payment-method').click(function () {
+            if ($('input[class=paymentMethod]:checked').length < 1) {
+                $.alert({
+                    title: 'Alerta!',
+                    content: 'Método de pagamento não selecionado',
+                });
+            } else {
+                var paymentMethodHtml = document.getElementById('paymentMethod-selected');
+                var paymentMethod = $('input[class=paymentMethod]:checked').val()
+                paymentMethodHtml.innerHTML = '';
+                paymentMethodHtml.innerHTML = `<span>Método de pagamento: ${paymentMethod}</span>`;
+
+                var selectedAddressId  = $('input[class=paymentMethod]:checked').val();
+
+                // $("#collapseThree").collapse("toggle");
+                $("#collapseFive ").collapse("show");
+            }
+        })
+
+        $('.add_new_address').click(function () {
+            $.confirm({
+                async: true,
+                title: 'Nova morada',
+                columnClass: 'col-md-8',
+                content: `URL:{{ path('new_address') }}`,
+                buttons: {
+                    fechar: function () {
+
+
+                    }
+                }
+            });
+
+        })
+
+        getAddresses();
+
+        function getAddresses() {
+            $.ajax({
+                type: "POST",
+                    url: "{{ path('get_addresses') }}",
+                // data: {products: products},
+                success: function (jsonAddresses) {
+                    setAddresses(jsonAddresses);
+                }, error: function (e) {
+
+                }
+            });
+        }
+
+        function setAddresses(jsonAddresses) {
+            // let products = JSON.parse(localStorage.getItem('products')) == null ? [] : JSON.parse(localStorage.getItem('products'));
+
+            const deliveryAddresses = document.getElementById('delivery-addresses');
+            const invoicingAddresses = document.getElementById('invoicing-addresses');
+
+            deliveryAddresses.innerHTML = '';
+            invoicingAddresses.innerHTML = '';
+
+            if(!jsonAddresses.address) {
+                deliveryAddresses.innerHTML += `
+                                <div class="inputAddress row mb-3 p-3">
+                                    <div class="col-lg-6 col-10 pb-0">
+                                        <span class="col-12" >Não tens endereço, favor cadastrar!</span>
+                                    </div>
+
+                                </div>`;
+                invoicingAddresses.innerHTML += `
+                                <div class="inputAddress row mb-3 p-3">
+                                    <div class="col-lg-6 col-10 pb-0">
+                                        <span class="col-12" >Não tens endereço, favor cadastrar!</span>
+                                    </div>
+
+                                </div>`
+
+
+                return
+            }
+            for (const address of jsonAddresses.addresses) {
+                deliveryAddresses.innerHTML += `<label for="deliveryAddress${address.id}" class="inputsAddressLabel" style="font-size: 14px">
+                                <div class="inputAddress row mb-3 p-3">
+
+                                    <div class="inputsAddress col-1 pb-0" >
+
+                                        <input type="radio" style="    transform: scale(3.5);" class="deliveryAddress" id="deliveryAddress${address.id}" name="radios-delivery" value="${address.id}"/>
+
+                                    </div>
+                                    <div class="col-lg-6 col-10 pb-0">
+                                        <span class="col-12 inputAddressDelivery-${address.id}">${address.street} - ${address.city} - ${address.referencecode} -${address.postalcode}</span>
+                                    </div>
+                                    <div class="col-12 col-lg-5 float-end pb-0">
+                                        <button class="btn col-lg-6 col-5 dark"><i class="bi bi-trash btn btn-outline-danger removeAddress" data-id="${address.id}"> Remover</i></button>
+                                        <button class="btn col-lg-5 col-6 dark"><i class="bi bi-pencil btn btn-outline-success editAddress" data-id="${address.id}"> Editar</i></button>
+                                    </div>
+
+                                </div></label>`
+
+                invoicingAddresses.innerHTML += `
+                                <div class="inputAddress row mb-3 p-3">
+                                    <div class="inputsAddress col-1 pb-0" >
+                                        <input type="radio" style="    transform: scale(3.5);" class="invoicingAddress" id="invoicingAddress${address.id}" name="radios-invoing" value="${address.id}">
+                                        <label for="invoicingAddress${address.id}" class="inputsAddressLabel"></label>
+                                    </div>
+                                    <div class="col-lg-6 col-10 pb-0">
+                                        <span class="col-12 inputAddressInvoicing-${address.id}">${address.street} - ${address.city} - ${address.referencecode} -${address.postalcode}</span>
+                                    </div>
+                                    <div class="col-12 col-lg-5 float-end pb-0">
+                                        <button class="btn col-lg-6 col-5 dark"><i class="bi bi-trash btn btn-outline-danger removeAddress" data-id="${address.id}"> Remover</i></button>
+                                        <button class="btn col-lg-5 col-6 dark"><i class="bi bi-pencil btn btn-outline-success editAddress" data-id="${address.id}"> Editar</i></button>
+                                    </div>
+                                </div>`
+            }
+
+            $('.removeAddress').click(function () {
+                const addressId = $(this).data('id');
+
+                $.confirm({
+                    async: true,
+                    title: 'Apagar morada',
+                    columnClass: 'col-md-4',
+                    content: `Tem certeza que deseja apagar esta morada?`,
+                    buttons: {
+                        apagar: function () {
+                            $.ajax({
+
+                                type: "POST",
+                                url: "{{ path('delete_address') }}",
+                                data: {addressId: addressId},
+                                success: function (jsonAddresses) {
+                                    $.alert({
+                                        title: 'Apagado',
+                                        content: 'Morada apagada com sucesso!',
+                                    });
+
+                                    getAddresses();
+                                }, error: function (e) {
+
+                                }
+                            });
+                        },
+                        cancelar: function () {
+
+                        }
+                    }
+                });
+            })
+
+            $('.editAddress').click(function () {
+                $.confirm({
+                    async: true,
+                    title: 'Editar morada',
+                    columnClass: 'col-md-8',
+                    content: `URL:{{ path('get_edit_address') }}`,
+                    buttons: {
+                        fechar: function () {
+
+
+                        }
+
+                    }
+                });
+
+            })
+
+            // $('.editAddress').click(function () {
+            //     const addressId = $(this).data('id');
+            //     $.ajax({
+            //         url: `/get_edit_address`,
+            //         type: 'POST',
+            //         data: {addressId: addressId},
+            //         success: function (data) {
+            //             // $.confirm({
+            //             //     async: false,
+            //             //     title: 'Editar',
+            //             //     columnClass: 'col-9',
+            //             //     content: data,
+            //             //     buttons: {
+            //             //         Confirmar: function () {
+            //             //             const street = $('#street').val();
+            //             //             const city = $('#city').val();
+            //             //             const postalCode = $('#postalCode').val();
+            //             //             const additionalInformation = $('#additionalInformation').val();
+            //             //
+            //             //             $.ajax({
+            //             //                 url: `/edit_address`,
+            //             //                 type: 'POST',
+            //             //                 data: {addressId: addressId, street: street, city: city, postalCode: postalCode, additionalInformation:additionalInformation},
+            //             //                 success: function () {
+            //             //                     $.alert({
+            //             //                         title: 'Sucesso!',
+            //             //                         content: 'Editado com sucesso',
+            //             //                     });
+            //             //                 }
+            //             //             })
+            //             //             getAddresses();
+            //             //         },
+            //             //         Cancelar: function () {
+            //             //         },
+            //             //     }
+            //             //
+            //             // });
+            //
+            //
+            //         }
+            //     });
+            // })
+        }
+
+        function deleteVoucher(orderCartId) {
+            $.ajax({
+                url: `/remove_voucher`,
+                type: 'POST',
+                data: {orderCartId: orderCartId},
+                success: function (data) {
+
+                    let deleteVoucher = document.getElementById('delete-voucher');
+                    deleteVoucher.innerHTML = ``;
+
+                    $.alert({
+                        title: 'Sucesso!',
+                        content: 'Voucher removido',
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+
+                }
+            })
+        }
+
+        $('#apply-voucher').click(function () {
+            let voucher = $('#voucher').val();
+            $.ajax({
+                url: `/apply_voucher`,
+                type: 'POST',
+                data: {voucher: voucher},
+                success: function (data) {
+                    if (data == false) {
+                        $.alert({
+                            title: 'Inválido!',
+                            content: 'Voucher inválido',
+                        });
+                        return;
+                    }
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+
+                }
+            })
+        })
+
+
+    </script>
+
+{% endblock %}

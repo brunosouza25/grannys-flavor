@@ -1,0 +1,15 @@
+
+<header class="header regular-header">
+    <div class="logo-wrap">
+        <i class="iconly-Category icli nav-bar"></i>
+        <a href="{{ path('app/app_dashboard') }}"> <img class="logo logo-w" src="{{ asset('app/assets/images/logo/logo-w.png') }}" alt="logo" /></a
+        ><a href="{{ path('app/app_dashboard') }}"> <img class="logo" src="{{ asset('images/logo.png') }}" alt="logo" /></a>
+
+    </div>
+    <div class="avatar-wrap">
+        {% if app.user.city != '' %}
+            <span class="font-sm"><i class="iconly-Location icli font-xl"></i> {{ app.user.city }}</span>
+        {% endif %}
+        <a href="#"> <span style="  font-size: 45px;  color: #e6352f;" class="mdi mdi-account"></span></a>
+    </div>
+</header>

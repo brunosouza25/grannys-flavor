@@ -1,0 +1,362 @@
+{% block body %}
+    <head>
+
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    </head>
+
+    <div class="deznav">
+        <div class="deznav-scroll">
+            <ul class="metismenu" id="menu">
+                <li><a class="has-arrow ai-icon" href="/admin" aria-expanded="false">
+                        <i class="mdi mdi-view-dashboard"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                    {#                <ul aria-expanded="false"> #}
+                    {#                    <li><a href="index-2.html">Dashboard</a></li> #}
+                    {#                    <li><a href="analytics.html">Analytics</a></li> #}
+                    {#                    <li><a href="review.html">Review</a></li> #}
+                    {#                    <li><a href="order.html">Order</a></li> #}
+                    {#                    <li><a href="order-list.html">Order List</a></li> #}
+                    {#                    <li><a href="customer-list.html">Customer List</a></li> #}
+                    {#                </ul> #}
+
+                </li>
+                <li><a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
+                        <i class="mdi mdi-cards"></i>
+                        <span class="nav-text">Produtos</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ path('admin/products') }}">Produtos</a></li>
+                        <li><a id="grids" href="#">Grade</a></li>
+                        <li><a id="categories" href="#">Categorias</a></li>
+{#                        <li><a href="">Categories</a></li>#}
+{#                        <li><a href="{{ path('admin/app_menu_products') }}">Menu e Acompanhamentos</a></li>#}
+                        <li><a id="brands" href="#">Marcas</a></li>
+
+                        <li><a id="vouchers" href="javascript:void(0);">Voucher de desconto</a></li>
+
+                    </ul>
+                </li>
+                {#            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false"> #}
+                {#                    <i class="mdi mdi-newspaper-variant-outline"></i> #}
+                {#                    <span class="nav-text">Encomendas</span> #}
+                {#                </a> #}
+                {#                <ul aria-expanded="false"> #}
+                {#                    <li><a href="chart-flot.html">Lista de Encomendas</a></li> #}
+                {#                </ul> #}
+                {#            </li> #}
+{#                <li><a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">#}
+{#                        <i class="mdi mdi-web"></i>#}
+{#                        <span class="nav-text">Conteudo</span>#}
+{#                    </a>#}
+{#                    <ul aria-expanded="false">#}
+{#                        #}{#                    <li><a href="{{ path('admin/app_page_menus') }}">Menus</a> #}
+{#                        <li><a href="{{ path('admin/app_ourteam') }}">Equipa</a></li>#}
+{#                        <li><a href="{{ path('admin/app_gallery') }}">Galerias</a></li>#}
+{#                       #}{#  <li><a href="{{ path('admin/app_blogs') }}">Blog</a></li>#}
+
+{#                    </ul>#}
+{#                </li>#}
+                {#            <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false"> #}
+                {#                    <i class="mdi mdi-account-multiple"></i> #}
+                {#                    <span class="nav-text">Clientes</span> #}
+                {#                </a> #}
+                {#                <ul aria-expanded="false"> #}
+                {#                    <li><a href="uc-select2.html">Lista de Clientes</a></li> #}
+                {#                </ul> #}
+                {#            </li> #}
+
+                <li><a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
+                        <i class="mdi mdi-cog"></i>
+                        <span class="nav-text">Definições</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ path('admin/zonesoft_sync') }}">Sincronização Zonesoft</a></li>
+                        {#<li><a href="{{ path('admin/app_ordering_zones') }}">Zona de Entrega</a></li>#}
+                        <li><a href="{{ path('admin/images') }}">Escolher Imagens</a></li>
+                        <li><a href="{{ path('admin/get_configs') }}">Configurações</a></li>
+                        {#  <li><a href="{{ path('admin/get_texts') }}">Textos</a></li>#}
+                        {#                    <li><a href="form-wizard.html">Configuração do Email</a></li> #}
+                        {#                    <li><a href="form-ckeditor.html">Metodos de Pagamento</a></li> #}
+                    </ul>
+                </li>
+
+            </ul>
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#categories').click(function (e) {
+                // debugger
+                $.confirm({
+                    async: true,
+                    title: 'Categorias',
+                    columnClass: 'col-md-12',
+                    content: 'URL:{{ path('admin/categories') }}',
+                    buttons: {
+                        fechar: function () {
+                        }
+                    }
+                });
+            })
+
+            $('#brands').click(function (e) {
+                $.confirm({
+                    async: true,
+                    title: 'Marcas',
+                    columnClass: 'col-md-7',
+                    content: 'URL:{{ path('admin/brands') }}',
+                    buttons: {
+                        fechar: function () {
+                        }
+                    }
+                });
+            })
+
+            $('#equipaments').click(function (e) {
+                $.confirm({
+                    async: true,
+                    title: 'Equipamentos',
+                    columnClass: 'col-md-7',
+                    content: 'URL:{{ path('admin/equipaments') }}',
+                    buttons: {
+                        fechar: function () {
+                        }
+                    }
+                });
+            })
+
+            $('#materials').click(function (e) {
+                e.preventDefault();
+
+                $.confirm({
+                    async: true,
+                    title: 'Materiais',
+                    columnClass: 'col-md-7',
+                    content: 'URL:{{ path('admin/materials') }}',
+                    buttons: {
+                        fechar: function () {
+                        }
+                    }
+                });
+            })
+
+
+            $('#bores').click(function (e) {
+                e.preventDefault();
+                $.confirm({
+                    async: true,
+                    title: 'Calibres',
+                    columnClass: 'col-md-7',
+                    content: 'URL:{{ path('admin/bores') }}',
+                    buttons: {
+                        fechar: function () {
+                        }
+                    }
+                });
+            })
+
+            $('#grids').click(function (e) {
+                e.preventDefault();
+
+                $.confirm({
+                    async: true,
+                    title: 'Grades',
+                    columnClass: 'col-md-12 col-lg-7 col-8',
+                    content: 'URL:{{ path('admin/grids') }}',
+                    buttons: {
+                        fechar: function () {
+                        }
+                    }
+                });
+            })
+
+
+            $('#models').click(function (e) {
+                e.preventDefault();
+
+                $.confirm({
+                    async: true,
+                    title: 'Modelos',
+                    columnClass: 'col-md-7',
+                    content: 'URL:{{ path('admin/models') }}',
+                    buttons: {
+                        fechar: function () {
+                        }
+                    }
+                });
+            })
+
+            /*$('#tags').click(function (e) {
+                e.preventDefault();
+
+                $.confirm({
+                    async: true,
+                    title: 'Tags',
+                    columnClass: 'col-md-7',
+                    content: 'URL:{{ path('admin/tags') }}',
+                    buttons: {
+                        fechar: function () {
+                        }
+                    }
+                });
+            })*/
+
+            $('#vouchers').click(function (e) {
+                e.preventDefault();
+
+                $.confirm({
+                    async: true,
+                    title: 'Vouchers',
+                    columnClass: 'col-md-7',
+                    content: 'URL:/vouchers',
+                    buttons: {
+                        fechar: function () {
+                        }
+                    }
+                });
+            })
+        })
+
+
+        function loadingTableBaseBrand(type, table) {
+            const tableItems = document.getElementById('table_items');
+
+            tableItems.innerHTML = `<div class="col-8">
+                    <label for="${type}_name">Nome</label>
+                    <input name="${type}_name" id="${type}_name" type="text" class="col-12">
+                </div>
+
+                <br>
+                <div class="col-3 dark">
+                    <button class="btn" id="new_${type}">Criar novo</button>
+                </div>`;
+            table.innerHTML = '';
+
+            $.ajax({
+                url: `get_${type}s`,
+                type: 'POST',
+                async: false,
+                success: function (itemsJson) {
+                    for (const item of itemsJson) {
+                        table.innerHTML += `
+                            <tr>
+                                <td>#${item.id}</td>
+                                <td>${item.name}</td>
+                                <td><a href="#"  class="edit_${type}" data-${type}_id="${item.id}" data-${type}_name="${item.name}" ><i class="bi bi-pencil-square black 50"></i></a></td>
+                                <td><a href="#" class="delete_${type}" data-${type}_id="${item.id}"><i class="bi bi-trash black 50"></i></a></td>
+                            </tr>`
+                    }
+
+                    $(`#new_${type}`).click(function () {
+                        $.ajax({
+                            url: `new_${type}`,
+                            type: 'POST',
+                            data: {itemName: $(`#${type}_name`).val()},
+                            success: function () {
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Cadastrado com sucesso',
+                                });
+                                loadingTableBaseBrand(type, table)
+
+                            }
+                        })
+                    })
+
+                    $(`.delete_${type}`).click(function () {
+                        const itemId = $(this).data(`${type}_id`);
+                        $.confirm({
+                            title: 'Apagar!',
+                            content: 'Você tem certeza?!',
+                            buttons: {
+                                confirm: function () {
+                                    $.ajax({
+                                        url: `delete_${type}`,
+                                        type: 'POST',
+                                        data: {itemId: itemId},
+                                        success: function () {
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Apagado com sucesso',
+                                            });
+                                            loadingTableBaseBrand(type, table)
+                                        }
+                                    })
+                                },
+                                Cancelar: function () {
+
+                                }
+
+
+                            }
+                        });
+
+                    })
+
+                    $(`.edit_${type}`).click(function () {
+                        const itemId = $(this).data(`${type}_id`);
+                        const itemName = $(this).data(`${type}_name`);
+
+                        $.confirm({
+                            async: true,
+                            title: 'Editar',
+                            columnClass: 'col-md-4',
+                            content: `
+                                         <div class="row col-12">
+                                             <div class="col-12">
+                                                 <label for="${type}_id">Nome</label>
+                                                 <input name="${type}_name" id="${type}_name_edit" data-${type}_id="${itemId}" type="text" class="col-12" value="${itemName}">
+                                             </div>
+                                         </div>
+                                    `,
+                            buttons: {
+                                Confirmar: function () {
+                                    $.ajax({
+                                        url: `edit_${type}`,
+                                        type: 'POST',
+                                        data: {itemId: itemId, itemName: $(`#${type}_name_edit`).val()},
+                                        success: function () {
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Editado com sucesso',
+                                            });
+                                            loadingTableBaseBrand(type, table)
+                                        }
+                                    })
+
+                                },
+                                Cancelar: function () {
+                                },
+                            }
+
+                        });
+
+                    })
+
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+            $('.table').DataTable();
+        }
+
+    </script>
+{% endblock %}

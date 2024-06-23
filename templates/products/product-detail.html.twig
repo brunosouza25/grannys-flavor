@@ -1,0 +1,140 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+
+{% block body %}
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="product_detail" class="row">
+                        <div class="col-xl-3 col-lg-6  col-md-6 col-xxl-5 ">
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade show active" id="first">
+                                    <img class="img-fluid product-bo-image" src="{{ bo_url }}{{ product.foto }}" alt="">
+                                </div>
+                                <form action="method" name="upload-file" id="multiple-files-upload"
+                                      enctype="multipart/form-data">
+                                    <div class="input-group custom_file_input mb-3">
+                                        <button class="btn btn-primary btn-sm" type="submit" name="submit" id="submit">
+                                            Carregar
+                                        </button>
+                                        <div class="form-file">
+                                            <input type="file" name="products_uploaded[]" id="products_uploaded"
+                                                   class="form-file-input form-control" value="Upload"
+                                                   multiple="multiple">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="productID" value="{{ product.id }}">
+                                </form>
+                            </div>
+                        </div>
+                        <!--Tab slider End-->
+                        <div class="col-xl-9 col-lg-6  col-md-6 col-xxl-7 col-sm-12">
+                            <div class="product-detail-content">
+                                <!--Product details-->
+                                <div class="new-arrival-content pr">
+                                    <h4>{{ titlePage }}</h4>
+
+                                    <div class="d-table mb-2">
+                                        <p class="price float-left d-block">{{ product.price }}€</p>
+                                    </div>
+                                    <p>Familia: <span class="item"> {{ familie }}</span></p>
+                                    <p>Subfamilia: <span class="item">{{ subfamilie }}</span></p>
+                                    <p>Estado: <span class="item">
+
+                                            {% set state = product.state %}
+                                            {% if state == 1 %}
+                                                <b data-id-product="{{ product.id }}"
+                                                   class="state-chenge alert-success p-2">Ativo</b>
+                                            {% else %}
+                                                <b data-id-product="{{ product.id }}"
+                                                   class="state-chenge alert-danger p-2">Desativado</b>
+                                            {% endif %}
+                                        </span></p>
+                                    <hr>
+                                    <form id="textEdit">
+                                        <label>Descrição do Produto</label>
+                                        <textarea rows="6" class="form-control"
+                                                  name="textproduct">{{ product.text }}</textarea>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('.state-chenge').click(function () {
+            var productID = $(this).attr('data-id-product');
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/app_products_state_change') }}',
+                data: ({productID: productID}),
+                success: function (data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Estado Atualizado',
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        });
+
+
+        $("form#multiple-files-upload").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: '{{ path('admin/app_products_upload_image') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+
+                success: function (data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Estado Atualizado',
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'info',
+                        title: 'Imagem não suportada',
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

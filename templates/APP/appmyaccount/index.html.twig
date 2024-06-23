@@ -1,0 +1,92 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <style>
+        .regular-header{
+            display: none;
+        }
+
+    </style>
+    <header class="header">
+        <div class="logo-wrap">
+            <a href="{{ path('app/app_dashboard') }}"><i class="iconly-Arrow-Left-Square icli"></i></a>
+            <h1 class="title-color font-md">Minha Conta</h1>
+        </div>
+        <div class="avatar-wrap">
+            <a href="{{ path('app/app_dashboard') }}">
+                <i class="iconly-Home icli"></i>
+            </a>
+        </div>
+    </header>
+    <main class="main-wrap setting-page mb-xxl">
+        <div class="user-panel">
+            <div class="media">
+                <div class="avatar-wrap">
+                    <a href="javascript:void(0)"> <span style="  font-size: 45px;  color: #e6352f;" class="mdi mdi-account"></span></a>
+
+                </div>
+                <div class="media-body">
+                    <h2 class="title-color">{{userdata.name}}</h2>
+                    <span class="content-color font-md">{{userdata.email}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Section Start -->
+        <form id="updateData" class="custom-form">
+            <div class="input-box">
+                <i class="iconly-Profile icli"></i>
+                <input type="text" value="{{ userdata.name }}" name="username" class="form-control" required />
+            </div>
+
+            <div class="input-box">
+                <i data-feather="at-sign"></i>
+                <input type="email" value="{{ userdata.email }}" name="useremail" class="form-control" required />
+            </div>
+
+            <div class="input-box">
+                <i class="iconly-Call icli"></i>
+                <input type="number" value="{{userdata.phone}}" class="form-control" name="userphone" required />
+            </div>
+
+
+            <div class="type-password">
+                <label class="font-sm" for="password">Modar a Password</label>
+                <div class="input-box mb-0">
+                    <i class="iconly-Lock icli"></i>
+                    <input id="password" type="password" name="password" placeholder="Password" autocomplete="off" class="form-control" />
+                </div>
+            </div>
+            <button type="submit" class="btn-solid">Atualizar os meus Dados</button>
+        </form>
+        <!-- Form Section End -->
+    </main>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+
+    <script>
+        $("#updateData").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('appapp_appmyaccount_update')}}",
+                data: formData, // serializes the form's elements.
+                success: function(data)
+                {
+                    location.reload();
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+    </script>
+
+
+{% endblock %}
+

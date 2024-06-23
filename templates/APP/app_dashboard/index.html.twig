@@ -1,0 +1,58 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+
+{% block body %}
+
+    {% if phonestate  == '0'%}
+        <meta http-equiv="refresh" content="0; URL='{{ path('app/app_phone_user_confirm') }}'"/>
+    {% endif %}
+
+    {% if address  == '0'%}
+        <meta http-equiv="refresh" content="0; URL='{{ path('app/app_add_user_address') }}'"/>
+    {% endif %}
+
+    <section class="banner-section ratio2_1">
+        <div class="h-banner-slider">
+            <div>
+                <div class="banner-box">
+                    <img src="assets/images/banner/home1.jpg" alt="banner" class="bg-img" />
+                    <div class="content-box">
+                        <h1 class="title-color font-md heading">Produto Fresco</h1>
+                        <p class="content-color font-sm">Só no Fabios</p>
+                        <a href="#" class="btn-solid font-sm">Explorar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="banner-box">
+                    <img src="assets/images/banner/home2.jpg" alt="banner" class="bg-img" />
+                    <div class="content-box">
+                        <h2 class="font-white font-md heading">Publicidade</h2>
+                        <p class="font-white font-sm">Opção de por como publicidade</p>
+                        <a href="#" class="btn-outline font-sm">Saber Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="category pt-0">
+        <h3 class="font-md"><span>O que deseja? </span><span class="line"></span></h3>
+        <div class="row gy-sm-4 gy-2">
+            {% for category in categories %}
+            <div class="col-3">
+                <div class="category-wrap">
+                    <div class="bg-shape bg-theme-blue border-blue"></div>
+                    <a href="{{ path('app/app_foodcategories') }}"> <img class="category img-fluid" src="{{bo_url}}{{ category.image }}" alt="{{category.name}}" /> </a>
+                    <span class="title-color">{{category.name}}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+{% endblock %}

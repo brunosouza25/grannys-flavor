@@ -1,0 +1,84 @@
+{% block body %}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Detalhes do Pedido do Cliente</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; background-color: #f0f0f0; color: #333;">
+
+    <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        {#        <div style="text-align: center; padding: 10px; border-radius: 5px 5px 0 0;">#}
+        {#            <img src="https://{{ emailInfo.url }}{{ app_logo }}" alt="{{ companyInfo.companyName }}" style="max-width: 200px; margin: 0 auto;">#}
+        {#        </div>#}
+
+        <h2 style="text-align: center; margin-top: 20px; color: #007BFF;">Order ID: #{{ emailInfo.orderId }}</h2>
+
+
+        <p>Name: {{ emailInfo.costumerInfo.name }},</p>
+        <p>Email: {{ emailInfo.costumerInfo.email }},</p>
+        <p>Contact: {{ emailInfo.costumerInfo.contact }},</p>
+
+        <hr style="border: 1px solid #ccc; margin: 20px 0;">
+
+        <h3 style="color: #007BFF;">Order Detail:</h3>
+        <h5><strong>Update date:</strong> {{ emailInfo.time }}</h5>
+        <ul style="list-style: none; padding-left: 0;">
+            {% for product in emailInfo.products %}
+                <li>
+                    <div style="display: flex; align-items: center;">
+                        {#                        <img src="https://{{ emailInfo.url }}/{{ product.image }}" alt="Product Image" style="max-width: 100px; margin-right: 10px;">#}
+                        <div>
+                            <strong>Product:</strong> {{ product.item }}
+                            <ul style="list-style: none; padding-left: 0;">
+                                <li><strong>Quantity:</strong> {{ product.qtd }}</li>
+                                <li><strong>Unit Price:</strong> € {{ (product.price | number_format(2)) }}</li>
+
+                                {% if product.attributes is defined and product.attributes is not null %}
+                                    <li><strong>Extras:</strong>
+                                        <h5>Obs: Alguns extras podem acabar não sendo cobrados dependendo de como foi especificado na hora do pedido!</h5>
+
+                                        <ul style="list-style: none; padding-left: 0;">
+                                            {% for extra in product.attributes %}
+                                                <li>{{ extra.name }} - € {{ (product.price / 100) | number_format(2) }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+
+                                <br>
+                                <li><strong>Subtotal:</strong> € {{ ((product.price * product.qtd)) | number_format(2) }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <hr style="border: 1px solid #ccc; margin: 20px 0;">
+            {% endfor %}
+        </ul>
+
+        <h4>Taxa de entrega: € {{ (emailInfo.feePrice / 100) | number_format(2) }}</h4>
+
+        <h3>Total: € {{ (((emailInfo.total ) / 100) | number_format(2)) + ((emailInfo.feePrice / 100) | number_format(2)) }}</h3>
+
+
+        <hr style="border: 1px solid #ccc; margin: 20px 0;">
+        {% if emailInfo.costumerAddress is defined %}
+
+            <h3 style="color: #007BFF;">Informações de Entrega:</h3>
+            <ul style="list-style: none; padding-left: 0;">
+                <li>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li><strong>Endereço:</strong> {{ emailInfo.costumerAddress.street }} - {{ emailInfo.costumerAddress.city }} - {{ emailInfo.costumerAddress.postalcode }}</li>
+                    </ul>
+                </li>
+
+            </ul>
+        {% endif %}
+        <hr style="border: 1px solid #ccc; margin: 20px 0;">
+
+    </div>
+
+    </body>
+    </html>
+
+{% endblock %}

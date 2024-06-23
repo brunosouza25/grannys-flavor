@@ -1,0 +1,63 @@
+<!-- Sidebar Start -->
+<a href="javascript:void(0)" class="overlay-sidebar"></a>
+<aside class="header-sidebar">
+    <div class="wrap">
+        <div class="user-panel">
+            <div class="media">
+                <a href="account.html"><span style="  font-size: 45px;  color: #e6352f;" class="mdi mdi-account"></span></a>
+                <div class="media-body">
+                    <a href="#" class="title-color font-sm"
+                    >{{ app.user.name }}
+                        <span class="content-color font-xs">{{app.user.email}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Start -->
+        <nav class="navigation">
+            <ul>
+                <li>
+                    <a href="{{ path('app/app_dashboard') }}" class="nav-link title-color font-sm">
+                        <i class="iconly-Home icli"></i>
+                        <span>Principal</span>
+                    </a>
+                    <a class="arrow" href="{{ path('app/app_dashboard') }}"><i data-feather="chevron-right"></i></a>
+                </li>
+
+                <li>
+                    <a href="{{ path('app/app_foodcategories') }}" class="nav-link title-color font-sm">
+                        <i class="iconly-Category icli"></i>
+                        <span>Categorias</span>
+                    </a>
+                    <a class="arrow" href="{{ path('app/app_foodcategories') }}"><i data-feather="chevron-right"></i></a>
+                </li>
+
+                <li>
+                    <a href="{{ path('app/app_orders') }}" class="nav-link title-color font-sm">
+                        <i class="iconly-Document icli"></i>
+                        <span>Pedidos</span>
+                    </a>
+                    <a class="arrow" href="{{ path('app/app_orders') }}"><i data-feather="chevron-right"></i></a>
+                </li>
+
+                <li>
+                    <a href="{{ path('appapp_appmyaccount') }}" class="nav-link title-color font-sm">
+                        <i class="iconly-Add-User icli"></i>
+                        <span>Minha Conta</span>
+                    </a>
+                    <a class="arrow" href="{{ path('appapp_appmyaccount') }}"><i data-feather="chevron-right"></i></a>
+                </li>
+
+            </ul>
+        </nav>
+        <!-- Navigation End -->
+    </div>
+
+    <div class="contact-us">
+{#        <span class="title-color">Contact Support</span>#}
+{#        <p class="content-color font-xs">If you have any problem,queries or questions feel free to reach out</p>#}
+        <a href="javascript:void(0)" class="btn-solid"> SAIR DA CONTA </a>
+    </div>
+</aside>
+<!-- Sidebar End -->

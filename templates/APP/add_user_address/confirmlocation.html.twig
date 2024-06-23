@@ -1,0 +1,130 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+
+    <div class="map-wrap">
+        <div class="map-section" id="map"></div>
+    </div>
+
+    <div class="current-box">
+        <div class="location">
+            <div class="location-box">
+                <h3 class="title-color font-sm"><i class="iconly-Location icli"></i>{{useraddress.street}}</h3>
+                <p class="content-color font-sm">{{ useraddress.city }} - {{ useraddress.postalcode }}</p>
+                <form >
+                    <input type="hidden" name="lantitude" id="lantitude">
+                    <input type="hidden" name="longitude" id="longitude">
+                    <button type="button" id="confirmLocation" class="custom-btn-app">Confirmar Localização</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        var geocoder;
+        var map;
+
+        function picked() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 16,
+                center: {lat: -34.397, lng: 150.644}
+            });
+            geocoder = new google.maps.Geocoder();
+
+                var street = '{{ useraddress.street }}';
+                var city = '{{useraddress.city}}';
+                var postal = '{{ useraddress.postalcode }}';
+                var address = (street + ' ' + city + ' ' + postal);
+
+            function codeAddress(geocoder, map) {
+                geocoder.geocode({'address': address}, function(results, status) {
+                    if (status === 'OK') {
+
+                        map.setCenter(results[0].geometry.location);
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location,
+                            draggable:true
+                        });
+
+                        var currentLat = (marker.getPosition().lat());
+                        var currentLng = (marker.getPosition().lng());
+
+                        $('#lantitude').val(currentLat);
+                        $('#longitude').val(currentLng);
+
+                        var infowindow = new google.maps.InfoWindow({
+                            content: "<b>Arraste</b> para definir a sua localização exata."
+                        });
+                        infowindow.open(map, marker);
+
+                        google.maps.event.addListener(marker, 'dragend', function() {
+                            var newLat = (marker.getPosition().lat());
+                            var newLng = (marker.getPosition().lng());
+
+                            $('#lantitude').val(newLat);
+                            $('#longitude').val(newLng);
+
+                        });
+                    } else {
+                        alert('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }
+
+                    window.picked = picked;
+                    codeAddress(geocoder, map);
+
+                    $('#confirmLocation').click(function () {
+                        var Gltd = $('#lantitude').val();
+                        var Glng = $('#longitude').val();
+
+                        $.ajax({
+                            type: "POST",
+                            url: "{{path('app/app_location_confirm_user_address')}}",
+                            data: ({Gltd:Gltd, Glng:Glng}), // serializes the form's elements.
+                            success: function(data)
+                            {
+                              location.replace('{{ path('app/app_dashboard') }}');
+                            }
+                        });
+                    });
+
+        }
+
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwoetFWD_58gajSuz86rp6cwu6QTHqO1E&callback=picked"></script>
+
+{#    <script>#}
+{#        $("#saveuserdata").submit(function(e) {#}
+{#            e.preventDefault(); // avoid to execute the actual submit of the form.#}
+{#            var formData = new FormData(this);#}
+
+{#            $.ajax({#}
+{#                type: "POST",#}
+{#                url: "{{path('app/app_save_user_address')}}",#}
+{#                data: formData, // serializes the form's elements.#}
+{#                success: function(data)#}
+{#                {#}
+{#                    alert('guardado');#}
+
+{#                },#}
+{#                cache: false,#}
+{#                contentType: false,#}
+{#                processData: false#}
+{#            });#}
+{#        });#}
+{#    </script>#}
+
+{% endblock %}
+
+
+

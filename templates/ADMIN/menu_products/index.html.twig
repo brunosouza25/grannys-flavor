@@ -1,0 +1,2124 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+
+{% block body %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="box-show-area">
+                <ul id="sortable">
+                    {% for category in categories %}
+                        <li id="{{category.id}}">
+                            <div class="card primary-droped box-category-{{ category.id }}" data-category-id-drop="{{ category.id }}">
+                                <div class="card-body">
+                                    <button class="expand-category box-expand-category-{{ category.id }}"><span class="mdi mdi-chevron-down"></span> </button>
+                                    <div class="bottom-options options-{{ category.id }}">
+                                        <span data-id="{{ category.id }}" class="icons-options mdi mdi-delete delete-category"></span>
+                                        <span class="icons-options mdi mdi-pencil edit-category-data-{{ category.id }}"></span>
+                                    </div>
+                                    <script>
+                                        $('.box-category-'+{{ category.id }}).hover(function () {
+                                            $('.options-'+{{ category.id }}).show();
+                                        });
+                                        $('.box-category-'+{{ category.id }}).mouseleave(function () {
+                                            $('.options-'+{{ category.id }}).hide();
+                                        });
+                                    </script>
+                                    {% set image = category.image %}
+                                    {% if image is null %}
+                                        <div class="image-add">
+                                            <img src="no image" class="image-add-class">
+                                            <form method="post" action="" enctype="multipart/form-data" id="myform">
+                                                <input type="file" id="products_uploaded_category" class="add-photo-category custom-file-input" data-category-id="{{ category.id }}" name="file" />
+                                            </form>
+                                        </div>
+                                    {% else %}
+                                        <div class="image-add-update">
+                                            <button class="delete-image-category" data-category-id="{{ category.id }}"><span class="mdi mdi-close"></span></button>
+                                            <img src="{{bo_url}}{{ image }}" style="border: 1px solid #b5b5b5;">
+                                            <form method="post" action="" enctype="multipart/form-data" id="myform">
+                                                <input type="file" id="products_uploaded_category_update" class="update-photo-category custom-file-input-update" data-category-id="{{ category.id }}" name="file" />
+                                            </form>
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="desc-category-align category-data-{{ category.id }}">
+
+                                        <div class="title-category">
+                                            <span>{{ category.name }}</span>
+                                        </div>
+                                        <div class="text-category">
+                                            <p>{{ category.description }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="category-form category-form-edit-{{ category.id }}">
+                                        <form class="edit-category-data">
+                                            <div class="mb-3">
+                                                <input type="text" class="form-control input-default" name="category-name" value="{{ category.name }}" placeholder="Nome da Categoria">
+                                            </div>
+                                            <div class="mb-3">
+                                                <input type="text" class="form-control input-default" name="category-desc" value="{{ category.description }}" placeholder="Descrição da Categoria">
+                                            </div>
+                                            <h5>Onde Apresentar a Categoria</h5>
+
+                                            <div class="row">
+                                                <div class="col-xl-4 col-xxl-6 col-6">
+                                                    <div class="form-check custom-checkbox mb-3">
+                                                        <div class="alignation-showing">
+                                                            {% if category.menustate == 1 %}
+                                                                <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>
+                                                            {% else %}
+                                                                <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>
+                                                            {% endif %}
+                                                            <label class="form-check-label" for="menuShow">Mostrar no menu</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-4 col-xxl-6 col-6">
+                                                    <label class="form-label">A partir das:</label>
+                                                    <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                        <input type="text" class="form-control" name="timeinm" value="{{ category.timeinm }}">
+                                                        <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-4 col-xxl-6 col-6">
+                                                    <label class="form-label">Até as:</label>
+                                                    <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                        <input type="text" class="form-control" name="timeoutm" value="{{ category.timeoutm }}">
+                                                        <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xl-4 col-xxl-6 col-6">
+                                                    <div class="form-check custom-checkbox mb-3">
+                                                        <div class="alignation-showing">
+                                                            {% if category.state == 1 %}
+                                                                <input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>
+                                                            {% else %}
+                                                                <input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>
+                                                            {% endif %}
+
+                                                            <label class="form-check-label" for="orderingShow">Mostrar nos Pedidos</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-4 col-xxl-6 col-6">
+                                                    <label class="form-label">A partir das:</label>
+                                                    <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                        <input type="text" class="form-control" name="timein" value="{{ category.timein }}">
+                                                        <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xl-4 col-xxl-6 col-6">
+                                                    <label class="form-label">Até as:</label>
+                                                    <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                        <input type="text" class="form-control" name="timeout" value="{{ category.timeout }}">
+                                                        <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="alert-warning p-2 text-center">
+                                                <span>Para mostrar o tempo todo, deixa o horário vazio</span>
+                                            </div>
+                                            <hr>
+                                            <div style="float: right">
+                                                <button type="button" class="btn btn-sm btn-danger m-2 close-form-category-edit-{{ category.id }}">Cancelar</button>
+                                                <button type="submit" class="btn btn-sm btn-success">Guardar</button>
+                                            </div>
+                                            <input type="hidden" name="category-id" value="{{ category.id }}">
+                                        </form>
+                                    </div>
+                                </div>
+
+                                {#                                Acompanhamentos já ligados toda Categoria#}
+                                <div class="">
+                                    {% for connectionsadd in connectionsadd %}
+                                        {% for catadi in adicional %}
+                                            {% if connectionsadd.idadicional == catadi.id and connectionsadd.idcategoryfood == category.id %}
+                                                <div class="box-connected-addicional adicional-con-{{ catadi.id }}">
+                                                    <span class="delete-addicional" data-adiciona-id="{{ catadi.id }}" data-category-id="{{ category.id }}"><span class="mdi mdi-close-circle"></span></span>
+                                                    {{ catadi.name }}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                                {#                                Acompanhamentos Previsualizados Toda Categoria #}
+                                <div class="append-addicional-temporary temp-addiciona-{{ category.id }}"></div>
+                                {#                                Fim Acompanhamentos Categoria#}
+
+                            </div>
+
+
+                            <div class="box-products box-products-category-{{ category.id }}">
+                                {% if items|length > 0 %}
+
+                                    {% for item in items %}
+                                        {% if item.categoryId == category.id %}
+                                        <div class="card item-card-box update-item-box-{{ item.id }}" data-item-id-drop="{{ item.id }}" data-category-id-drop="{{ category.id }}">
+                                            <div class="bottom-options options-item-{{ item.id }}">
+                                                <span data-id="{{ item.id }}" class="icons-options mdi mdi-delete delete-product"></span>
+                                                <span class="icons-options mdi mdi-pencil edit-item-data-{{ item.id }}"></span>
+                                            </div>
+                                            <script>
+                                                $('.update-item-box-'+{{ item.id }}).hover(function () {
+                                                    $('.options-item-'+{{ item.id }}).show();
+                                                });
+                                                $('.update-item-box-'+{{ item.id }}).mouseleave(function () {
+                                                    $('.options-item-'+{{ item.id }}).hide();
+                                                });
+                                            </script>
+                                            <div class="card-body">
+                                                {% set imageItem = item.image %}
+                                                {% if imageItem is null %}
+                                                    <div class="image-add">
+                                                        <img src="no image" class="image-add-class">
+                                                        <form method="post" action="" enctype="multipart/form-data" id="myform">
+                                                            <input type="file" id="products_uploaded_category" class="add-photo-item custom-file-input" data-item-id="{{ item.id }}" name="file" />
+                                                        </form>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="image-add-update">
+                                                        <button class="delete-image-category" data-item-id="{{ item.id }}"><span class="mdi mdi-close"></span></button>
+                                                        <img src="{{bo_url}}{{ imageItem }}" style="border: 1px solid #b5b5b5;">
+                                                        <form method="post" action="" enctype="multipart/form-data" id="myform">
+                                                            <input type="file" id="products_uploaded_category_update" class="update-photo-item custom-file-input-update" data-item-id="{{ item.id }}" name="file" />
+                                                        </form>
+                                                    </div>
+                                                {% endif %}
+
+
+                                                <div class=" box-preview-item-{{ item.id }}" style="display: inline;">
+                                                    <div class="desc-category-align item-data-{{ item.id }}" data-item-id-drop="{{ item.id }}" data-category-id-drop="{{ category.id }}">
+                                                        <div class="title-item">
+                                                            <span>{{ item.name }}</span>
+                                                        </div>
+                                                        <div class="text-item">
+                                                            <p>{{ item.description }}</p>
+                                                        </div>
+
+                                                        <div class="category-form category-form-edit-{{ category.id }}">
+                                                            <form class="edit-category-data">
+                                                                <div class="mb-3">
+                                                                    <input type="text" class="form-control input-default" name="category-name" value="{{ category.name }}" placeholder="Nome da Categoria">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <input type="text" class="form-control input-default" name="category-desc" value="{{ category.description }}" placeholder="Descrição da Categoria">
+                                                                </div>
+                                                                <h5>Onde Apresentar a Categoria</h5>
+
+                                                                <div class="row">
+                                                                    <div class="col-xl-4 col-xxl-6 col-6">
+                                                                        <div class="form-check custom-checkbox mb-3">
+                                                                            <div class="alignation-showing">
+                                                                                {% if category.menustate == 1 %}
+                                                                                    <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>
+                                                                                {% else %}
+                                                                                    <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>
+                                                                                {% endif %}
+                                                                                <label class="form-check-label" for="menuShow">Mostrar no menu</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-4 col-xxl-6 col-6">
+                                                                        <label class="form-label">A partir das:</label>
+                                                                        <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                            <input type="text" class="form-control" name="timeinm" value="{{ category.timeinm }}">
+                                                                            <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-4 col-xxl-6 col-6">
+                                                                        <label class="form-label">Até as:</label>
+                                                                        <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                            <input type="text" class="form-control" name="timeoutm" value="{{ category.timeoutm }}">
+                                                                            <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-xl-4 col-xxl-6 col-6">
+                                                                        <div class="form-check custom-checkbox mb-3">
+                                                                            <div class="alignation-showing">
+                                                                                {% if category.state == 1 %}
+                                                                                    <input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>
+                                                                                {% else %}
+                                                                                    <input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>
+                                                                                {% endif %}
+
+                                                                                <label class="form-check-label" for="orderingShow">Mostrar nos Pedidos</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xl-4 col-xxl-6 col-6">
+                                                                        <label class="form-label">A partir das:</label>
+                                                                        <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                            <input type="text" class="form-control" name="timein" value="{{ category.timein }}">
+                                                                            <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-xl-4 col-xxl-6 col-6">
+                                                                        <label class="form-label">Até as:</label>
+                                                                        <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                            <input type="text" class="form-control" name="timeout" value="{{ category.timeout }}">
+                                                                            <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="alert-warning p-2 text-center">
+                                                                    <span>Para mostrar o tempo todo, deixa o horário vazio</span>
+                                                                </div>
+                                                                <hr>
+                                                                <div style="float: right">
+                                                                    <button type="button" class="btn btn-sm btn-danger m-2 close-form-category-edit-{{ category.id }}">Cancelar</button>
+                                                                    <button type="submit" class="btn btn-sm btn-success">Guardar</button>
+                                                                </div>
+                                                                <input type="hidden" name="category-id" value="{{ category.id }}">
+                                                            </form>
+                                                        </div>
+
+                                                        {#                                                    Acompanhamentos ITEMS#}
+                                                        <div class="preview-append-item-adicional"></div>
+                                                        <div class="">
+                                                            {% for connectitemadd in connectitemadd %}
+                                                                {% for catadi in adicional %}
+                                                                    {% if (connectitemadd.idadicional == catadi.id and connectitemadd.idcategoryfood == category.id and connectitemadd.iditem == item.id) %}
+                                                                        <div class="box-connected-addicional adicional-con-item-{{ catadi.id }}">
+                                                                            <span class="delete-addicional-item" data-adiciona-id="{{ catadi.id }}" data-category-id="{{ category.id }}" data-item-id="{{ item.id }}"><span class="mdi mdi-close-circle"></span></span>
+                                                                            {{ catadi.name }}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endfor %}
+                                                        </div>
+                                                        <div class="temp-item-adiciona-{{ item.id }}"></div>
+
+                                                    </div>
+
+                                                    {% if itemsm | length > 0 %}
+                                                        <table class="table table-responsive">
+                                                            {% for mitem in itemsm %}
+                                                                {% if mitem.idfooditem == item.id %}
+                                                                    <tr class="adicional-multple-item" data-item-id-drop="{{ item.id }}" data-category-id-drop="{{ category.id }}" data-item-multiple-id ="{{ mitem.id }}">
+                                                                        <td>{{mitem.itemname}}
+                                                                            <span class="append-multiple-item-{{ mitem.id }}"></span>
+                                                                            <span>
+                                                                        <div style="  width: fit-content;display: inline-block;">
+                                                                        {% for connectitemaddm in connectitemaddm %}
+                                                                            {% for catadi in adicional %}
+                                                                                {% if (connectitemaddm.idadicional == catadi.id and connectitemaddm.idcategory == category.id and connectitemaddm.iditem == item.id and connectitemaddm.iditemmultiple == mitem.id) %}
+                                                                                    <div class="box-connected-addicional adicional-con-item-multiple-{{ catadi.id }}">
+                                                                                        <span class="delete-addicional-item-multiple" data-adiciona-id="{{ catadi.id }}" data-category-id="{{ category.id }}" data-item-id="{{ item.id }}" data-item-multiple="{{ mitem.id }}"><span class="mdi mdi-close-circle"></span></span>
+                                                                                        {{ catadi.name }}
+                                                                                    </div>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                    </span>
+                                                                            <span class="preview-append-multiple-item"></span>
+                                                                                     <span class="right-side-price">{{ mitem.itemprice }}
+                                                                        <span>EUR</span></span>
+                                                                        </td>
+
+                                                                    </tr>
+
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </table>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="hidden-form box-edit-item-{{ item.id }}">
+
+                                                    {% if item.type == 'single' %}
+                                                        {#                                                    // Produto Unico#}
+                                                        <div class="card">
+                                                            <div class="card-body">
+
+                                                                <div class="basic-form">
+                                                                    <form class="submit-edit-item-category">
+                                                                        <div class="mb-3">
+                                                                            <input type="text" class="form-control input-default resized-name" name="item-name" value="{{ item.name }}" placeholder="Nome do Produto">
+                                                                            <input type="text" class="form-control input-default resized-price" value="{{ item.price }}" name="item-price-single" placeholder="Preço">
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <input type="text" class="form-control input-default" name="item-desc" value="{{ item.description }}" placeholder="Descrição do Produto" >
+                                                                        </div>
+
+                                                                        <h5>Onde Apresentar o Produto</h5>
+
+                                                                        <div class="row">
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <div class="form-check custom-checkbox mb-3">
+                                                                                    <div class="alignation-showing">
+                                                                                        {% if category.menustate == 1 %}
+                                                                                            <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>
+                                                                                        {% else %}
+                                                                                            <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>
+                                                                                        {% endif %}
+                                                                                        <label class="form-check-label" for="menuShow">Mostrar no menu</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <label class="form-label">A partir das:</label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                                    <input type="text" class="form-control" name="timeinm" value="{{ item.timeinm }}">
+                                                                                    <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <label class="form-label">Até as:</label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                                    <input type="text" class="form-control" name="timeoutm" value="{{ item.timeoutm }}">
+                                                                                    <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <div class="form-check custom-checkbox mb-3">
+                                                                                    <div class="alignation-showing">
+                                                                                        {% if item.state == 1 %}
+                                                                                            <input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>
+                                                                                        {% else %}
+                                                                                            <input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>
+                                                                                        {% endif %}
+
+                                                                                        <label class="form-check-label" for="orderingShow">Mostrar nos Pedidos</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <label class="form-label">A partir das:</label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                                    <input type="text" class="form-control" name="timein" value="{{ item.timein }}">
+                                                                                    <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <label class="form-label">Até as:</label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                                    <input type="text" class="form-control" name="timeout" value="{{ item.timeout }}">
+                                                                                    <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="alert-warning p-2 text-center">
+                                                                            <span>Para mostrar o tempo todo, deixa o horário vazio</span>
+                                                                        </div>
+                                                                        <hr>
+                                                                        <input type="hidden" name="category-id" value="{{ category.id }}">
+
+                                                                        <div class="mb-3">
+                                                                            <label>Codigo ZoneSoft do Produto</label><br>
+                                                                            <select class="select" theme="google" placeholder="Código Zonesoft" name="zonesoftcode" data-search="true">
+                                                                                {% for zoneCodes in zoneProducts %}
+                                                                                    <option {% if item.zonesoftcode == zoneCodes.zoneSoftCode %} selected {% endif %} value="{{ zoneCodes.zoneSoftCode }}">{{zoneCodes.name}} - {{ zoneCodes.zoneSoftCode }}</option>
+                                                                                {% endfor %}
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="mb-3">
+
+                                                                            <div class="right-side-btn" style="float:right;">
+                                                                                <button type="button" class="btn btn-sm btn-outline-danger close-form-edit-item-{{ item.id }}">Cancelar</button>
+                                                                                <button type="submit" class="btn btn-sm btn-outline-success">Guardar</button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="hidden" name="typeItem" value="single">
+                                                                        <input type="hidden" name="itemID" value="{{ item.id }}">
+                                                                        <input type="hidden" name="categoryId" value="{{ category.id }}">
+
+                                                                    </form>
+                                                                    <div class="left-side-btn" style="float: left;">
+                                                                        <form id="submit-edit-item-to-multiple">
+                                                                            <button id="multiple-items" form="submit-edit-item-to-multiple" type="submit" data-id="{{ item.id }}" class="btn btn-sm btn-outline-light multiple-items-form">múltiplos tamanhos</button>
+                                                                            <input type="hidden" name="itemID" value="{{ item.id }}">
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {#                                                    //fim produto unico#}
+                                                    {% else %}
+                                                        {#                                                        //produto multiplo#}
+
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="basic-form">
+                                                                    <form class="submit-edit-item-category">
+                                                                        <div class="mb-3">
+                                                                            <input type="text" class="form-control input-default" name="item-name" value="{{ item.name }}" placeholder="Nome do Produto">
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <input type="text" class="form-control input-default" name="item-desc" value="{{ item.description }}" placeholder="Descrição do Produto" >
+                                                                        </div>
+
+                                                                        <h5>Onde Apresentar o Produto</h5>
+
+                                                                        <div class="row">
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <div class="form-check custom-checkbox mb-3">
+                                                                                    <div class="alignation-showing">
+                                                                                        {% if category.menustate == 1 %}
+                                                                                            <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>
+                                                                                        {% else %}
+                                                                                            <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>
+                                                                                        {% endif %}
+                                                                                        <label class="form-check-label" for="menuShow">Mostrar no menu</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <label class="form-label">A partir das:</label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                                    <input type="text" class="form-control" name="timeinm" value="{{ category.timeinm }}">
+                                                                                    <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <label class="form-label">Até as:</label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                                    <input type="text" class="form-control" name="timeoutm" value="{{ category.timeoutm }}">
+                                                                                    <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <div class="form-check custom-checkbox mb-3">
+                                                                                    <div class="alignation-showing">
+                                                                                        {% if category.state == 1 %}
+                                                                                            <input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>
+                                                                                        {% else %}
+                                                                                            <input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>
+                                                                                        {% endif %}
+
+                                                                                        <label class="form-check-label" for="orderingShow">Mostrar nos Pedidos</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <label class="form-label">A partir das:</label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                                    <input type="text" class="form-control" name="timein" value="{{ category.timein }}">
+                                                                                    <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-xl-4 col-xxl-6 col-6">
+                                                                                <label class="form-label">Até as:</label>
+                                                                                <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">
+                                                                                    <input type="text" class="form-control" name="timeout" value="{{ category.timeout }}">
+                                                                                    <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="alert-warning p-2 text-center">
+                                                                            <span>Para mostrar o tempo todo, deixa o horário vazio</span>
+                                                                        </div>
+                                                                        <hr>
+                                                                        <input type="hidden" name="category-id" value="{{ category.id }}">
+                                                                        {% if itemsm | length > 0 %}
+
+                                                                            {% for mitem in itemsm %}
+                                                                                {% if mitem.idfooditem == item.id %}
+                                                                                    <div class="mb-3">
+                                                                                        <input type="text" class="form-control input-default resized-name-multiple" value="{{ mitem.itemname }}" name="item-name-multiple[]" placeholder="Tamanho">
+                                                                                        <input type="text" class="form-control input-default resized-price-multiple" value="{{ mitem.itemprice }}" name="item-price-single-multiple[]" placeholder="Preço">
+                                                                                        <button type="button" class="mdi mdi-close close-multiple-item" data-target-category-close=""></button>
+                                                                                        <div class="mb-3">
+                                                                                            <label>Codigo ZoneSoft do Produto</label><br>
+                                                                                            <select class="select" theme="google" placeholder="Código Zonesoft" name="zonesoftcode[]" data-search="true">
+                                                                                                {% for zoneCodes in zoneProducts %}
+                                                                                                    <option  {% if mitem.zonesoftcode == zoneCodes.zoneSoftCode %} selected {% endif %} value="{{ zoneCodes.zoneSoftCode }}">{{zoneCodes.name}} - {{ zoneCodes.zoneSoftCode }}</option>
+                                                                                                {% endfor %}
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+
+                                                                        {% endif %}
+
+                                                                        <div class="append-extra-item-edit-{{ item.id }}"></div>
+
+                                                                        <div class="mb-3">
+                                                                            <div class="left-side-btn" style="float: left;">
+                                                                                <button type="button" class="btn btn-sm btn-outline-light add-multiple-item-update" data-id-item="{{ item.id }}">adicionar item</button>
+                                                                            </div>
+                                                                            <div class="right-side-btn" style="float:right;">
+                                                                                <button type="button" class="btn btn-sm btn-outline-danger close-form-edit-item-{{ item.id }}">Cancelar</button>
+                                                                                <button type="submit" class="btn btn-sm btn-outline-success">Guardar</button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <input type="hidden" name="typeItem" value="multiple">
+                                                                        <input type="hidden" name="itemID" value="{{ item.id }}">
+                                                                        <input type="hidden" name="categoryId" value="{{ category.id }}">
+
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {#                                                    // fim produto multiplo#}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+
+
+                                        <script>
+                                            $('.edit-item-data-'+{{ item.id }}).click(function () {
+                                                $('.box-preview-item-'+{{ item.id }}).hide();
+                                                $('.box-edit-item-'+{{ item.id }}).show();
+                                                $('.bottom-options').css({'visibility': 'hidden'});
+                                            });
+
+                                            $('.close-form-edit-item-'+{{ item.id }}).click(function () {
+                                                $('.box-preview-item-'+{{ item.id }}).show();
+                                                $('.box-edit-item-'+{{ item.id }}).hide();
+                                                $('.bottom-options').css({'visibility': 'visible'});
+                                            });
+
+
+
+
+                                        </script>
+
+                                    {% endfor %}
+                                {% endif %}
+
+                                <div class="append-form-add-item-{{ category.id }}"></div>
+                                <div class="card">
+                                    <button class="add-new-product-category btn btn-sm btn-primary" data-category-id="{{ category.id }}">Adicionar item à {{ category.name }}</button>
+                                </div>
+                            </div>
+
+                        </li>
+
+                        <script>
+
+                            $('.edit-category-data-'+{{ category.id }}).click(function () {
+                                $('.category-data-'+{{ category.id }}).hide();
+                                $('.category-form-edit-'+{{ category.id }}).addClass('show-category-form');
+                                $('.bottom-options').css({'visibility': 'hidden'});
+                            });
+
+                            $('.close-form-category-edit-'+{{ category.id }}).click(function () {
+                                $('.category-data-'+{{ category.id }}).show();
+                                $('.category-form-edit-'+{{ category.id }}).removeClass('show-category-form');
+                                $('.bottom-options').css({'visibility': 'visible'});
+                            });
+
+                            $('.box-expand-category-'+{{ category.id }}).click(function () {
+                                $('.box-products-category-'+{{ category.id }}).toggle();
+                            });
+
+                        </script>
+
+                    {% endfor %}
+                    <script>
+                        $('.add-multiple-item-update').click(function () {
+
+                            var idIdMultile = $(this).attr('data-id-item');
+                            var randomNumb = Math.round(Math.random()*100);
+
+                            $('.append-extra-item-edit-'+idIdMultile).append('' +
+                                '                <div class="mb-3 zone-item-form-'+randomNumb+'">' +
+                                '                <input type="text" class="form-control input-default resized-name-multiple" name="item-name-multiple[]" placeholder="Tamanho">' +
+                                '                <input type="text" class="form-control input-default resized-price-multiple" name="item-price-single-multiple[]" placeholder="Preço">' +
+                                '                <button type="button" class="mdi mdi-close close-multiple-item-edit" data-target-item-close="'+randomNumb+'"></button>' +
+                                '                </div>');
+
+
+                            $('.close-multiple-item-edit').click(function () {
+                                var eliminateSec = $(this).attr('data-target-item-close');
+                                $('.zone-item-form-'+eliminateSec).empty();
+                            });
+
+                        });
+                    </script>
+                </ul>
+            </div>
+
+
+            <div id="form-area-category-append"></div>
+            <button class="btn btn-primary mb-5" id="add-category-form">Adicionar Categoria</button>
+        </div>
+        <div class="col-lg-3">
+            <div class="area-addicional">
+                <h4>Adicionais & Complementos</h4>
+                {% for catadi in adicional %}
+                    <div class="card-adicional-box ">
+                        <div class="card-body-adicional" id="{{ catadi.id }}">
+                            <input type="hidden" value="{{ catadi.id }}">
+
+                            <span class="expand-add-icon mdi mdi-plus-box"></span>{{ catadi.name }}
+                        </div>
+                        <button class="btn btn-primary btn-sm custom-edit-btn delete-adicional" data-adicional-id="{{ catadi.id }}"><span class="mdi mdi-delete"></span></button>
+                        <button class="btn btn-primary btn-sm custom-edit-btn" data-edit-adicional-form="{{ catadi.id }}"><span class="mdi mdi-pencil"></span></button>
+                    </div>
+
+                    <div class="edit-form-aditional-category show-form-edit-adicional-{{ catadi.id }}">
+                        <div class="card">
+                            <div class="card-body">
+                                <form class="edit-adicional-form ">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control input-default" value="{{ catadi.name }}" name="category-name-adicional" placeholder="Por exemplo, coberturas extras, escolha o tipo">
+                                    </div>
+                                    <div class="mb-3">
+                                        {% if catadi.type == 'opcional' %}
+                                            <label class="label-align-type">
+                                                <input type="radio" class="type-category-adicional" name="type-adicional" value="opcional" checked/> <br>Opcional
+                                            </label>
+                                        {% else %}
+                                            <label class="label-align-type">
+                                                <input type="radio" class="type-category-adicional" name="type-adicional" value="opcional"/> <br>Opcional
+                                            </label>
+                                        {% endif %}
+
+                                        {% if catadi.type == 'required' %}
+                                            <label class="label-align-type">
+                                                <input type="radio" name="type-adicional" class="type-category-adicional" value="required" checked/> <br>Obrigatório
+                                            </label>
+                                        {% else %}
+                                            <label class="label-align-type">
+                                                <input type="radio" name="type-adicional" class="type-category-adicional" value="required" /> <br>Obrigatório
+                                            </label>
+                                        {% endif %}
+                                    </div>
+                                    <div class="type-opcional-category hiden-box">
+                                        <div>
+                                            <label for="multiple-times-adicional" style="width: 100%;">Adicionar várias vezes
+                                                <span class="mdi mdi-information"  data-toggle="tooltip" data-placement="top" title="Se ativo o cliente consegue selecionar a mesma opção varias vezes!"></span>
+                                                <input type="checkbox" name="multiple-times-adicional" class="multiple-times-checkbox">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="type-required-category hiden-box">
+                                        <div>
+                                            <label for="min-val-adicional" style="width: 100%;">Máximo de adicionais sem cobrar
+                                                <span class="mdi mdi-information"  data-toggle="tooltip" data-placement="top" title="Valor minimo de escolha do produto"></span>
+                                                <input type="text" name="min-val-adicional" class="min-max-items" value="{{catadi.min}}">
+                                            </label>
+                                        </div>
+{#                                        <hr style="margin: 11px 0;">#}
+{#                                        <div>#}
+{#                                            <label for="max-val-adicional" style="width: 100%;">Máximo#}
+{#                                                <span class="mdi mdi-information"  data-toggle="tooltip" data-placement="top" title="Valor máximo de escolha do produto"></span>#}
+{#                                                <input type="text" name="max-val-adicional" class="min-max-items" value="{{catadi.max}}">#}
+{#                                            </label>#}
+{#                                        </div>#}
+                                    </div>
+
+                                    <input type="hidden" name="idAdicionalForm" value="{{ catadi.id }}">
+                                    <button type="button" class="btn btn-sm btn-danger m-2 close-edit-form-cat-adi-{{ catadi.id }}">Cancelar</button>
+                                    <button type="submit" class="btn btn-sm btn-success">Guardar</button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hide-area style-expad-box expand-area-adicional-{{ catadi.id }}">
+                        <div class="existed-items-adicional">
+                            {% for adicionalitm in adicionalitm %}
+                                {% if adicionalitm.idadicional == catadi.id %}
+                                    <div class="adicinal-list-box">
+                                        <div class="adicional-name">{{ adicionalitm.name }}</div>
+                                        <div class="adicional-edits">
+                                            <span>{{ adicionalitm.price }}</span>
+                                            <a href="#"><span class="mdi mdi-pencil edit-current-adicional-item" data-item-ad-id="{{adicionalitm.id}}"></span></a>
+                                            <a href="#"><span class="mdi mdi-close delete-adicional-item" data-item-ad-id="{{adicionalitm.id}}"></span></a>
+
+                                        </div>
+                                    </div>
+
+
+                                    <form class="submit-form-adicional-item-edit edit-adiciolan-{{ adicionalitm.id }}">
+                                        <div class="mb-3">
+                                            <input type="text" placeholder="Nome" value="{{ adicionalitm.name }}" name="name-adicional-item" class="form-control input-default adicional-input-name">
+                                            <input type="text" placeholder="Preço" value="{{ adicionalitm.price }}" name="price-adicional-item" class="form-control input-default adicional-input-price">
+                                            <label>Codigo ZoneSoft do Produto</label><br>
+                                            <select class="select" theme="google" placeholder="Código Zonesoft" name="zonesoftcode" data-search="true">
+                                                {% for zoneCodes in zoneProducts %}
+                                                    <option {% if adicionalitm.idzonesoft == zoneCodes.zoneSoftCode %} selected {% endif %} value="{{ zoneCodes.zoneSoftCode }}">{{zoneCodes.name}} - {{ zoneCodes.zoneSoftCode }}</option>
+{#                                                    <option selected value="{{ zoneCodes.codigo }}">{{zoneCodes.descricao}} - {{ zoneCodes.codigo }}</option>#}
+                                                {% endfor %}
+                                            </select>
+                                            <input type="hidden" name="idadicional" value="{{ adicionalitm.id }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div>
+                                                <label for="preselected-item" style="width: 100%;padding: 5px; font-size: 15px; ">
+                                                    <button type="button" class="close-btn-form-adicional-edit-{{ adicionalitm.id }} btn-sm btn btn-outline-danger">Cancelar</button>
+                                                    <button type="submit" class="btn-sm btn btn-outline-success">Guardar</button>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                {% endif %}
+                            {% endfor %}
+                            <button class="add-adicional-item btn btn-sm btn-outline-light w-100" data-id-adicional="{{ catadi.id }}">Adicionar em {{ catadi.name }}</button>
+                        </div>
+
+
+
+
+
+                        <div class="form-area-adicional-append form-add-item-adicional-{{ catadi.id }}"></div>
+                    </div>
+                {% endfor %}
+
+                <div class="append-form-aditional-category">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="add-adicional-form">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control input-default" name="category-name-adicional" placeholder="Por exemplo, coberturas extras, escolha o tipo">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="label-align-type">
+                                        <input type="radio" class="type-category-adicional" name="type-adicional" value="opcional" checked/> <br>Opcional
+                                    </label>
+
+                                    <label class="label-align-type">
+                                        <input type="radio" name="type-adicional" class="type-category-adicional" value="required" /> <br>Obrigatório
+                                    </label>
+                                </div>
+                                <div class="type-opcional-category">
+                                    <div>
+                                        <label for="multiple-times-adicional" style="width: 100%;">Adicionar várias vezes
+                                            <span class="mdi mdi-information"  data-toggle="tooltip" data-placement="top" title="Se ativo o cliente consegue selecionar a mesma opção varias vezes!"></span>
+                                            <input type="checkbox" name="multiple-times-adicional" class="multiple-times-checkbox">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="type-required-category">
+                                    <div>
+                                        <label for="min-val-adicional" style="width: 100%;">Minimo
+                                            <span class="mdi mdi-information"  data-toggle="tooltip" data-placement="top" title="Valor minimo de escolha do produto"></span>
+                                            <input type="text" name="min-val-adicional" class="min-max-items" value="0">
+                                        </label>
+                                    </div>
+                                    <hr style="margin: 11px 0;">
+                                    <div>
+                                        <label for="max-val-adicional" style="width: 100%;">Máximo
+                                            <span class="mdi mdi-information"  data-toggle="tooltip" data-placement="top" title="Valor máximo de escolha do produto"></span>
+                                            <input type="text" name="max-val-adicional" class="min-max-items" value="0">
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                                <button type="button" class="btn btn-sm btn-danger m-2 close-append-form-cat-adi">Cancelar</button>
+                                <button class="btn btn-sm btn-success">Guardar</button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <button class="add-aditional-category btn btn-sm btn-outline-light  w-100">Adicionais</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-bg"></div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+
+    <script>
+        $('.card-body-adicional').click(function () {
+            var idArea = $(this).attr('id');
+            $('.expand-area-adicional-'+idArea).toggle();
+        });
+
+        $('.add-adicional-item').click(function () {
+            $('.existed-items-adicional').hide();
+            var idAdicional = $(this).attr('data-id-adicional');
+            $('.form-add-item-adicional-'+idAdicional).append('' +
+                '<form class="submit-form-adicional-item">' +
+                '                                    <div class="mb-3">' +
+                '                                        <input type="text" placeholder="Nome" name="name-adicional-item" class="form-control input-default adicional-input-name">' +
+                '                                        <input type="text" placeholder="Preço" name="price-adicional-item" class="form-control input-default adicional-input-price" value="0">' +
+                '                                        <input type="hidden" name="idadicional" value="'+idAdicional+'"' +
+                '                                    </div>' +
+                '                                    <div class="mb-3">' +
+                '                                        <div>' +
+                '                                            <label for="preselected-item" style="width: 100%;padding: 5px; font-size: 15px; ">' +
+                '<label>Codigo ZoneSoft do Produto</label><br>'+
+            '                                            <select class="select" theme="google" placeholder="Código Zonesoft" name="zonesoftcode" data-search="true">'+
+                '                                                {% for zoneCodes in zoneProducts %}'+
+                '<option value="{{ zoneCodes.zoneSoftCode }}">{{zoneCodes.name}} - {{ zoneCodes.zoneSoftCode }}</option>{% endfor %}'+
+                '</select>'+
+                '                                                <input type="checkbox" name="preselected" class="preselected-item">' +
+                '                                                 Pré-seleção' +
+                '                                                <span class="mdi mdi-information"  data-toggle="tooltip" data-placement="top" title="Este item aparece como pré-selecionado no menu"></span>' +
+                '                                                <button type="button" class="close-btn-form-adicional-'+idAdicional+' btn-sm btn btn-outline-danger">Cancelar</button>' +
+                '                                                <button type="submit" class="btn-sm btn btn-outline-success">Guardar</button>' +
+                '                                            </label>' +
+                '                                        </div>' +
+                '                                    </div>' +
+                '                                </form>');
+
+
+
+            $('.close-btn-form-adicional-'+idAdicional).click(function () {
+                $('.form-add-item-adicional-'+idAdicional).empty();
+                $('.existed-items-adicional').show();
+            });
+
+
+
+            $(".submit-form-adicional-item").submit(function(e) {
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+                var form = $(this);
+                var actionUrl = form.attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{path('admin/app_menu_products_add_adicional_item')}}",
+                    data: form.serialize(), // serializes the form's elements.
+                    success: function(data)
+                    {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Adicionado',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+
+                    }
+                });
+            });
+        });
+
+        $(".delete-adicional-item").click(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            const idAdicional = $(this).data('item-ad-id');
+
+            Swal.fire({
+                title: 'Você tem certeza?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Deletar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{path('admin/app_menu_products_delete_adicional_item')}}",
+                        data: ({idAdicional : idAdicional}), // serializes the form's elements.
+                        success: function(data)
+                        {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Adicionado',
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+
+                        }
+                    });
+                }
+            })
+
+            });
+
+        $(".delete-adicional").click(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            const idAdicional = $(this).data('adicional-id');
+
+            Swal.fire({
+                title: 'Você tem certeza?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Deletar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{path('admin/app_menu_products_delete_adicional')}}",
+                        data: ({idAdicional : idAdicional}), // serializes the form's elements.
+                        success: function(data)
+                        {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Eliminado!',
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+
+                        }
+                    });
+                }
+            })
+
+        });
+
+
+    </script>
+
+    {#    //ADICONAL SCRIPTS#}
+
+    <script>
+
+        $('.delete-addicional').click(function () {
+
+            var adicionalID = $(this).attr('data-adiciona-id');
+            var categoryID = $(this).attr('data-category-id');
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_menu_products_delete_adicional_category_connection')}}",
+                data: ({adicionalID:adicionalID, categoryID:categoryID}), // serializes the form's elements.
+                success: function(data)
+                {
+                    $('.adicional-con-'+adicionalID).remove();
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Eliminado',
+                        showConfirmButton: false,
+                        timer: 500
+                    });
+
+                }
+            });
+        });
+        $('.delete-addicional-item').click(function () {
+
+            var adicionalID = $(this).attr('data-adiciona-id');
+            var categoryID = $(this).attr('data-category-id');
+            var itemID = $(this).attr('data-item-id');
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_menu_products_delete_adicional_item_connection')}}",
+                data: ({adicionalID:adicionalID, categoryID:categoryID, itemID:itemID}), // serializes the form's elements.
+                success: function(data)
+                {
+                    $('.adicional-con-item-'+adicionalID).remove();
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Eliminado',
+                        showConfirmButton: false,
+                        timer: 500
+                    });
+
+                }
+            });
+        });
+
+        $('.delete-addicional-item-multiple').click(function () {
+
+            var adicionalID = $(this).attr('data-adiciona-id');
+            var categoryID = $(this).attr('data-category-id');
+            var itemID = $(this).attr('data-item-id');
+            var itemIDMultiple = $(this).attr('data-item-multiple');
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_menu_products_delete_adicional_item_multiple_connection')}}",
+                data: ({adicionalID:adicionalID, categoryID:categoryID, itemID:itemID, itemIDMultiple:itemIDMultiple}), // serializes the form's elements.
+                success: function(data)
+                {
+                    $('.adicional-con-item-multiple-'+adicionalID).remove();
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Eliminado',
+                        showConfirmButton: false,
+                        timer: 500
+                    });
+
+                }
+            });
+        });
+
+        $( ".card-adicional-box" ).draggable({ revert: true, helper: "clone", cursor: "move" });
+
+
+        $( ".primary-droped" ).droppable(
+            {
+                drop :function(event, ui)
+                {
+                    // $(this).css('background', 'rgb(0,200,0)');
+                    $(this).css('background', 'white');
+                    var categoryid = $(this).attr('data-category-id-drop');
+                    var draggableId = ui.draggable.find('input').val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{path('admin/app_menu_products_add_adicional_category_connection')}}",
+                        data: ({categoryid:categoryid, draggableId:draggableId}), // serializes the form's elements.
+                        success: function(data)
+                        {
+
+                            var resultAdd = data;
+
+                            if (resultAdd === '1')
+                            {
+                                $('.item-temp-add-'+draggableId).remove();
+                                $(this).css('background', 'white');
+
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'warning',
+                                    title: 'Já existe',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }else{
+
+
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Adicionado',
+                                    showConfirmButton: false,
+                                    timer: 500
+                                });
+                            }
+
+                            // setTimeout(function() {
+                            //     location.reload();
+                            // }, 1000);
+
+                        }
+                    });
+
+                },
+                over: function(event, ui) {
+                    var categoryid = $(this).attr('data-category-id-drop');
+                    var draggableId = ui.draggable.find('input').val();
+                    if(draggableId == ''){
+                    }else{
+                        $('.temp-addiciona-'+categoryid).append('' +
+                            '<div class="apend-text-box item-temp-add-'+draggableId+'">'+ ui.draggable.text() +'</div>');
+                        $(this).css('background', '#e3e3e3');
+                    }
+
+
+                },
+                out: function(event, ui) {
+                    var categoryid = $(this).attr('data-category-id-drop');
+                    var draggableId = ui.draggable.find('input').val();
+                    $('.item-temp-add-'+draggableId).remove();
+                    $(this).css('background', 'white');
+
+                }
+            } );
+
+
+
+        $( ".desc-category-align").droppable(
+            {
+                drop :function(event, ui)
+                {
+                    var itemid = $(this).attr('data-item-id-drop');
+                    var categoryid = $(this).attr('data-category-id-drop');
+                    var draggableId = ui.draggable.find('input').val();
+
+                    $(this).find('.preview-append-item-adicional').empty();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{path('admin/app_menu_products_add_adicional_item_connection')}}",
+                        data: ({categoryid:categoryid, draggableId:draggableId, itemid:itemid}), // serializes the form's elements.
+                        success: function(data)
+                        {
+                            var resultAdd = data;
+                            if (resultAdd === '1')
+                            {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'warning',
+                                    title: 'Já existe',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }else{
+
+                                $('.temp-item-adiciona-'+itemid).append('' +
+                                    '<div class="box-connected-addicional item-temp-add-'+draggableId+'">'+ ui.draggable.text() +'</div>');
+
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Adicionado',
+                                    showConfirmButton: false,
+                                    timer: 500
+                                });
+                            }
+                        }
+                    });
+
+                },
+                over: function(event, ui) {
+                    $(this).find('.preview-append-item-adicional').append('' +
+                        '<div class="connection-add-text"><b>Ligar <span style="color: #e91e63;">' + ui.draggable.text() + '</span> com todos os Tamanhos</b></div>');
+                },
+                out: function(event, ui) {
+                    $(this).find('.preview-append-item-adicional').empty();
+
+                }
+            } );
+
+        $( ".adicional-multple-item" ).droppable(
+            {
+                drop :function(event, ui)
+                {
+                    var itemid = $(this).attr('data-item-id-drop');
+                    var categoryid = $(this).attr('data-category-id-drop');
+                    var itemMultipleId = $(this).attr('data-item-multiple-id');
+                    var draggableId = ui.draggable.find('input').val();
+
+                    $(this).find('.preview-append-multiple-item').empty();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{path('admin/app_menu_products_add_adicional_item_multiple_connection')}}",
+                        data: ({categoryid:categoryid, draggableId:draggableId, itemid:itemid, itemMultipleId:itemMultipleId}), // serializes the form's elements.
+                        success: function(data)
+                        {
+                            var resultAdd = data;
+                            if (resultAdd === '1')
+                            {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'warning',
+                                    title: 'Já existe',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }else{
+
+                                $('.append-multiple-item-'+itemMultipleId).append('' +
+                                    '<div class="box-connected-addicional item-temp-add-'+draggableId+'">'+ ui.draggable.text() +'</div>');
+
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Adicionado',
+                                    showConfirmButton: false,
+                                    timer: 500
+                                });
+                            }
+                        }
+                    });
+
+                },
+                over: function(event, ui) {
+                    $(this).css('background', '#e3e3e3');
+                    $(this).find('.preview-append-multiple-item').append('' +
+                        '<div class="connection-add-text-multiple"><b>Ligar <span style="color: #e91e63;">' + ui.draggable.text() + '</span> com este item</b></div>');
+                },
+                out: function(event, ui) {
+                    $(this).find('.preview-append-multiple-item').empty();
+                    $(this).css('background', '#ffffff');
+                }
+            } );
+
+
+
+        $('.type-category-adicional').change(function () {
+            var currentType = $(this).val();
+            if(currentType == "required"){
+                $('.type-opcional-category').slideUp(function () {
+                    $('.type-required-category').slideDown();
+                });
+            }else{
+                $('.type-required-category').slideUp(function () {
+                    $('.type-opcional-category').slideDown();
+                });
+            }
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        $('.add-aditional-category').click(function () {
+            $('.append-form-aditional-category').slideDown();
+        });
+        $('.close-append-form-cat-adi').click(function () {
+            $('.append-form-aditional-category').slideUp();
+        });
+
+
+
+        $("#add-adicional-form").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var form = $(this);
+            var actionUrl = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_menu_products_add_adicional_category')}}",
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+
+
+    </script>
+
+
+    {#    //ITEMS SCRIPTS#}
+    <script>
+        $('#add-category-form').click(function () {
+
+            const box = document.getElementById('form-area-category-append');
+
+            if (box.childNodes.length === 0) {
+                $('#form-area-category-append').append('' +
+                    '<form id="submit-category-menu">' +
+                    '<div class="card">' +
+                    '<div class="card-body">' +
+                    ' <div class="basic-form">' +
+                    '<div class="image-add">'+
+                    '<img src="/images/profile/noimagelist.png" class="image-add-class" id="imageAddNew">'+
+
+                    '<input type="file" id="inputImg" name="file" >'+
+
+                    '</div>'+
+                    ' <div class="mb-3">' +
+                    '<input type="text" class="form-control input-default" name="category-name" placeholder="Nome da Categoria">' +
+                    '</div>' +
+                    '<div class="mb-3">' +
+                    '<input type="text" class="form-control input-default" name="category-desc" placeholder="Descrição da Categoria">' +
+                    '</div>' +
+
+                    '</div>' +
+                    '</div>' +
+
+                    ' </div>' +
+                    '<h5>Onde Apresentar a Categoria</h5> ' +
+                    ' <div class="row">' +
+                    '     <div class="col-xl-4 col-xxl-6 col-6">' +
+                    '         <div class="form-check custom-checkbox mb-3">' +
+                    '             <div class="alignation-showing">' +
+                    '                 <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>' +
+                    '                         <label class="form-check-label" for="menuShow">Mostrar no menu</label>' +
+                    '             </div>' +
+                    '         </div>' +
+                    '     </div>' +
+                    '     <div class="col-xl-4 col-xxl-6 col-6">' +
+                    '         <label class="form-label">A partir das:</label>' +
+                    '         <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">' +
+                    '             <input type="text" class="form-control" name="timeinm" value="">' +
+                    '                 <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>' +
+                    '         </div>' +
+                    '     </div>' +
+                    '     <div class="col-xl-4 col-xxl-6 col-6">' +
+                    '         <label class="form-label">Até as:</label>' +
+                    '         <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">' +
+                    '             <input type="text" class="form-control" name="timeoutm" value="">' +
+                    '                 <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>' +
+                    '         </div>' +
+                    '     </div>' +
+                    ' </div>' +
+                    ' <div class="row">' +
+                    '     <div class="col-xl-4 col-xxl-6 col-6">' +
+                    '         <div class="form-check custom-checkbox mb-3">' +
+                    '             <div class="alignation-showing">' +
+                    '                 <input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>' +
+
+                    '                         <label class="form-check-label" for="orderingShow">Mostrar nos Pedidos</label>' +
+                    '             </div>' +
+                    '         </div>' +
+                    '     </div>' +
+                    '     <div class="col-xl-4 col-xxl-6 col-6">' +
+                    '         <label class="form-label">A partir das:</label>' +
+                    '         <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">' +
+                    '            <input type="text" class="form-control" name="timein" value="">' +
+                    '                 <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>' +
+                    '         </div>' +
+                    '     </div>' +
+
+                    '     <div class="col-xl-4 col-xxl-6 col-6">' +
+                    '         <label class="form-label">Até as:</label>' +
+                    '         <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">' +
+                    '             <input type="text" class="form-control" name="timeout" value="">' +
+                    '                 <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>' +
+                    '         </div>' +
+                    '     </div>' +
+                    ' </div>' +
+                    ' <div class="alert-warning p-2 text-center">' +
+                    '     <span>Para mostrar o tempo todo, deixa o horário vazio</span>' +
+                    ' </div>' +
+                    ' <hr>'+
+                    '<div style="float: right">' +
+                    '<button class="btn btn-sm btn-danger m-2" id="closeFromCategory">Cancelar</button>' +
+                    '<button class="btn btn-sm btn-success">Guardar</button>' +
+                    '</div>' +
+                    '</form>'
+                );
+
+                $('#closeFromCategory').click(function () {
+                    $('#form-area-category-append').empty();
+                });
+
+                $("#submit-category-menu").submit(function(form_subscribe) {
+                    form_subscribe.preventDefault(); // avoid to execute the actual submit of the form.
+                    var formData = new FormData($(this)[0]);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ path('admin/app_menu_products_add_categoty') }}',
+                        data: formData, // serializes the form's elements.
+                        contentType: false,
+                        processData: false,
+                        success: function(data)
+                        {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Adicionado',
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+
+                        }
+                    });
+                });
+
+            } else {
+                console.log('⛔  Element is NOT empty');
+            }
+
+            inputImg.onchange = evt => {
+                const [file] = inputImg.files
+                if (file) {
+                    imageAddNewProduct.src = URL.createObjectURL(file)
+                }
+            }
+        });
+
+
+    </script>
+
+    <script>
+        $( function() {
+            $( "#sortable" ).sortable({
+                stop: function(event, ui) {
+                    var itemOrder = $('#sortable').sortable("toArray");
+                    for (var i = 0; i < itemOrder.length; i++) {
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ path('admin/app_menu_products_change_positions_category') }}',
+                            data: ({position:i, categoryid:itemOrder[i]}), // serializes the form's elements.
+                            success: function(data) {}
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        $('.image-add').mouseover(function () {
+            $(this).find('input').fadeIn();
+        });
+        $('.image-add').mouseleave(function () {
+            $(this).find('input').fadeOut();
+        });
+
+        $('.image-add-update').mouseover(function () {
+            $(this).find('input').fadeIn();
+            $(this).find('button').fadeIn();
+        });
+        $('.image-add-update').mouseleave(function () {
+            $(this).find('input').fadeOut();
+            $(this).find('button').fadeOut();
+        });
+
+
+        $('.add-photo-category').change(function () {
+
+
+            var formFiles = new FormData();
+            var files = $(this)[0].files;
+            var categoryid = $(this).attr('data-category-id');
+
+
+            formFiles.append('file',files[0]);
+            formFiles.append('categoryid', categoryid);
+            $.ajax({
+                url: '{{ path('admin/app_menu_products_add_imagecategory') }}',
+                type: 'post',
+                data: formFiles,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'A Enviar',
+                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function(response){
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+            });
+        });
+        $('.add-photo-item').change(function () {
+
+
+            var formFiles = new FormData();
+            var files = $(this)[0].files;
+            var categoryid = $(this).attr('data-item-id');
+
+
+            formFiles.append('file',files[0]);
+            formFiles.append('categoryid', categoryid);
+            $.ajax({
+                url: '{{ path('admin/app_menu_products_add_item_image') }}',
+                type: 'post',
+                data: formFiles,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'A Enviar',
+                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function(response){
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+            });
+        });
+
+        $('.update-photo-category').change(function () {
+            var fd = new FormData();
+            var files = $(this)[0].files;
+            var categoryid = $(this).attr('data-category-id');
+            fd.append('file',files[0]);
+            fd.append('categoryid', categoryid);
+            $.ajax({
+                url: '{{ path('admin/app_menu_products_add_imagecategory_update') }}',
+                type: 'post',
+                data: fd,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'A Enviar',
+                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function(response){
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Alterado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+            });
+        });
+        $('.update-photo-item').change(function () {
+            var fd = new FormData();
+            var files = $(this)[0].files;
+            var categoryid = $(this).attr('data-item-id');
+            fd.append('file',files[0]);
+
+            fd.append('categoryid', categoryid);
+            $.ajax({
+                url: '{{ path('admin/app_menu_products_add_imageitem_update') }}',
+                type: 'post',
+                data: fd,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'A Enviar',
+                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function(response){
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Alterado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+            });
+        });
+
+    </script>
+
+    <script>
+        $('.delete-image-category').click(function () {
+            var categoryid = $(this).attr('data-category-id');
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/app_menu_products_add_imagecategory_delete') }}',
+                data: ({categoryid:categoryid}), // serializes the form's elements.
+                success: function(data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Eliminado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        });
+
+
+        $('.add-new-product-category').click(function () {
+            var categoryId = $(this).attr('data-category-id');
+
+            // const boxlenght = document.getElementsByClassName('append-form-add-item-'+categoryId);
+
+            if ($('.append-form-add-item-'+categoryId).is(':empty')) {
+                $('.append-form-add-item-'+categoryId).append('' +
+                    '<div class="card">' +
+                    '                <div class="card-body">' +
+                    '                <div class="basic-form">' +
+                    '                <form class="submit-item-category">' +
+                    '<div class="image-add">'+
+                    '<img src="/images/profile/noimagelist.png" class="image-add-class" id="imageAddNewProduct">'+
+
+                    '<input type="file" id="inputImg" name="file" >'+
+
+                    '</div>'+
+                    '                <div class="mb-3">' +
+                    '                <input type="text" class="form-control input-default resized-name" name="item-name" placeholder="Nome do Produto" required>' +
+                    '                <input type="text" class="form-control input-default resized-price" name="item-price-single" placeholder="Preço">' +
+                    '                </div>' +
+                    '                <div class="mb-3">' +
+                    '                <input type="text" class="form-control input-default" name="item-description" placeholder="Descrição do Produto" >' +
+                    '                </div>' +
+                    '<h5>Onde Apresentar o Produto</h5>'+
+
+                    '<div class="row">'+
+                    '    <div class="col-xl-4 col-xxl-6 col-6">'+
+                    '        <div class="form-check custom-checkbox mb-3">'+
+                    '            <div class="alignation-showing">'+
+
+                    '                <input type="checkbox" class="form-check-input" id="menuShow" name="menu-show" checked>'+
+                    '                        <label class="form-check-label" for="menuShow">Mostrar no menu</label>'+
+                    '            </div>'+
+                    '        </div>'+
+                    '    </div>'+
+                    '    <div class="col-xl-4 col-xxl-6 col-6">'+
+                    '        <label class="form-label">A partir das:</label>'+
+                    '        <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">'+
+                    '            <input type="text" class="form-control" name="timeinm" value="">'+
+                    '<span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>'+
+                    '</div>'+
+                    '</div>'+
+                    '<div class="col-xl-4 col-xxl-6 col-6">'+
+                    '       <label class="form-label">Até as:</label>'+
+                    '       <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">'+
+                    '           <input type="text" class="form-control" name="timeoutm" value="">'+
+                    '               <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>'+
+                    '       </div>'+
+                    '   </div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                    '<div class="col-xl-4 col-xxl-6 col-6">'+
+                    '<div class="form-check custom-checkbox mb-3">'+
+                    '<div class="alignation-showing">'+
+
+                    '<input type="checkbox" class="form-check-input" id="orderingShow" name="orderingShow" checked>'+
+
+
+                    '<label class="form-check-label" for="orderingShow">Mostrar nos Pedidos</label>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '<div class="col-xl-4 col-xxl-6 col-6">'+
+                    '    <label class="form-label">A partir das:</label>'+
+                    '    <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">'+
+                    '        <input type="text" class="form-control" name="timein" value="">'+
+                    '            <span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>'+
+                    '    </div>'+
+                    '</div>'+
+                    '<div class="col-xl-4 col-xxl-6 col-6">'+
+                    '<label class="form-label">Até as:</label>'+
+                    '<div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autobtn-close="true">'+
+                    '<input type="text" class="form-control" name="timeout" value="">'+
+                    '<span class="input-group-text"><i class="mdi mdi-clock-time-seven-outline"></i></span>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '<div class="alert-warning p-2 text-center">'+
+                    '<span>Para mostrar o tempo todo, deixa o horário vazio</span>'+
+                    '</div>'+
+                    '<hr>'+
+                    '               <div class="multiple-box-area-append-'+categoryId+'"></div>' +
+                    '                <div class="mb-3">' +
+                    '                <div class="left-side-btn" style="float: left;">' +
+                        '                <button type="button" class="btn btn-sm btn-outline-light multiple-items-form" data-target-category="'+categoryId+'">múltiplos tamanhos</button>' +
+                        '                <button type="button" class="btn btn-sm btn-outline-light multiple-items-form-more" data-target-category-more="'+categoryId+'">adicionar item</button>' +
+                    '               </div>' +
+                    '               <div class="right-side-btn" style="float:right;">' +
+                        '                <button type="button" class="btn btn-sm btn-outline-danger close-form-append-'+categoryId+'">Cancelar</button>' +
+                    '                <button type="submit" class="btn btn-sm btn-outline-success save-new-item">Guardar</button>' +
+                    '                </div>' +
+                    '                </div>' +
+                        '                <input type="hidden" name="typeitem" class="typeporoduct-'+categoryId+'" value="single">' +
+                        '                <input type="hidden" name="categoryId" value='+categoryId+'>' +
+                    '                </form>' +
+                        '                </div>' +
+                        '                </div>' +
+                    '                </div>');
+            }
+
+
+            $('.multiple-items-form').click(function () {
+
+                var categoryIdMultile = $(this).attr('data-target-category');
+                $('.multiple-items-form-more').show();
+
+                $('.typeporoduct-'+categoryIdMultile).val('multiple');
+                $('.resized-name').removeClass('resized-name');
+                $('.resized-price').hide();
+                $('.multiple-items-form').hide();
+
+                var randomNumb = Math.round(Math.random()*100);
+
+                $('.multiple-box-area-append-'+categoryIdMultile).append('' +
+                    '                <div class="mb-3 zone-item-form-'+randomNumb+'">' +
+                    '                <input type="text" class="form-control input-default resized-name-multiple" name="item-name-multiple[]" placeholder="Tamanho">' +
+                    '                <input type="text" class="form-control input-default resized-price-multiple" name="item-price-single-multiple[]" placeholder="Preço">' +
+                    '                <button type="button" class="mdi mdi-close close-multiple-item" data-target-category-close="'+randomNumb+'"></button>' +
+                    '                </div>');
+            });
+
+
+            $('.multiple-items-form-more').click(function () {
+
+                var categoryIdMultile = $(this).attr('data-target-category-more');
+                var randomNumb = Math.round(Math.random()*100);
+
+                $('.multiple-box-area-append-'+categoryIdMultile).append('' +
+                    '                <div class="mb-3 zone-item-form-'+randomNumb+'">' +
+                    '                <input type="text" class="form-control input-default resized-name-multiple" name="item-name-multiple[]" placeholder="Tamanho">' +
+                    '                <input type="text" class="form-control input-default resized-price-multiple" name="item-price-single-multiple[]" placeholder="Preço">' +
+                    '                <button type="button" class="mdi mdi-close close-multiple-item" data-target-category-close="'+randomNumb+'"></button>' +
+                    '                </div>');
+
+
+                $('.close-multiple-item').click(function () {
+                    var eliminateSec = $(this).attr('data-target-category-close');
+                    $('.zone-item-form-'+eliminateSec).empty();
+                });
+
+            });
+
+            $('.close-form-append-'+categoryId).click(function () {
+                $('.append-form-add-item-'+categoryId).empty();
+            });
+
+            // $('.save-new-item').click(function () {
+
+            $('.submit-item-category').submit(function (form_items) {
+                form_items.preventDefault();
+                form_items.stopImmediatePropagation();
+                var formData = new FormData($(this)[0]);
+
+                $.ajax({
+                    type: "POST",
+                    url: '{{ path('admin/app_menu_products_add_item') }}',
+                    data: formData, // serializes the form's elements.
+                    contentType: false,
+                    processData: false,
+                    success: function(data)
+                    {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Item Adicionado',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+
+                    }
+                });
+
+                return false;
+
+            });
+
+            inputImg.onchange = evt => {
+                const [file] = inputImg.files
+                if (file) {
+                    imageAddNewProduct.src = URL.createObjectURL(file)
+                }
+            }
+
+
+            // });
+        });
+    </script>
+
+    <script>
+        $('.edit-category-data').submit(function (form_items) {
+            form_items.preventDefault();
+            form_items.stopImmediatePropagation();
+            var form = $(this);
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/app_menu_products_edit_category_data') }}',
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Item Editado',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+
+            return false;
+
+        });
+
+        $('.submit-edit-item-category').submit(function (form_items) {
+            form_items.preventDefault();
+            form_items.stopImmediatePropagation();
+
+            var formData = new FormData($(this)[0]);
+
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/app_menu_products_edit_item') }}',
+                contentType: false,
+                processData: false,
+                data: formData, // serializes the form's elements.
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Item Editado Adicionado',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+
+            return false;
+        });
+
+
+        $('.edit-current-adicional-item').click(function () {
+            var ItemID = $(this).attr('data-item-ad-id');
+            $('.edit-adiciolan-'+ItemID).slideDown();
+            $('.close-btn-form-adicional-edit-'+ItemID).click(function () {
+                $('.edit-adiciolan-'+ItemID).slideUp();
+            });
+        });
+
+        $(".submit-form-adicional-item-edit").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var form = $(this);
+            var actionUrl = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_menu_products_edit_adicional_item')}}",
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Editado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+
+
+        $('.custom-edit-btn').click(function () {
+            var idAdicionalID = $(this).attr('data-edit-adicional-form');
+
+            $('.show-form-edit-adicional-'+idAdicionalID).slideDown();
+
+            $('.close-edit-form-cat-adi-'+idAdicionalID).click(function () {
+                $('.show-form-edit-adicional-'+idAdicionalID).slideUp();
+            });
+        });
+
+        $(".edit-adicional-form").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var form = $(this);
+            var actionUrl = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_menu_products_edit_adicional_category')}}",
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+
+
+
+
+
+
+        // $('select').selectstyle({
+        //     width  : 250,
+        //     height : 300,
+        //     onchange :function(val){}
+        //
+        // });
+
+        $('#submit-edit-item-to-multiple').submit(function (form_items) {
+            form_items.preventDefault();
+            form_items.stopImmediatePropagation();
+
+            var formData = new FormData($(this)[0]);
+            var form = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_menu_products_edit_single_multiple')}}",
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Alterado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+
+            return false;
+        });
+
+
+        $('.delete-category').click(function (data) {
+
+            Swal.fire({
+                title: 'Você tem certeza?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Deletar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ path('admin/app_menu_products_remove_category') }}',
+                        data: ({id: $(this).data('id')}), // serializes the form's elements.
+                        success: function(data)
+                        {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Removido',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+
+                        }
+                    });
+                }
+            })
+            return false;
+
+        });
+
+        $('.delete-product').click(function (data) {
+
+            Swal.fire({
+                title: 'Você tem certeza?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Deletar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ path('admin/app_menu_products_remove_it') }}',
+                        data: ({id: $(this).data('id')}), // serializes the form's elements.
+                        success: function(data)
+                        {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Removido',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+
+                        }
+                    });
+                }
+            })
+            return false;
+
+        });
+
+
+    </script>
+
+{% endblock %}

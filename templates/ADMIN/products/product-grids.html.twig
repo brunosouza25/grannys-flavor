@@ -1,0 +1,197 @@
+{% block body %}
+
+    <div class="col-lg-11">
+
+        <div class="container px-4">
+
+            <div class="row" id="table_items">
+                <div class="col-6">
+
+                    <label>Grade</label><br>
+                    <select class="select" theme="google" placeholder="Código Zonesoft" id="gridId" name="gridId"
+                            data-search="true">
+                        {% for grid in grids %}
+                            <option value="{{ grid.id }}">  {% if grid.type == 0  %} Tamanho: {% else %} Cor: {% endif %}{{ grid.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <input hidden type="text" id="productId" value={{ productId }}>
+                </div>
+
+                <br>
+                <div class="col-3 dark">
+                    <button class="btn btn-primary" id="new_product_grid">Adicionar Grade</button>
+                </div>
+
+                <div class="col-3 dark">
+                    <button class="btn btn-primary" id="grid_codes">Adicionar Códigos</button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr class="col-lg-11">
+                        <th class="col-1" scope="col">#</th>
+                        <th class="col-1" scope="col">Nome</th>
+                        <th class="col-1" scope="col">Tipo</th>
+                        <th class="col-1" scope="col">Excluir</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_grid">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        function gridTable() {
+            $.ajax({
+                url: `{{ path('admin/get_product_grids', {'productId': productId}) }}`,
+                type: 'POST',
+                async: false,
+                success: function (itemsJson) {
+
+                    var table = document.getElementById('table_grid');
+                    table.innerHTML = '';
+
+                    for (const item of itemsJson) {
+                        table.innerHTML += `
+                            <tr>
+                                <td>#${item.grid_id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.type == 0 ? 'Tamanho' : 'Cor'}</td>
+                                <td><a href="#" class="delete_grid_product" data-product-grid-id="${item.product_grid_id}" data-grid-id="${item.grid_id}" data-product-id="${item.product_id}"><i class="bi bi-trash black 50"></i></a></td>
+                            </tr>`
+                    }
+
+                    $('.delete_grid_product').click(function () {
+                        const productGridId = $(this).data('product-grid-id')
+                        const gridId = $(this).data('grid-id')
+                        const productId = $(this).data('product-id')
+                        $.ajax({
+                            url: `{{ path('admin/delete_grid_product') }}`,
+                            type: 'POST',
+                            async: false,
+                            data: ({productGridId:productGridId, gridId:gridId, productId:productId}),
+                            success: function () {
+                                gridTable();
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Apagado com sucesso',
+                                });
+                            },
+                            error: function (e) {
+                                $.alert({
+                                    title: 'Alert!',
+                                    content: 'Error!',
+                                });
+                            }
+                        });
+                    })
+
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            gridTable();
+        })
+
+
+
+        $('#new_product_grid').click(function () {
+            $.ajax({
+                url: `{{ path('admin/new_product_grid', {'productId': productId}) }}`,
+                type: 'POST',
+                async: false,
+                data: ({gridId:$('#gridId').val()}),
+                success: function (e) {
+
+                    if(e.code == 1) {
+                        gridTable();
+                        $.alert({
+                            title: 'Sucesso!',
+                            content: 'Vinculado com sucesso',
+                        });
+                    } else {
+                        $.alert({
+                            title: 'Alerta!',
+                            content: 'Gride já vinculado',
+                        });
+                    }
+
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+        })
+
+        $('#grid_codes').click(function () {
+            $.confirm({
+                async: true,
+                title: 'Produto Grade',
+                columnClass: 'col-md-12',
+                content: `URL:{{ path('admin/grid_codes', {'productId': productId}) }}`,
+                buttons: {
+                    fechar: function () {}
+                }
+            });
+
+            {#$.ajax({#}
+            {#    url: `{{ path('admin/grid_codes', {'productId': productId}) }}`,#}
+            {#    type: 'POST',#}
+            {#    async: false,#}
+            {#    data: ({gridId:$('#gridId').val()}),#}
+            {#    success: function (e) {#}
+
+            {#        if(e.code == 1) {#}
+            {#            gridTable();#}
+            {#            $.alert({#}
+            {#                title: 'Sucesso!',#}
+            {#                content: 'Vinculado com sucesso',#}
+            {#            });#}
+            {#        } else {#}
+            {#            $.alert({#}
+            {#                title: 'Alerta!',#}
+            {#                content: 'Gride já vinculado',#}
+            {#            });#}
+            {#        }#}
+
+            {#    },#}
+            {#    error: function (e) {#}
+            {#        Swal.fire({#}
+            {#            position: 'top-end',#}
+            {#            icon: 'success',#}
+            {#            title: 'Occoreu erro!',#}
+            {#            showConfirmButton: false,#}
+            {#            timer: 2500#}
+            {#        });#}
+            {#    }#}
+            {#});#}
+        })
+
+    </script>
+
+{% endblock %}

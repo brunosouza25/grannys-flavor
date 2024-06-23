@@ -1,0 +1,108 @@
+{% block body %}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Detalhes do Pedido do Cliente</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; background-color: #f0f0f0; color: #333;">
+
+    <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        <div style="background-color: #007BFF; text-align: center; padding: 10px; border-radius: 5px 5px 0 0;">
+            <img src="{{ emailInfo.url }}{{ app_logo }}" alt="{{ companyInfo.companyName }}" style="max-width: 200px;">
+        </div>
+
+        {% if emailInfo.type == 1 %}
+            <h2 style="text-align: center; margin-top: 20px; color: #007BFF;">Pedido em preparo! ID: #{{ emailInfo.orderId }}</h2>
+        {% endif %}
+
+        {% if emailInfo.type == 2 %}
+            <h2 style="text-align: center; margin-top: 20px; color: #007BFF;">Pedido pronto para recolher! ID: #{{ emailInfo.orderId }}</h2>
+        {% endif %}
+
+        {% if emailInfo.type == 3 %}
+            <h2 style="text-align: center; margin-top: 20px; color: #007BFF;">Pedido a caminho! ID: #{{ emailInfo.orderId }}</h2>
+        {% endif %}
+
+        {% if emailInfo.type == 4 %}
+            <h2 style="text-align: center; margin-top: 20px; color: #007BFF;">Pedido entregue! ID: #{{ emailInfo.orderId }}</h2>
+        {% endif %}
+
+        <p>Olá {{ emailInfo.costumerInfo.name }},</p>
+        <p>Espero que esteja tudo bem! Gostaríamos de agradecer pela sua compra no {{ companyInfo.companyName }}.</p>
+
+        {% if emailInfo.type == 1 %}
+            <p>Tempo estimado para o preparo do seu pedido é de: {{ emailInfo.timeToPrepare }} minutos.</p>
+        {% endif %}
+
+        <hr style="border: 1px solid #ccc; margin: 20px 0;">
+
+        <h3 style="color: #007BFF;">Detalhes do Pedido:</h3>
+        <h5><strong>Data da atualização:</strong> {{ emailInfo.time }}</h5>
+        <ul style="list-style: none; padding-left: 0;">
+             {% for product in emailInfo.products %}
+                <li>
+                    <strong>Produto:</strong> {{ product.name }}
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li><strong>Quantidade:</strong> {{ product.quantity }}</li>
+                        <li><strong>Preço Unitário:</strong> € {{ (product.price / 100) | number_format(2) }}</li>
+
+                        {% if product.attributes is defined and product.attributes is not null %}
+                            <li><strong>Extras:</strong>
+                                <h5>Obs: Alguns extras podem acabar não sendo cobrados dependendo de como foi especificado na hora do pedido!</h5>
+
+                                <ul style="list-style: none; padding-left: 0;">
+                                    {% for extra in product.attributes %}
+                                        <li>{{ extra.name }} - € {{ (product.price / 100) | number_format(2) }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+
+                        {% if product.description is defined and product.description is not null %}
+                            <br>
+                            <li>Observações: {{ product.description }}</li>
+                        {% endif %}
+                        <br>
+                        <li><strong>Subtotal:</strong> € {{ ((product.price * product.quantity) / 100) | number_format(2) }}</li>
+                    </ul>
+                </li>
+                <hr style="border: 1px solid #ccc; margin: 20px 0;">
+
+            {% endfor %}
+        </ul>
+
+
+        <h4>BAG: € {{ ((emailInfo.bag) / 100) | number_format(2) }}</h4>
+        {% if emailInfo.feePrice is defined %}
+            <h4>Taxa de entrega: € {{ (emailInfo.feePrice / 100) | number_format(2) }}</h4>
+        {% endif %}
+
+        <h3>Total: € {{ ((emailInfo.total) / 100) | number_format(2) }}</h3>
+
+
+        <hr style="border: 1px solid #ccc; margin: 20px 0;">
+        {% if emailInfo.costumerAddress is defined %}
+
+        <h3 style="color: #007BFF;">Informações de Entrega:</h3>
+        <ul style="list-style: none; padding-left: 0;">
+            <li>
+                <ul style="list-style: none; padding-left: 0;">
+                        <li><strong>Endereço:</strong> {{ emailInfo.costumerAddress.street }} - {{ emailInfo.costumerAddress.city }} - {{ emailInfo.costumerAddress.postalcode }}</li>
+                </ul>
+            </li>
+
+        </ul>
+        {% endif %}
+        <hr style="border: 1px solid #ccc; margin: 20px 0;">
+
+        <p>Agradecemos novamente pelo seu pedido e estamos à disposição para ajudar no que for necessário.</p>
+
+        <p style="text-align: center; color: #555;">Atenciosamente,<br>
+            {{ companyInfo.companyName }}</p>
+    </div>
+
+    </body>
+    </html>
+
+{% endblock %}

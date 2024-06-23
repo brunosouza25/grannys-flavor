@@ -1,0 +1,329 @@
+
+{% block body %}
+{#    dashboard Cards#}
+    <div class="">
+        <div class="">
+            <div class="card-body">
+                <div class="row justify-content-between mb-3">
+                    <div class="col-auto"> <h6 class="color-1 mb-0 change-color">Informações do pedido</h6> </div>
+                    <div class="col-auto  "> <h3>Pedido Número : #{{ orderId }}</h3> </div>
+                    <div class="col-auto"> <h3 id="date"></h3> </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="">
+                            <div class="">
+                                <div id="products">
+
+                                </div>
+                                <hr class="my-3 ">
+                                <div class="row">
+                                    <div class=" col-lg-6 border border-2">
+                                    <div class="col-12 mb-3"> <h5> Status do Pedido</h5> </div>
+                                    <div class="col mt-auto">
+                                        <div class="media row justify-content-between ">
+                                            <select disabled name="status" id="status" class="col-12">
+                                                <option value="1"disabled>Pendente</option>
+                                                <option value="2"disabled>A preparar</option>
+                                                <option value="3"disabled>Enviado</option>
+                                                <option value="4"disabled>Entregue</option>
+                                                <option value="0"disabled>Cancelado</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    </div>
+
+
+                                    <div class=" col-lg-6 border border-2">
+                                    <div class="col-md-3 col-lg-12 mb-3"> <span> Status do pagamento</span> </div>
+                                    <div class="col mt-auto">
+                                        <div class="media row justify-content-between ">
+                                            <div id="paymentStatus">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    </div>
+
+                                    <div class="row mt-3 border border-1 border-dark p-2">
+                                        <div id="divTable">
+
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <textarea class="col-6 mt-3" name="" id="comment" cols="30" rows="10"></textarea>
+                                        <div class="col-12">                                        <button class="col-3 mt-3 btn btn-dark" id="addComment">Adicionar comentário</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <div class="row justify-content-between">
+                            <div class="col-auto"><p class="mb-1 text-dark"><b>Order Details</b></p></div>
+{#                            <div class="flex-sm-col text-right col"> <p class="mb-1"><b>Total</b></p> </div>#}
+{#                            <div class="flex-sm-col col-auto"> <p class="mb-1">&#8377;4,835</p> </div>#}
+                        </div>
+{#                        <div class="row justify-content-between">#}
+{#                            <div class="flex-sm-col text-right col"><p class="mb-1"> <b>Discount</b></p> </div>#}
+{#                            <div class="flex-sm-col col-auto"><p class="mb-1">&#8377;150</p></div>#}
+{#                        </div>#}
+{#                        <div class="row justify-content-between">#}
+{#                            <div class="flex-sm-col text-right col"><p class="mb-1"><b>GST 18%</b></p></div>#}
+{#                            <div class="flex-sm-col col-auto"><p class="mb-1">843</p></div>#}
+{#                        </div>#}
+                        <div class="row justify-content-between">
+                            <div class="flex-sm-col text-right col"><p class="mb-1"><b>Informações de entrega</b></p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row invoice ">
+                    <div class="col"><p class="mb-1" id="name"></p><p class="mb-1" id="address">2</p>wwwwwwwww<p id="phone" class="mb-1"></p></div>
+                </div>
+
+                <br>
+                <div class="row justify-content-between">
+                    <div class="flex-sm-col text-right col"><p class="mb-1"><b>Informações do contribuinte</b></p></div>
+                </div>
+                <div class="row invoice ">
+                    <div class="col"><p class="mb-1" id="nif"></p><p class="mb-1" id="nifName"></p><p id="nifEmail" class="mb-1"></p></div>
+                </div>
+
+                <div class="col-12 mt-4" id="multibanco">
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="jumbotron-fluid">
+                    <div class="row justify-content-between ">
+                        <div class="col-auto my-auto "><h2 class="mb-0 font-weight-bold">Shipping Fee</h2></div>
+                        <div class="col-auto my-auto ml-auto"><h1 id="fee" class="display-3 ">€</h1></div>
+                    </div>
+
+                    <div class="row justify-content-between ">
+                        <div class="col-auto my-auto "><h2 class="mb-0 font-weight-bold" id="voucherText"></h2></div>
+                        <div class="col-auto my-auto ml-auto"><h1 id="voucherDiscount" class="display-3 "></h1></div>
+                    </div>
+
+                    <div class="row justify-content-between ">
+                        <div class="col-auto my-auto "><h2 class="mb-0 font-weight-bold">Total</h2></div>
+                        <div class="col-auto my-auto ml-auto"><h1 id="total" class="display-3 ">€</h1></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var orderId = {{ orderId }};
+            $.ajax({
+                type: "POST",
+                url: '{{ path('get_order_info') }}',
+                data: ({orderId: orderId}),
+                success: function (order) {
+                    var htmlProducts = document.getElementById('products');
+
+                    $('#total').text(`€${(Number(order.total) + Number(order.fee)).toFixed(2)}`)
+                    $('#nif').text(`NIF do Contribuinte: ${order.nif}`)
+                    $('#nifEmail').text(`Email do Contribuinte: ${order.nif_email}`)
+                    $('#nifName').text(`Nome do Contribuinte: ${order.nif_name}`)
+                    $('#fee').text(`€${order.fee}`)
+                    $('#name').text(`${order.costumer}`)
+                    $('#address').text(`${order.deliveryAddress.street +'-'+ order.deliveryAddress.city +'-'+ order.deliveryAddress.postalcode +'-'+order.deliveryAddress.postalcode}`)
+                    $('#status').val(order.status);
+                    $('#date').text(`Data: ${ new Date(order.time).toLocaleString()}`);
+
+                    if (order.voucher) {
+                        $('#voucherDiscount').text(`-€${ Number(order.voucher_discount).toFixed(2)}`);
+                        $('#voucherText').text(`Desconto: `);
+                    }
+
+                    var payment = '';
+
+//                     if (order.payment.multibanco) {
+//                         var multibancoDiv = document.getElementById('multibanco');
+//
+//                         multibancoDiv.innerHTML = `
+//                             <div class="flex-sm-col text-right col"><p class="mb-1"><b>MultiBanco</b></p></div>
+//                             <p><strong>Entidade:</strong> ${order.multibanco.entity}</p>
+//                             <p><strong>Valor:</strong> € ${(order.multibanco.total).toFixed(2)}</p>
+// `;
+//                     }
+
+                    if(order.payment.status == 0){
+                        if (!order.payment.multibanco) {
+                            if(order.dev){
+                                payment = `<span class="text-danger">Pagamento não concluido</span>`
+
+                                    `<!--<a target="_blank" href="https://checkout.stripe.com/c/pay/${ order.orderCodeVW }" class="btn btn-primary">PAGAR</a>-->`;
+                            } else {
+                                payment = `<span class="text-danger">Pagamento não concluido</span>`
+
+                                    `<!--<a target="_blank" href="https://checkout.stripe.com/c/pay/${ order.orderCodeVW }" class="btn btn-primary">PAGAR</a>-->`;
+                            }
+                        } else {
+
+                            payment = `<span class="text-danger">Pagamento não concluido</span>`
+
+                        }
+
+
+                    } else {
+                        if (order.payment.multibanco) {
+                            payment = `<span class="text-success col-12 me-5">Pagamento concluido</span>`
+                            // ` <a class="btn btn-success col-4 mb-2" href="${order.multibanco.receipt_url}" target="_blank"> Ver Recebibo</a>`
+                        }
+                    }
+
+                    var paymentDiv = document.getElementById('paymentStatus');
+                    paymentDiv.innerHTML = payment;
+
+                    for (const product of order['products']) {
+                        htmlProducts.innerHTML += `<a target='_blank' href='/product/${product.product_id}'>
+                    <div class="media border m-3 rounded-2">
+                        <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="/${product.image}" width="135" height="135" /> </div>
+                        <div class="media-body my-auto text-right">
+                            <div class="row  my-auto flex-column flex-md-row">
+                                <div class="col my-auto"> <h6 class="mb-0"> ${product.item}</h6>  </div>
+                                <div class="col my-auto"> <small>${product.productSize != null ? 'Tamanho: ' + product.productSize : ''} - ${product.productColor != null ? 'Cor: ' + product.productColor : ''}</small></div>
+                                <div class="col my-auto"> <small>Quantidade x ${product.qtd}</small></div>
+                                <div class="col my-auto"><h6 class="mb-0">€${product.price}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div></a>`
+
+                    }
+
+                    loadComments(orderId);
+
+                }
+            })
+        })
+
+        function loadComments(orderId) {
+            $.ajax({
+                type: "POST",
+                url: '{{ path('get_comments') }}',
+                data: ({orderId: orderId}),
+                success: function (comments) {
+                    var htmlComments = document.getElementById('divTable');
+
+                    htmlComments.innerHTML = `
+                                            <table id="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Usuário</th>
+                                                    <th>Data</th>
+                                                    <th>Comentário</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="tableComments">
+                                                </tbody>
+                                            </table>`;
+
+                    var htmlComments = document.getElementById('tableComments');
+
+                    for (const comment of comments) {
+                        htmlComments.innerHTML += `
+                        <tr>
+                            <td>${comment.user}</td>
+                            <td>${comment.date}</td>
+                            <td><p>${comment.comment.replace(/\n/g, '<br />')}</p></td>
+                        </tr>
+                        `
+                    }
+
+                    $('#table').dataTable({
+                        /* No ordering applied by DataTables during initialisation */
+                        "order": []
+                    });
+
+                }
+            })
+        }
+
+
+        $('#addComment').click(function () {
+
+            var orderId = {{ orderId }};
+            const comment = $('#comment').val().trim();
+
+            $.ajax({
+                url: `{{ path('add_comment') }}`,
+                type: 'POST',
+                async: false,
+                data: ({orderId:orderId, comment:comment, user:1}),
+                success: function () {
+                    loadComments(orderId);
+                    $.alert({
+                        title: 'Sucesso!',
+                        content: 'Comentário adicionado',
+                    });
+                    $('#comment').val("");
+                },
+                error: function (e) {
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Error!',
+                    });
+                }
+            });
+        })
+
+        $('#sendToPos').click(function () {
+
+            var orderId = $(this).data('id');
+
+            $.ajax({
+                url: `{{ path('confirmation/send_zone_soft') }}`,
+                type: 'POST',
+                async: false,
+                data: ({orderId:orderId}),
+                success: function (data) {
+                    const OrderStatus = data.status;
+                    if(OrderStatus != 1){
+                        $.alert({
+                            title: '<span class="text-danger">Não enviado!</span>',
+                            content: '<b>Motivos:</b>' +
+                                '<ul>' +
+                                '<li>Produto não Sincronizado</li>' +
+                                '<li>POS principal Desligado</li>' +
+                                '<li>Falha da Internet (Internet Lento)</li>' +
+                                '</ul><br>' +
+                                '<p>Se após 2 - 3 tentativas de envio continuar aparecer a mesma mensagem entra em contacto!</p>',
+                        });
+
+
+                    } else {
+                        $.confirm({
+                            title: '<span class="text-success">Enviado!</span>',
+                            content: 'Foi enviado ao POS!',
+                            buttons: {
+                                confirm: function () {
+
+                                }
+                            }
+                        });
+                    }
+
+                },
+                error: function (e) {
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Error!',
+                    });
+                }
+            });
+        })
+
+
+    </script>
+{% endblock %}

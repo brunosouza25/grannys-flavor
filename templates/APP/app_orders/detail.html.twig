@@ -1,0 +1,129 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <style>
+        .regular-header{
+            display: none;
+        }
+        .regular-footer{
+            display: none;
+        }
+    </style>
+    <header class="header">
+        <div class="logo-wrap">
+            <a href="{{ path('app/app_orders') }}"><i class="iconly-Arrow-Left-Square icli"></i></a>
+            <h1 class="title-color font-md">Detailhes do Pedido</h1>
+        </div>
+        <div class="avatar-wrap">
+            <a href="{{ path('app/app_dashboard') }}">
+                <i class="iconly-Home icli"></i>
+            </a>
+        </div>
+    </header>
+    <div class="main-wrap order-detail mb-xxl">
+        <!-- Banner Start -->
+        <div class="section-p-b">
+            <div class="banner-box">
+                <div class="media">
+                    <div class="img"></div>
+                    <div class="media-body">
+                        <span class="font-sm">Referência: #{{orders.ordernr}}</span>
+                        {% if orders.orderstate == 0 %}
+                            <h2>Aguarde Confirmação</h2>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Banner End -->
+
+        <!-- Item Section Start -->
+        <div class="item-section p-0">
+            <h3 class="font-theme font-md">Resumo:</h3>
+
+            <div class="item-wrap">
+                <!-- Item Start -->
+
+                {% for detaiorder in orderitems %}
+                <div class="media">
+                    <div class="count">
+                        <span class="font-sm">{{ detaiorder.qtd }}</span>
+                        <div class="icon"></div>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="title-color font-sm">{{detaiorder.item}}</h4>
+                    </div>
+                    <span class="title-color font-md">{{detaiorder.price}} €</span>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+        <!-- Item Section End -->
+
+        <!-- Order Summary Section Start -->
+        <div class="order-summary p-0">
+            <h3 class="font-theme font-md">Detalhes do Pagamento</h3>
+            <!-- Product Summary Start -->
+            <ul>
+                <li>
+                    <span>Saco</span>
+                    <span>{{bag}} €</span>
+                </li>
+
+
+                <li>
+                    <span>Entrega</span>
+                    <span>{{delivery}} €</span>
+                </li>
+                <li>
+                    <span>Total</span>
+                    <span>{{total}} €</span>
+                </li>
+            </ul>
+            <!-- Product Summary End -->
+        </div>
+        <!-- Order Summary Section End -->
+
+        <!-- Address Section Start -->
+
+        {% if orders.ordertype == 'delivery' %}
+
+        <div class="address-section p-0">
+            <h3 class="font-theme font-md">Morada de Entrega</h3>
+
+            <div class="address">
+                <h4 class="font-sm title-color">{{address.city}}</h4>
+                <p class="font-sm content-color">{{address.street}} {{ address.city }} {{ address.postalcode }}</p>
+            </div>
+        </div>
+        {% else %}
+
+
+        {% endif %}
+        <!-- Address Section End -->
+
+        <!-- Payment Method Section Start -->
+        <section class="payment-method p-0">
+            <h3 class="font-theme font-md">Metodo de Pagamento</h3>
+
+            <div class="payment-box">
+                <div class="img"></div>
+                <span class="font-sm title-color">
+                {% if orders.paymenttype == 'online' %}
+                   Pagamento Online
+                {% endif %}
+                    {% if orders.paymenttype == 'cash' %}
+                        Pagamento em Dinheiro
+                    {% else %}
+                    Pagamento com Cartão
+                    {% endif %}
+
+                </span>
+            </div>
+        </section>
+        <!-- Payment Method Section End -->
+    </div>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+
+    <style>
+        #map{
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div id="map"></div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDwoetFWD_58gajSuz86rp6cwu6QTHqO1E"></script>#}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwoetFWD_58gajSuz86rp6cwu6QTHqO1E&callback=initMap&v=weekly" defer></script>
+    {#    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwoetFWD_58gajSuz86rp6cwu6QTHqO1E"></script>#}
+    <script>
+        function initMap() {
+            var infowindow = new google.maps.InfoWindow();
+            const map = new google.maps.Map(document.getElementById("map"));
+            var test = new Array();
+            {% for zone in zones %}
+
+
+            var outerCoords_{{ zone.reference }} = [
+                {% for cordinate in cordinates %}
+                {% if cordinate.cordinate == zone.reference %}
+                {
+                    lat: {{ cordinate.lat }},
+                    lng: {{ cordinate.lng }}
+                },
+                {% endif %}
+                {% endfor %}
+
+            ];
+
+
+            var rightShoulderFront_{{ zone.reference }} = new google.maps.Polygon({
+                paths: outerCoords_{{ zone.reference }},
+                map: map,
+                zoneIdReference: '{{ zone.id }}',
+                strokeColor: '{{ zone.color }}',
+                strokeOpacity: 1.00,
+                fillColor: '{{ zone.color }}',
+                fillOpacity: 0.10,
+                strokeWeight: 3,
+                zonename: '{{ zone.title }}',
+                zIndex: {{zone.positions}}
+            });
+            var bounds_{{ zone.reference }} = new google.maps.LatLngBounds();
+            for (var i = 0; i < outerCoords_{{ zone.reference }}.length; i++) {
+                bounds_{{ zone.reference }}.extend(outerCoords_{{ zone.reference }}[i]);
+            }
+            map.fitBounds(bounds_{{ zone.reference }});
+
+
+            var geocoder = new google.maps.Geocoder();
+            var selectedFullAddress = "Kuala Lumpur"
+            geocoder.geocode({
+                address: selectedFullAddress,
+            }, function(results, status) {
+                lat = 37.10509892273147;
+                lng = -8.383755396805238;
+                const myLatLng = { lat: 37.10509892273147, lng: -8.383755396805238 };
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map
+                });
+                var curPosition = new google.maps.LatLng(lat, lng);
+                var isWithinPolygon = google.maps.geometry.poly.containsLocation(curPosition, rightShoulderFront_{{ zone.reference }});
+                if (isWithinPolygon) {
+                    infowindow.setContent("isWithinPolygon:" + curPosition.toUrlValue(6));
+                    infowindow.open(map, marker);
+                    {#alert(rightShoulderFront_{{ zone.reference }}.zoneIdReference);#}
+
+                    test.push(rightShoulderFront_{{ zone.reference }}.zonename);
+                }else{
+                    console.log("no");
+                }
+
+            });
+            {% endfor %}
+            setTimeout(function() {
+                alert(test);
+            }, 3000);
+
+        }
+
+
+
+        // function initMap() {
+        //     var infowindow = new google.maps.InfoWindow();
+        //     var outerCoords = [{
+        //         lat: 3.528319665937775,
+        //         lng: 101.7580347776062
+        //     },
+        //         {
+        //             lat: 3.003044444012029,
+        //             lng: 101.4085838669952
+        //         },
+        //         {
+        //             lat: 2.9951223092598767,
+        //             lng: 101.82611927913445
+        //         },
+        //         {
+        //             lat: 3.5216453,
+        //             lng: 101.7636108
+        //         }
+        //     ]
+        //     const map = new google.maps.Map(document.getElementById("mapSect"));
+        //     var rightShoulderFront = new google.maps.Polygon({
+        //         paths: outerCoords,
+        //         map: map
+        //     });
+        //     var bounds = new google.maps.LatLngBounds();
+        //     for (var i = 0; i < outerCoords.length; i++) {
+        //         bounds.extend(outerCoords[i]);
+        //     }
+        //     map.fitBounds(bounds);
+        //
+        //
+        //     var geocoder = new google.maps.Geocoder();
+        //     var selectedFullAddress = "Kuala Lumpur"
+        //     geocoder.geocode({
+        //         address: selectedFullAddress,
+        //     }, function(results, status) {
+        //         lat = results[0].geometry.location.lat();
+        //         lng = results[0].geometry.location.lng();
+        //         var marker = new google.maps.Marker({
+        //             position: results[0].geometry.location,
+        //             map: map
+        //         })
+        //         var curPosition = new google.maps.LatLng(lat, lng);
+        //         var isWithinPolygon = google.maps.geometry.poly.containsLocation(curPosition, rightShoulderFront);
+        //         if (isWithinPolygon) {
+        //             infowindow.setContent("isWithinPolygon:" + curPosition.toUrlValue(6));
+        //             infowindow.open(map, marker);
+        //         }
+        //     });
+        // }
+    </script>
+
+
+    <script>
+        $("#savePositions").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_house-position_save')}}",
+                data: formData, // serializes the form's elements.
+                contentType: false,
+                processData: false,
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Guardado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

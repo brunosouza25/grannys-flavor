@@ -1,0 +1,319 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+
+    <style>
+        #map-canvas{
+            width: 100%;
+            height: 100vh;
+        }
+        .container-fluid{
+            padding: 0 !important;
+        }
+    </style>
+
+    <div id="map-canvas"></div>
+    <div class="zones-box">
+        <h5>Zonas de Entrega</h5>
+        <form id="saveNewZone">
+            <div class="zone-form">
+                <div class="mb-3">
+                    <input type="text" name="zonename" id="zonemane" class="form-control" placeholder="Titulo da Zona" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="pricezone" id="pricezone" class="form-control" placeholder="Preço" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="minprice" id="pricezone" class="form-control minprice" placeholder="Valor Mínimo de Compra" required>
+                </div>
+                <div class="mb-3">
+                    <input type="hidden" name="vertices" value="" id="vertices" />
+                </div>
+                <label class="alert-success p-2 text-center" id="infozone"></label>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                </div>
+            </div>
+            <div class="zone-form-add">
+                <button type="button" id="newCordinate" class="btn btn-sm btn-outline-secondary">Adicionar Novo</button>
+                <input type="color" id="color" name="colorZone" style=" float: right;   margin-top: 4px;">
+            </div>
+        </form>
+    </div>
+    <div class="zone-box-edit">
+        <form id="editNewZone">
+            <h5>Editar a <span class="zone-name-edit"></span></h5>
+            <div class="mb-3">
+                <label>Nome da Zona</label>
+                <input type="text" name="zonename" id="zonemane-edit" class="form-control" placeholder="Titulo da Zona" required>
+            </div>
+            <div class="mb-3">
+                <label>Preço</label>
+                <input type="text" name="pricezone" id="pricezone-edit" class="form-control" placeholder="Preço" required>
+            </div>
+            <div class="mb-3">
+                <label>Valor Mínimo de Compra</label>
+                <input type="text" name="minpricetotal"  class="form-control minpricetotal" placeholder="Valor Mínimo de Compra" required>
+            </div>
+            <div class="mb-3">
+                <input type="hidden" name="vertices" value="" id="vertices-edit" />
+                <input type="hidden" name="zoneID" value="" id="zone-id-edit" />
+
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                <button type="button" id="deleteDrawing" class="btn btn-sm btn-outline-warning">Eliminar</button>
+            </div>
+
+
+        </form>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwoetFWD_58gajSuz86rp6cwu6QTHqO1E&libraries=drawing"></script>
+    <script>
+        var map; // Global declaration of the map
+        var iw = new google.maps.InfoWindow(); // Global declaration of the infowindow
+        var lat_longs = [];
+        var markers = [];
+        var drawingManager;
+
+        $('#newCordinate').click(function () {
+            $('.zone-form-add').slideUp(function () {
+                $('.zone-form').slideDown();
+
+            });
+
+            var colortoUse = $('#color').val();
+            drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: google.maps.drawing.OverlayType.POLYGON,
+                drawingControl: true,
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_CENTER,
+                    drawingModes: [google.maps.drawing.OverlayType.POLYGON]
+                },
+                polygonOptions: {
+                    editable: true,
+                    fillColor: colortoUse,
+                    strokeColor: colortoUse,
+                    strokeOpacity: '0.8'
+                }
+            });
+
+            drawingManager.setMap(map);
+
+            google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
+                var newShape = event.overlay;
+                newShape.type = event.type;
+
+            });
+
+            google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
+                overlayClickListener(event.overlay);
+                $('#vertices').val(event.overlay.getPath().getArray());
+                $('#infozone').text('Coordenados Obtidos');
+                var lsa = lat_longs[''] = event.overlay.getPath().getArray();
+
+            });
+
+            function overlayClickListener(overlay) {
+                google.maps.event.addListener(overlay, "mouseup", function(event) {
+                    var lsa = lat_longs[overlay.getPath().getArray()];
+                });
+            }
+
+        });
+    </script>
+
+
+    <script>
+        var map; // Global declaration of the map
+        var iw = new google.maps.InfoWindow(); // Global declaration of the infowindow
+        var lat_longs = [];
+        var markers = [];
+        var drawingManager;
+        var polygons = [];
+        var ltd = {{ ltd }};
+        var lng = {{ lng }};
+        var bounds = new google.maps.LatLngBounds();
+
+
+        function initialize(listener) {
+            var myLatlng = new google.maps.LatLng(ltd, lng);
+            var myOptions = {
+                zoom: 13,
+                center: myLatlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+            map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map,
+                title: "House location",
+            });
+
+
+            {% for zone in zones %}
+
+            var zone_{{ zone.reference }} = [
+                {% for cordinate in cordinates %}
+                {% if cordinate.cordinate == zone.reference %}
+                new google.maps.LatLng({{ cordinate.lat }}, {{ cordinate.lng }}),
+                {% endif %}
+                {% endfor %}
+            ];
+
+            var polys_{{ zone.reference }} = new google.maps.Polygon({
+                path: zone_{{zone.reference}},
+                geodesic: true,
+                strokeColor: '{{ zone.color }}',
+                strokeOpacity: 1.00,
+                fillColor: '{{ zone.color }}',
+                fillOpacity: 0.10,
+                strokeWeight: 3,
+                zIndex: {{zone.positions}},
+                map: map,
+                zonename: '{{ zone.title }}',
+                pricezone: '{{ zone.price }}',
+                zoneIdReference: '{{ zone.id }}',
+                minpricesend: '{{ zone.minprice }}',
+                clickable: true
+            });
+            google.maps.event.addListener(polys_{{ zone.reference }}, 'mouseover', function() {+
+                polys_{{ zone.reference }}.setOptions({
+                    fillOpacity: 0.5
+                });
+            });
+            google.maps.event.addListener(polys_{{ zone.reference }}, 'mouseout', function() {+
+                polys_{{ zone.reference }}.setOptions({
+                    fillOpacity: 0.10
+                });
+
+                google.maps.event.addListener(polys_{{ zone.reference }}.getPath(), 'set_at',  function() {+
+                    console.log("set_at");
+                    var curLatLng;
+                    curLatLng = polys_{{ zone.reference }}.getPath().getArray();
+                    $('#vertices-edit').val(curLatLng);
+                });
+            });
+            google.maps.event.addListener(polys_{{ zone.reference }}, 'click', function() {+
+                polys_{{ zone.reference }}.setOptions({
+                    editable: true,
+                });
+                $('.zones-box').slideUp(function () {
+                    $('.zone-box-edit').slideDown();
+                    $('.zone-name-edit').text(polys_{{ zone.reference }}.zonename);
+                    $('#zonemane-edit').val(polys_{{ zone.reference }}.zonename);
+                    $('#pricezone-edit').val(polys_{{ zone.reference }}.pricezone);
+                    $('#zone-id-edit').val(polys_{{ zone.reference }}.zoneIdReference);
+                    $('.minpricetotal').val(polys_{{ zone.reference }}.minpricesend);
+                });
+            });
+            {% endfor %}
+
+            for (var j = 0; j < polygons.length; j++) {
+                for (var i = 0; i < polygons[j].getPath().getLength(); i++) {
+                    bounds.extend(polygons[j].getPath().getAt(i));
+                }
+            }
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+
+    </script>
+
+
+    <script>
+        $("#saveNewZone").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_new_zones')}}",
+                data: formData, // serializes the form's elements.
+                contentType: false,
+                processData: false,
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $("#deleteDrawing").click(data => {
+            //Event to delete zone
+            const zoneId = document.getElementById("zone-id-edit").value;
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/delete_zone')}}",
+                data: ({zoneId: zoneId}), // serializes the form's elements.
+                success: function(data)
+                {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Apagado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                },error: data => {
+                    console.log(data);
+                }
+            });
+        });
+
+        $("#editNewZone").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_edit_existed_zone')}}",
+                data: formData, // serializes the form's elements.
+                contentType: false,
+                processData: false,
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Editado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

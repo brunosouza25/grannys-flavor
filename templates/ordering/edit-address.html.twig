@@ -1,0 +1,84 @@
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card mb-4">
+                <div class="card-header py-3">
+                    <h5 class="mb-0">Morada</h5>
+                </div>
+                <div class="card-body">
+
+                        <!-- Text input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="street">Rua *</label>
+                            <input type="text" id="street" class="form-control" value="{{ street }}" />
+                        </div>
+
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="city">Cidade *</label>
+                            <input type="text" id="city" class="form-control" value="{{ city }}"/>
+                        </div>
+
+                        <!-- Number input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="postalCode">Código postal *</label>
+                            <input type="text" id="postalCode" class="form-control" value="{{ postalcode }}"/>
+                        </div>
+
+                        <!-- Message input -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="additionalInformation">Additional information</label>
+                            <textarea class="form-control" id="additionalInformation" rows="4" value="{{ referencecode }}"></textarea>
+                        </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+
+        $('#create_new_address').click(function () {
+            const street = $('#street').val();
+            const city = $('#city').val();
+            const postalCode = $('#postalCode').val();
+            const additionalInformation = $('#additionalInformation').val().trim();
+
+            if(street.length == 0 || city.length == 0 || postalCode.length == 0){
+                $.alert({
+                    title: 'Itens faltando!',
+                    content: 'Rua, cidade e código postal não podem estar vazios!',
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('create_new_address') }}",
+                    data: {street: street, city: city, postalCode:postalCode, additionalInformation:additionalInformation}, // serializes the form's elements.
+                    success: function (data) {
+                        $.alert({
+                            title: 'Sucesso!',
+                            content: 'Nova morada adicionada com sucesso!',
+                        });
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+
+                    }
+                });
+            }
+
+
+        })
+
+
+    </script>
+
+{% endblock %}

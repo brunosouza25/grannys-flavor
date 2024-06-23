@@ -1,0 +1,95 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" id="rtl-link" type="text/css" href="{{ asset('app/assets/css/vendors/bootstrap.css') }}" />
+<!-- Iconly Icon css -->
+<link rel="stylesheet" type="text/css" href="{{ asset('app/assets/css/iconly.css') }}" />
+<!-- Style css -->
+<link rel="stylesheet" id="change-link" type="text/css" href="{{ asset('app/assets/css/style.css') }}" />
+
+{% block body %}
+    <div class="bg-pattern-wrap ratio2_1">
+        <div class="bg-patter">
+            <img src="{{ asset('app/assets/images/banner/bg-pattern2.png') }}" class="bg-img" alt="pattern" />
+        </div>
+    </div>
+    <!-- Main Start -->
+    <main class="main-wrap login-page mb-xxl">
+        <img class="logo" src="{{ asset('images/logo.png') }}" alt="logo" />
+        <img class="logo logo-w" src="{{ asset('front/assets/images/logo/logo-w.png') }}" alt="logo" />
+        <p class="font-sm content-color">Bem Vindo ao Fabios Roadstop! </p>
+
+        <!-- Login Section Start -->
+        <section class="login-section p-0">
+            <!-- Login Form Start -->
+
+
+            <form method="post" class="custom-form">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('admin/app_logout') }}">Logout</a>
+                    </div>
+                {% endif %}
+                <h1 class="font-md title-color fw-600">Login</h1>
+
+
+                <div class="input-box">
+                    <input type="email" value="{{ last_username }}" placeholder="Seu Email" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus />
+                    <i data-feather="at-sign"></i>
+                </div>
+
+                <!-- Password Input start -->
+                <div class="input-box">
+                    <input type="password" placeholder="Password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required />
+                    <i class="iconly-Hide icli showHidePassword"></i>
+                </div>
+
+
+
+                <a href="forgot-password.html" class="content-color font-sm forgot mb-3">Esqueci-me da Password ?</a>
+
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+                <div class="text-center">
+                    <button type="submit" class="btn-solid">Entrar</button>
+                    <span class="content-color font-sm d-block text-center fw-600">Se é novo, <a href="{{ path('appapp_register') }}" class="underline">Cria Conta Agora </a></span>
+                </div>
+            </form>
+
+
+
+            <!-- Login Form End -->
+
+            <!-- Social Section Start -->
+{#            <div class="socila-section">#}
+{#          <span>#}
+{#            <span class="font-sm fw-600 font-theme"> Ou entra com  </span>#}
+{#          </span>#}
+{#                <div class="social-wrap">#}
+{#                    <a href="javascript:void(0)" class="font-md title-color fw-600"><img src="assets/icons/png/phone.png" alt="phone" /> Entrar com Número do Telemovel </a>#}
+{#                </div>#}
+{#            </div>#}
+            <!-- Social Section End -->
+        </section>
+        <!-- Login Section End -->
+    </main>
+
+    <script src="{{ asset('app/assets/js/jquery-3.6.0.min.js') }}"></script>
+
+    <!-- Bootstrap Js -->
+    <script src="{{ asset('app/assets/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Feather Icon -->
+    <script src="{{ asset('app/assets/js/feather.min.js') }}"></script>
+
+    <!-- Theme Setting js -->
+{#    <script src="{{ asset('app/assets/js/theme-setting.js') }}"></script>#}
+
+    <!-- Script js -->
+    <script src="{{ asset('app/assets/js/script.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends 'base-login.html.twig' %}
+
+{#{% block title %}Registration!{% endblock %}#}
+{% block stylesheets %}
+    {{ parent() }}
+
+
+{% endblock %}
+
+{% block body %}
+
+
+    <body class="text-center">
+
+    <main class="form-signin">
+        <form id="form-login">
+            <img class="mb-4" src="{{ app_logo }}" alt="" width="150">
+            <br>
+{#            <span class="h3 mb-3 fw-normal">Em breve!</span>#}
+
+            <div class="form-floating">
+                <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" required>
+                <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
+                <label for="floatingPassword">Password</label>
+            </div>
+
+            <button class="w-100 btn btn-lg" style="background-color: #1c346c; color: white" type="submit">Login</button>
+
+            <p class="mt-5 mb-3 text-muted">© 2017–2021</p>
+        </form>
+        <a href="/register_costumer" class="w-100 btn btn-lg btn-dark mt-3" >Cadastrar</a>
+        <button class="w-100 btn btn-lg btn-dark mt-3" id="recover">Recuperar senha</button>
+
+    </main>
+
+
+
+
+
+    </body>
+
+{% endblock %}
+
+
+
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    {{ parent() }}
+
+    {#    <script src="{{ asset('app/assets/js/jquery-3.6.0.min.js') }}"></script>#}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.11.3/paper-full.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{#    {{ parent() }}#}
+
+    <script>
+
+        document.getElementById('register').addEventListener('click', function () {
+            location.replace('/register_costumer');
+        })
+        document.getElementById('login').addEventListener('click', function () {
+            location.replace('/login')
+        })
+
+        $('#recover').click(function () {
+
+                Swal.fire({
+                    position: 'top',
+                    icon: 'question',
+                    input: 'text',
+                    title: 'Deseja recuperar senha?',
+                    // text: 'Deseja recuperar senha?',
+                    showDenyButton: true,
+                    confirmButtonText: 'Enviar Codigo de Reperação',
+
+                    denyButtonText: `Cancelar`,
+                }).then((result) => {
+
+                    if (result.value.length == 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Favor inserir o email!',
+
+                        })
+                        return;
+                    }
+
+                    if (result.isConfirmed) {
+
+                        var email = result.value
+                        $.ajax({
+                            type: "POST",
+                            url: "/recover_send",
+                            data: { email: email }, // serializes the form's elements.
+                            beforeSend: function(){
+                                Swal.fire({
+                                    title: 'A Enviar o email, por favor aguarde',
+                                    html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                                    allowOutsideClick: false,
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    onBeforeOpen: () => {
+                                        Swal.showLoading()
+                                    },
+                                });
+                            },
+                            success: function(data){
+                                Swal.fire({
+                                    position: 'top',
+                                    icon: 'info',
+                                    html: `<p>Se o email existe na nossa base de dados, foi enviado um código com o link de recuperação para:</p><br> ${data.email}`,
+                                    // text: 'insira o codigo',
+                                    // denyButtonText: `Enviar novamente`,
+                                    confirmButtonText: 'Recuperar',
+                                }).then((result) => {
+                                    location.replace('/recover_password');
+                                })
+                            }
+                        })
+                    }})
+
+        })
+
+        $("#form-login").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var form = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: "/singin",
+                data: form.serialize(), // serializes the form's elements.
+                beforeSend: function(){
+                    Swal.fire({
+                        title: 'Aguarde',
+                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function(data)
+                {
+                    if(data.state == "0") {
+
+                        location.replace('/');
+
+                    }if(data.state == "1") {
+                        Swal.fire({
+                            position: 'top',
+                            icon: 'error',
+                            title: 'Por favor, check Email e Senha',
+                            showConfirmButton: false,
+                            timer: 5000
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

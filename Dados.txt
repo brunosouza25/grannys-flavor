@@ -1,0 +1,10 @@
+Admin:
+https://dev.pitombolanches.com/admin
+info@pitombolanches.com
+pitombo2023#
+
+Criar Utilizador:
+https://dev.pitombolanches.com/register
+
+Confirmação do Pedidos
+https://dev.pitombolanches.com/confirmation/dashboard

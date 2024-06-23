@@ -1,0 +1,86 @@
+.bf:not(:last-child){
+    /*border-right:1px solid #a8a8a8;*/
+    border-right:2px solid #a8a8a8;
+}
+@media (max-width: 767px)
+{
+    .bf:not(:last-child)
+    {
+        border-right:none;
+        border-bottom:1px solid #a8a8a8;
+        padding:10px 0;
+    }
+    .bf:first-child{
+        padding-right:5rem;
+    }
+    .bf:last-child{
+        padding-right:3rem;
+    }
+    /*body{*/
+    /*    overflow:hidden;*/
+    /*}*/
+    .aside-filter-sm:not(.gw-sidebar){
+        width:0;
+        padding:0;
+    }
+
+    .gw-sidebar{
+        display:block;
+        position:absolute;
+        top:5.70rem;
+        z-index:2;
+        width:80vw;
+        height:100vh;
+    }
+    .gw-blur{
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: rgba(0,0,0,0.5);
+        height: 100vh;
+        width: 100vw;
+        z-index: 1;
+        overflow: hidden;
+
+    }
+    .gw-sideblar{
+        height:72vh;
+    }
+    .gw-nav-list{
+        height:71vh;
+        overflow:scroll;
+    }
+    /*.gw-sidebar{*/
+    /*    position:absolute;*/
+    /*    top:15.7rem;*/
+    /*    z-index:2;*/
+    /*    width:80vw;*/
+    /*    height:100vh;*/
+    /*    border-radius:0;*/
+    /*    overflow:hidden;*/
+    /*}*/
+    .nano-content{
+        overflow:hidden;
+        height:70vh;
+    }
+    .gw-nav-list{
+        overflow-y:scroll;
+        overscroll-behavior:contain;
+
+    }
+
+
+}
+/*KEYFRAME TEST*/
+@Keyframes Myanimin {
+    0% {
+        width: 0;
+        opacity: 0;
+        transform: translateX(-600px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

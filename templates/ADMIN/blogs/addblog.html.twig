@@ -1,0 +1,101 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+
+{% block body %}
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Adicionar novo Blog</h4>
+        </div>
+        <div class="card-body">
+            <form id="submit-new-blog" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <p class="alert-danger p-2">Referência é gerada automaticamente</p>
+                    <input type="text" class="form-control input-default" id="reference" name="menu-ref" placeholder="Referencia">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control input-default" id="nametitle" name="menu-title" placeholder="Titulo do Blog" autofocus>
+                </div>
+                <div class="mb-3">
+                    <label style="color: #000;">Imagem do blog</label><br>
+                    <input type="file" class=" input-default" id="imageblog" name="imageblog" placeholder="Imagem">
+                </div>
+                <div class="mb-3">
+                    <textarea id="textblog" name="textblog"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-primary" type="submit">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+    <script>
+        $('#textblog').trumbowyg();
+
+        $("#submit-new-blog").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_blogs_save_new')}}",
+                data: formData, // serializes the form's elements.
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.replace('/admin/blogs');
+                    }, 1000);
+
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+
+
+    </script>
+<script>
+
+
+
+
+    makeSortString = (function() {
+        var translate_re = /[¹²³áàâãäåaaaÀÁÂÃÄÅAAAÆccç©CCÇÐÐèéê?ëeeeeeÈÊË?EEEEE€gGiìíîïìiiiÌÍÎÏ?ÌIIIlLnnñNNÑòóôõöoooøÒÓÔÕÖOOOØŒr®Ršs?ßŠS?ùúûüuuuuÙÚÛÜUUUUýÿÝŸžzzŽZZ]/g;
+        var translate = {
+            "¹":"1","²":"2","³":"3","á":"a","à":"a","â":"a","ã":"a","ä":"a","å":"a","a":"a","a":"a","a":"a","À":"a","Á":"a","Â":"a","Ã":"a","Ä":"a","Å":"a","A":"a","A":"a",
+            "A":"a","Æ":"a","c":"c","c":"c","ç":"c","©":"c","C":"c","C":"c","Ç":"c","Ð":"d","Ð":"d","è":"e","é":"e","ê":"e","?":"e","ë":"e","e":"e","e":"e","e":"e","e":"e",
+            "e":"e","È":"e","Ê":"e","Ë":"e","?":"e","E":"e","E":"e","E":"e","E":"e","E":"e","€":"e","g":"g","G":"g","i":"i","ì":"i","í":"i","î":"i","ï":"i","ì":"i","i":"i",
+            "i":"i","i":"i","Ì":"i","Í":"i","Î":"i","Ï":"i","?":"i","Ì":"i","I":"i","I":"i","I":"i","l":"l","L":"l","n":"n","n":"n","ñ":"n","N":"n","N":"n","Ñ":"n","ò":"o",
+            "ó":"o","ô":"o","õ":"o","ö":"o","o":"o","o":"o","o":"o","ø":"o","Ò":"o","Ó":"o","Ô":"o","Õ":"o","Ö":"o","O":"o","O":"o","O":"o","Ø":"o","Œ":"o","r":"r","®":"r",
+            "R":"r","š":"s","s":"s","?":"s","ß":"s","Š":"s","S":"s","?":"s","ù":"u","ú":"u","û":"u","ü":"u","u":"u","u":"u","u":"u","u":"u","Ù":"u","Ú":"u","Û":"u","Ü":"u",
+            "U":"u","U":"u","U":"u","U":"u","ý":"y","ÿ":"y","Ý":"y","Ÿ":"y","ž":"z","z":"z","z":"z","Ž":"z","Z":"z","Z":"z"
+        };
+        return function(s) {
+            return(s.replace(translate_re, function(match){return translate[match];}) );
+        }
+    })();
+
+
+    $('#nametitle').keyup(function() {
+        var filteredRef = makeSortString(this.value.toLowerCase().replace(/\s+/g, '-'));
+        $('#reference').val(filteredRef);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+        <div class="row">
+        {% for category in categories %}
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="category-slider-box">
+                            <div class="title-category-item">
+                                <span>{{ category.name }}</span>
+                            </div>
+                            {% for slider in sliders %}
+                                {% if slider.idcategory == category.id %}
+                                    <div class="atual-category-slide-image">
+                                        <img src="{{ bo_url }}{{slider.image}}">
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <form class="add-image-slide-cat mt-4" enctype="multipart/form-data">
+                                <input type="file" name="file">
+                                <input type="hidden" name="categoryID" value="{{ category.id }}">
+                                <button class="btn btn-primary btn-sm mt-4">Guardar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+
+{#    <script>#}
+{#        $('.add-image-slide-cat').submit(function () {#}
+{#            #}
+{#            var formFiles = new FormData();#}
+{#            var files = $(this)[0].files;#}
+{#            var categoryid = $(this).attr('data-category-id');#}
+
+
+{#            formFiles.append('file',files[0]);#}
+{#            formFiles.append('categoryid', categoryid);#}
+{#            $.ajax({#}
+{#                url: '{{ path('admin/app_menu_products_add_imagecategory') }}',#}
+{#                type: 'post',#}
+{#                data: formFiles,#}
+{#                contentType: false,#}
+{#                processData: false,#}
+{#                beforeSend: function() {#}
+{#                    Swal.fire({#}
+{#                        title: 'A Enviar',#}
+{#                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove#}
+{#                        allowOutsideClick: false,#}
+{#                        showCancelButton: false,#}
+{#                        showConfirmButton: false,#}
+{#                        onBeforeOpen: () => {#}
+{#                            Swal.showLoading()#}
+{#                        },#}
+{#                    });#}
+{#                },#}
+{#                success: function(response){#}
+{#                    Swal.fire({#}
+{#                        position: 'top-end',#}
+{#                        icon: 'success',#}
+{#                        title: 'Adicionado',#}
+{#                        showConfirmButton: false,#}
+{#                        timer: 2500#}
+{#                    });#}
+
+{#                    setTimeout(function() {#}
+{#                        location.reload();#}
+{#                    }, 1000);#}
+{#                },#}
+{#            });#}
+{#        });#}
+{#    </script>#}
+
+    <script>
+        $(".add-image-slide-cat").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: '{{ path('admin/app_category_banners_submit') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+
+                success: function(data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    // setTimeout(function() {
+                    //     location.reload();
+                    // }, 1000);
+                },
+
+            });
+        });
+    </script>
+
+
+
+
+{% endblock %}
+

@@ -1,0 +1,190 @@
+{% block body %}
+    <div class="col-lg-11">
+
+        <div class="container px-4">
+            <div id="head">
+
+
+            </div>
+
+            <hr>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr class="col-lg-11">
+                        <th class="col-1" scope="col">ID#</th>
+                        <th class="col-1" scope="col">Imagem</th>
+                        <th class="col-1" scope="col">Imagem principal</th>
+                        <th class="col-1" scope="col">Excluir</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_images">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+
+    <script>
+        function imagesTable() {
+            $.ajax({
+                url: `{{ path('get_product_images', {'productId': productId}) }}`,
+                type: 'POST',
+                async: false,
+                success: function (imagesJson) {
+
+                    var table = document.getElementById('table_images');
+                    var head = document.getElementById('head');
+
+                    head.innerHTML = ``;
+                    head.innerHTML = `<form class="row" id="form_new_product_images">
+                    <div class="col-8">
+                        <label>Grade</label><br>
+                        <input hidden type="text" id="productId" value={{ productId }}>
+                    </div>
+                    <div class="input-group custom_file_input mb-3">
+                        <div class="form-file">
+                            <input type="file" name="files[]"
+                                   class="form-file-input form-control" value="Upload"
+                                   multiple id="productImages" required>
+                        </div>
+                        <div class="col-3 dark">
+                            <button type="submit" class="btn btn-primary" id="new_product_images">Adicionar Fotos</button>
+                        </div>
+                    </div>
+                    <br>
+            </form>`;
+
+                    table.innerHTML = '';
+
+                    for (const image of imagesJson) {
+                        table.innerHTML += `
+                            <tr>
+                                <td>#${image.id}</td>
+                                <td><img src="{{ bo_url }}${image.path}" alt=""></td>
+                                <td> ${image.main_image == 0 ? `<a data-product-image-id="${image.id}" id="selectMainImage" href="#"><i style="font-size: 20px; " class="bi bi-card-image"></i></a>` : '<i style="font-size: 30px; color: green" class="bi bi-check"></i>'}</td>
+                                <td><a  href="#" class="deleteProductImage" data-product-image-id="${image.id}"><i id="deleteProductImage" class="bi bi-trash black 50"></i></a></td>
+                            </tr>`
+                    }
+
+                    $('.deleteProductImage').click(function () {
+                        const productImageId = $(this).data('product-image-id')
+                        $.confirm({
+                            title: 'Apagar!',
+                            content: 'Você tem certeza?!',
+                            buttons: {
+                                confirm: function () {
+                                    $.ajax({
+                                        url: `{{ path('admin/delete_product_image') }}`,
+                                        type: 'POST',
+                                        async: false,
+                                        data: ({productImageId: productImageId}),
+                                        success: function () {
+                                            imagesTable();
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Apagado com sucesso',
+                                            });
+                                        },
+                                        error: function (e) {
+                                            $.alert({
+                                                title: 'Alert!',
+                                                content: 'Error!',
+                                            });
+                                        }
+                                    });
+                                },
+                                Cancelar: function () {
+
+                                }
+
+
+                            }
+                        });
+
+
+                    })
+
+                    $('#selectMainImage').click(function () {
+                        const productImageId = $(this).data('product-image-id')
+                        $.ajax({
+                            url: `{{ path('admin/change_product_main_image') }}`,
+                            type: 'POST',
+                            async: false,
+                            data: ({productImageId:productImageId}),
+                            success: function () {
+                                imagesTable();
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Trocado com sucesso',
+                                });
+                            },
+                            error: function (e) {
+                                $.alert({
+                                    title: 'Alert!',
+                                    content: 'Error!',
+                                });
+                            }
+                        });
+                    })
+
+                    $('#form_new_product_images').submit(function (e) {
+                        e.preventDefault();
+
+                        const productId = $('#productId').val();
+
+                        var fd = new FormData(this);
+
+                        fd.append('productId', productId);
+
+                        $.ajax({
+                            url: `{{ path('admin/new_product_images') }}`,
+                            type: 'POST',
+                            processData: false,
+                            contentType: false,
+                            async: true,
+                            data: (fd),
+                            beforeSend: function(){
+                                $('#new_product_images').prop("disabled",true);
+                            },
+                            success: function () {
+                                imagesTable();
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Adicionado com sucesso',
+                                });
+                                $('#new_product_images').prop("disabled",false);
+
+                            },
+                            error: function (e) {
+                                $.alert({
+                                    title: 'Alert!',
+                                    content: 'Error!',
+                                });
+                            }
+                        });
+                    })
+
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            imagesTable();
+        })
+    </script>
+
+{% endblock %}

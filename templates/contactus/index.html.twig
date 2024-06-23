@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RepairsAndCustomController!{% endblock %}
+
+
+{% block body %}
+
+    <!--================ End of Breadcrumb ================-->
+    <div class="container mt-5">
+        <div class="row pt-5 ">
+            <div class="col-1 d-none d-xl-block d-xxl-block">
+                <!-- linhas verticais -->
+                <div class="container-linhas d-flex flex-column align-items-center ">
+                    <div class="line-1 mb-4 mt-2"></div>
+
+                    <div class="icon-1 mb-4">
+                        <a class="footer-facebook" target="_blank"><i
+                                    class="bi bi-facebook text-black-50 media"></i></a>
+
+                    </div>
+
+                    <div class="line-2 mb-3 mt-2"></div>
+
+                    <div class="icon-1 mb-4">
+                        <a class="footer-instagram-link" target="_blank" ><i class="bi bi-instagram text-black-50 media"></i></a>
+                    </div>
+
+                    <div class="line-2 mb-3 mt-2"></div>
+
+                    <div class="icon-1 mb-3 mt-2">
+                        <a class="footer-youtube" target="_blank"><i class="bi bi-youtube text-black-50 media"></i></a>
+                    </div>
+                    <div class="line-1 mb-4 mt-2"></div>
+                </div>
+                <!-- .. -->
+
+            </div>
+
+            <div class="col-12 col-xl-11">
+                <div class="row">
+                <div class="col-md-8 col-12">
+                    <h5 class="mb-3">Deixe uma mensagem</h5>
+
+{#                    <p class="mb-4" style="color: #606060">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque consequatur dicta dignissimos dolores eos et harum hic ipsam laudantium nam, neque quas quis quo ratione repellat sunt, vitae voluptatum!</p>#}
+                     <!-- Contact Form -->
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6 px-0 pe-md-1 mb-md-0 mb-3">
+                                <label for="nome" class="form-label">Nome:</label>
+                                <input type="text" class="form-control" id="nome" placeholder="Digite seu nome" required>
+                            </div>
+                            <div class="col-12 col-md-6 p-0 ps-md-1">
+                                <label for="email" class="form-label">E-mail:</label>
+                                <input type="email" class="form-control" id="email" placeholder="Digite seu e-mail" required>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            <label for="mensagem" class="form-label">Mensagem:</label>
+                            <textarea class="form-control" id="mensagem" rows="5" placeholder="Digite sua mensagem" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark py-2 px-5 mb-3" style="border-radius:10px;">SUBMIT</button>
+                    </form>
+
+                </div>
+                <div class="col-md-4 col-12">
+                    <div class="row">
+                        <div class="col-12 p-0 ">
+                                <h5>E-mail</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="border border-dark text-dark rounded-circle px-3 py-2">
+                                    <i class="bi bi-envelope fs-4"></i>
+                                </div>
+                                <div class="ps-4 text-break">
+                                    <span class="text-dark" id="footer-email-contact"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-12 p-0 my-5">
+                                    <h5>Telemóvel:</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-dark text-dark rounded-circle px-3 py-2">
+                                            <i class="bi bi-telephone fs-4"></i>
+                                        </div>
+                                        <div class="ps-4 text-break">
+                                            <span class="text-dark" id="footer-phone1"></span>
+                                            <span class="text-dark">«Chamada para rede móvel nacional»</span>
+                                        </div>
+                                    </div>
+
+                        </div>
+                        <div class="col-12 p-0">
+                                    <h5>Morada Principal:</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-dark text-dark rounded-circle px-3 py-2">
+                                            <i class="bi bi-geo-alt fs-4"></i>
+                                        </div>
+                                        <div class="ps-4 text-break">
+                                            <span class="text-dark" id="footer-address"></span>
+                                        </div>
+                                    </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        $('#form-contact').submit(function (e) {
+            e.preventDefault();
+
+            var form = $(this);
+            $.ajax({
+                type: "POST",
+                url: '/save_message',
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Mensagem Enviada!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    setTimeout(function() {
+                        //location.reload();
+                    }, 1000);
+
+                }
+            });
+
+
+        })
+
+
+
+    </script>
+
+{% endblock %}

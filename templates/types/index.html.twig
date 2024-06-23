@@ -1,0 +1,41 @@
+{% block body %}
+
+    <div class="col-lg-11">
+
+        <div class="container px-4">
+
+            <div class="row" id="table_items">
+
+            </div>
+            <hr>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr class="col-lg-11">
+                        <th class="col-1" scope="col">#</th>
+                        <th class="col-1" scope="col">Nome</th>
+                        {#                                <th class="col-1" scope="col">Status</th> #}
+                        <th class="col-1" scope="col">Editar</th>
+                        <th class="col-1" scope="col">Excluir</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_types">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+
+        var tableMaterials = document.getElementById('table_types');
+        loadingTableBaseBrand('type', tableMaterials)
+
+
+    </script>
+
+{% endblock %}

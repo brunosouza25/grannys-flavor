@@ -1,0 +1,379 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block body %}
+{#    dashboard Cards#}
+    <div class="row">
+        <div class="col-xl-3 col-lg-3 col-sm-6">
+            <div class="card overflow-hidden">
+                <div class="card-header media border-0 pb-0">
+                    <div class="media-body">
+                        <h2 class="text-black">56</h2>
+                        <p class="mb-0 text-black">Produtos</p>
+                    </div>
+                    <svg width="36" height="28" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <span class="icon-dash-card mdi mdi-coffee" style="color: #1c346c"></span>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-sm-6">
+            <div class="card overflow-hidden">
+                <div class="card-header media border-0 pb-0">
+                    <div class="media-body">
+                        <h2 class="text-black">785</h2>
+                        <p class="mb-0 text-black">Pedidos</p>
+                    </div>
+                    <svg width="32" height="31" viewBox="0 0 32 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <span class="icon-dash-card mdi mdi-newspaper-variant-outline"></span>
+                    </svg>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-sm-6">
+            <div class="card overflow-hidden">
+                <div class="card-header media border-0 pb-0">
+                    <div class="media-body">
+                        <h2 class="text-black">56</h2>
+                        <p class="mb-0 text-black">Clientes</p>
+                    </div>
+                    <svg width="32" height="36" viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <span class="icon-dash-card mdi mdi-account-multiple"></span>
+                    </svg>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-sm-6">
+            <div class="card overflow-hidden">
+                <div class="card-header media border-0 pb-0">
+                    <div class="media-body">
+                        <h2 class="text-black">€1612.36</h2>
+                        <p class="mb-0 text-black">Total Faturado</p>
+                    </div>
+                    <svg width="20" height="36" viewBox="0 0 20 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <span class="icon-dash-card mdi mdi-currency-eur"></span>
+                    </svg>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{#    Dashboard Recent Orders#}
+    <div class="row">
+        <div class="col-xl-12 col-xxl-12 col-lg-12 col-sm-12">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div>
+                        <h4 class="card-title mb-2">Encomendas mais Recentes</h4>
+                        <p class="fs-13 mb-0">Aqui vao aparecer os ultimos 5 pedidos dos clientes atravês do Site / APP</p>
+                    </div>
+                    <!-- <select class="form-control style-1 default-select">
+                        <option>Newest</option>
+                        <option>Latest</option>
+                        <option>Old</option>
+                    </select> -->
+                    <select class="default-select style-1" aria-label="Default select example">
+                        <option selected>Newest</option>
+                        <option value="1">Latest</option>
+                        <option value="2">Old</option>
+                    </select>
+                </div>
+                <div class="card-body  p-0">
+                    <div class="table-responsive ">
+                        <table class="table order-request">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="media align-items-center">
+                                        <img class="me-3 img-fluid rounded-circle" width="75" src="../images/card/pic1.jpg" alt="DexignZone">
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-2"><a class="text-black" href="ecom-product-detail.html">Tuna Soup spinach with himalaya salt.</a></h5>
+                                            <p class="mb-0 text-primary">#0010235</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5 class="mb-2 text-black wspace-no">Jimmy Kueai</h5>
+                                    <p class="mb-0">South Corner st41256 london</p>
+                                </td>
+                                <td style="width:100px;">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <h4 class="mb-0 me-3 fs-20 text-black d-inline-block">$7.4</h4>
+                                        <p class="mb-0 fs-20 d-inline-block">x3</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <a class="btn bgl-warning text-warning" href="javascript:;">PENDING</a>
+                                        <div class="dropdown ms-auto">
+                                            <div class="btn-link" data-bs-toggle="dropdown">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="12" cy="5" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="19" r="2"></circle></g></svg>
+                                            </div>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M22 4L12 14.01L9 11.01" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Accept order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M15 9L9 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M9 9L15 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Reject order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 16V12" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 8H12.01" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    View Details
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="media align-items-center">
+                                        <img class="me-3 img-fluid rounded-circle" width="75" src="../images/card/pic2.jpg" alt="DexignZone">
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-2"><a href="ecom-product-detail.html" class="text-black">Mozarella Pizza With Random Topping</a></h5>
+                                            <p class="mb-0 text-primary">#0010299</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5 class="mb-2 text-black wspace-no">Kinda Alexa</h5>
+                                    <p class="mb-0">Blue Ocean st.41551 London</p>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <h4 class="mb-0 me-3 fs-20 text-black d-inline-block">$8.2</h4>
+                                        <p class="mb-0 fs-20 d-inline-block">x1</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <a class="btn bgl-success text-success" href="javascript:;">ENTREGUE</a>
+                                        <div class="dropdown ms-auto">
+                                            <div class="btn-link" data-bs-toggle="dropdown">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="12" cy="5" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="19" r="2"></circle></g></svg>
+                                            </div>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M22 4L12 14.01L9 11.01" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Accept order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M15 9L9 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M9 9L15 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Reject order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 16V12" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 8H12.01" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    View Details
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="media align-items-center">
+                                        <img class="me-3 img-fluid rounded-circle" width="75" src="../images/card/pic3.jpg" alt="DexignZone">
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-2"><a href="ecom-product-detail.html" class="text-black">Sweet Cheezy Pizza for Kids Meal (Small Size)</a></h5>
+                                            <p class="mb-0 text-primary">#0010235</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5 class="mb-2 text-black wspace-no">Peter Parkur</h5>
+                                    <p class="mb-0">Franklin Avenue St.66125 London</p>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <h4 class="mb-0 me-3 fs-20 text-black d-inline-block">$4.2</h4>
+                                        <p class="mb-0 fs-20 d-inline-block">x2</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <a class="btn bgl-light" href="javascript:;">CANCELADO</a>
+                                        <div class="dropdown ms-auto">
+                                            <div class="btn-link" data-bs-toggle="dropdown">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="12" cy="5" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="19" r="2"></circle></g></svg>
+                                            </div>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M22 4L12 14.01L9 11.01" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Accept order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M15 9L9 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M9 9L15 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Reject order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 16V12" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 8H12.01" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    View Details
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="media align-items-center">
+                                        <img class="me-3 img-fluid rounded-circle" width="75" src="../images/card/pic6.jpg" alt="DexignZone">
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-2"><a href="ecom-product-detail.html" class="text-black">Tuna soup spinach with himalaya salt</a></h5>
+                                            <p class="mb-0 text-primary">#0010235</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5 class="mb-2 text-black wspace-no">Jimmy Kueai</h5>
+                                    <p class="mb-0">South Corner st41256 london</p>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <h4 class="mb-0 me-3 fs-20 text-black d-inline-block">$7.4</h4>
+                                        <p class="mb-0 fs-20 d-inline-block">x3</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <a class="btn bgl-warning text-warning" href="javascript:;">PENDING</a>
+                                        <div class="dropdown ms-auto">
+                                            <div class="btn-link" data-bs-toggle="dropdown">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="12" cy="5" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="19" r="2"></circle></g></svg>
+                                            </div>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M22 4L12 14.01L9 11.01" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Accept order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M15 9L9 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M9 9L15 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Reject order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 16V12" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 8H12.01" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    View Details
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="media align-items-center">
+                                        <img class="me-3 img-fluid rounded-circle" width="75" src="../images/card/pic7.jpg" alt="DexignZone">
+                                        <div class="media-body">
+                                            <h5 class="mt-0 mb-2"><a href="ecom-product-detail.html" class="text-black">Mozarella Pizza With Random Topping</a></h5>
+                                            <p class="mb-0 text-primary">#0010299</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5 class="mb-2 text-black wspace-no">Cindy Alexa</h5>
+                                    <p class="mb-0">Blue Ocean St.41551 London</p>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <h4 class="mb-0 me-3 fs-20 text-black d-inline-block">$8.2</h4>
+                                        <p class="mb-0 fs-20 d-inline-block">x1</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <a class="btn bgl-light" href="javascript:;">CANCELADO</a>
+                                        <div class="dropdown ms-auto">
+                                            <div class="btn-link" data-bs-toggle="dropdown">
+                                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"></rect><circle fill="#000000" cx="12" cy="5" r="2"></circle><circle fill="#000000" cx="12" cy="12" r="2"></circle><circle fill="#000000" cx="12" cy="19" r="2"></circle></g></svg>
+                                            </div>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M22 4L12 14.01L9 11.01" stroke="#209F84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Accept order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M15 9L9 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M9 9L15 15" stroke="#F24242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    Reject order
+                                                </a>
+                                                <a class="dropdown-item text-black" href="javascript:;">
+                                                    <svg class="me-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 16V12" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M12 8H12.01" stroke="#6F6F6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    View Details
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody></table>
+{#                        <div class="card-footer border-0 pt-0 text-center">#}
+{#                            <a href="ecom-product-list.html" class="btn-link">View More &gt;&gt;</a>#}
+{#                        </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

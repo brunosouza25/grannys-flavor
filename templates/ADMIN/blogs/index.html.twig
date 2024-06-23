@@ -1,0 +1,51 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+
+{% block body %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Tabela de Produtos</h4>
+                <a style="float: right;" href="{{ path('admin/app_blogs_add_new') }}" class="btn btn-primary">Adicionar Blog</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="ProductsTable" class="display table table-hover table-responsive-sm" style="min-width: 845px">
+                        <thead>
+                        <tr>
+                            <th>Imagem</th>
+                            <th>Data</th>
+                            <th>Titulo</th>
+                            <th>Editar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for blog in blogs %}
+                            <tr>
+                                <td><img class="blog-image-list" src="{{ bo_url }}{{ blog.image }}"> </td>
+                                <td>{{ blog.date }}</td>
+                                <td>{{ blog.title }}</td>
+                                <td>
+                                    <a href="">Eliminar</a> /
+
+                                    <a href="">Editar</a>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+
+    <script>
+        $('#ProductsTable').DataTable();
+
+    </script>
+    {% endblock %}

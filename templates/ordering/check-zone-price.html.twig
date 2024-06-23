@@ -1,0 +1,245 @@
+
+{% block body %}
+
+    <style>
+        body{
+            background-color: #ffffff;
+        }
+        #map{
+            width: 100%;
+            height: 600px;
+            visibility: hidden;
+        }
+
+        .spinner {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            width: 11.2px;
+            height: 11.2px;
+            animation: spinner-z355kx 1s infinite linear;
+            border-radius: 11.2px;
+            box-shadow: 28px 0px 0 0 #474bff, 17.4px 21.8px 0 0 #474bff, -6.2px 27.2px 0 0 #474bff, -25.2px 12px 0 0 #474bff, -25.2px -12px 0 0 #474bff, -6.2px -27.2px 0 0 #474bff, 17.4px -21.8px 0 0 #474bff;
+        }
+
+        @keyframes spinner-z355kx {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .content-ld{
+            min-width: 100vh;
+            background-color: #fff;
+        }
+    </style>
+
+<div class="content-ld">
+    <div class="spinner"></div>
+
+</div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="map"></div>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <!-- jquery 3.6.0 -->
+    <script src="{{ asset('front/assets/js/jquery-3.6.0.min.js') }}"></script>
+
+    <!-- Bootstrap Js -->
+    <script src="{{ asset('front/assets/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Lord Icon -->
+    <script src="{{ asset('front/assets/js/lord-icon-2.1.0.js') }}"></script>
+
+    <!-- Feather Icon -->
+    <script src="{{ asset('front/assets/js/feather.min.js') }}"></script>
+
+    <!-- Theme Setting js -->
+    <script src="{{ asset('front/assets/js/theme-setting.js') }}"></script>
+
+    <!-- Script js -->
+    <script src="{{ asset('front/assets/js/script.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {#    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDwoetFWD_58gajSuz86rp6cwu6QTHqO1E"></script>#}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwoetFWD_58gajSuz86rp6cwu6QTHqO1E&callback=initMap&v=weekly" defer></script>
+    {#    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwoetFWD_58gajSuz86rp6cwu6QTHqO1E"></script>#}
+    <script>
+        function initMap() {
+            var infowindow = new google.maps.InfoWindow();
+            const map = new google.maps.Map(document.getElementById("map"));
+            var test = new Array();
+            {% for zone in zones %}
+
+
+            var outerCoords_{{ zone.reference }} = [
+                {% for cordinate in cordinates %}
+                {% if cordinate.cordinate == zone.reference %}
+                {
+                    lat: {{ cordinate.lat }},
+                    lng: {{ cordinate.lng }}
+                },
+                {% endif %}
+                {% endfor %}
+
+            ];
+
+
+            var rightShoulderFront_{{ zone.reference }} = new google.maps.Polygon({
+                paths: outerCoords_{{ zone.reference }},
+                map: map,
+                zoneIdReference: '{{ zone.id }}',
+                strokeColor: '{{ zone.color }}',
+                strokeOpacity: 1.00,
+                fillColor: '{{ zone.color }}',
+                fillOpacity: 0.10,
+                strokeWeight: 3,
+                zonename: '{{ zone.title }}',
+                zIndex: {{zone.positions}}
+            });
+            var bounds_{{ zone.reference }} = new google.maps.LatLngBounds();
+            for (var i = 0; i < outerCoords_{{ zone.reference }}.length; i++) {
+                bounds_{{ zone.reference }}.extend(outerCoords_{{ zone.reference }}[i]);
+            }
+            map.fitBounds(bounds_{{ zone.reference }});
+
+
+            var geocoder = new google.maps.Geocoder();
+            var selectedFullAddress = "Kuala Lumpur"
+            geocoder.geocode({
+                address: selectedFullAddress,
+            }, function(results, status) {
+                lat = {{ltd}};
+                lng = {{ lng }};
+                const myLatLng = { lat: {{ltd}}, lng: {{ lng }} };
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map
+                });
+                var curPosition = new google.maps.LatLng(lat, lng);
+                var isWithinPolygon = google.maps.geometry.poly.containsLocation(curPosition, rightShoulderFront_{{ zone.reference }});
+                if (isWithinPolygon) {
+                    infowindow.setContent("isWithinPolygon:" + curPosition.toUrlValue(6));
+                    infowindow.open(map, marker);
+                    {#alert(rightShoulderFront_{{ zone.reference }}.zoneIdReference);#}
+
+                    test.push(rightShoulderFront_{{ zone.reference }}.zonename);
+
+                }else{
+                    console.log("no");
+                }
+
+            });
+            {% endfor %}
+
+            setTimeout(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "{{path('app_get_poly_zone_by_address')}}",
+                    data: ({test:test}), // serializes the form's elements.
+                    success: function(data)
+                    {
+                        location.replace('/ordering#cart');
+                    }
+                });
+            }, 1500);
+        }
+
+
+
+
+
+
+        // function initMap() {
+        //     var infowindow = new google.maps.InfoWindow();
+        //     var outerCoords = [{
+        //         lat: 3.528319665937775,
+        //         lng: 101.7580347776062
+        //     },
+        //         {
+        //             lat: 3.003044444012029,
+        //             lng: 101.4085838669952
+        //         },
+        //         {
+        //             lat: 2.9951223092598767,
+        //             lng: 101.82611927913445
+        //         },
+        //         {
+        //             lat: 3.5216453,
+        //             lng: 101.7636108
+        //         }
+        //     ]
+        //     const map = new google.maps.Map(document.getElementById("mapSect"));
+        //     var rightShoulderFront = new google.maps.Polygon({
+        //         paths: outerCoords,
+        //         map: map
+        //     });
+        //     var bounds = new google.maps.LatLngBounds();
+        //     for (var i = 0; i < outerCoords.length; i++) {
+        //         bounds.extend(outerCoords[i]);
+        //     }
+        //     map.fitBounds(bounds);
+        //
+        //
+        //     var geocoder = new google.maps.Geocoder();
+        //     var selectedFullAddress = "Kuala Lumpur"
+        //     geocoder.geocode({
+        //         address: selectedFullAddress,
+        //     }, function(results, status) {
+        //         lat = results[0].geometry.location.lat();
+        //         lng = results[0].geometry.location.lng();
+        //         var marker = new google.maps.Marker({
+        //             position: results[0].geometry.location,
+        //             map: map
+        //         })
+        //         var curPosition = new google.maps.LatLng(lat, lng);
+        //         var isWithinPolygon = google.maps.geometry.poly.containsLocation(curPosition, rightShoulderFront);
+        //         if (isWithinPolygon) {
+        //             infowindow.setContent("isWithinPolygon:" + curPosition.toUrlValue(6));
+        //             infowindow.open(map, marker);
+        //         }
+        //     });
+        // }
+    </script>
+
+
+    <script>
+        $("#savePositions").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_house-position_save')}}",
+                data: formData, // serializes the form's elements.
+                contentType: false,
+                processData: false,
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Guardado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

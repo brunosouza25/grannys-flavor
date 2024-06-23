@@ -1,0 +1,61 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+
+<p class="content-color font-sm">Acabamos de enviar para o seu número do telemóvel o código de verificação!</p>
+<span class="font-md"><i class="mdi mdi-phone"></i> +351 {{ app.user.phone }}  </span>
+
+<!-- Login Section Start -->
+<section class="login-section p-0 mt-4">
+    <!-- Login Form Start -->
+    <form id="confirmPhone" class="custom-form">
+        <h1 class="font-md title-color fw-600">Código de Verificação</h1>
+
+        <div class="countdown mb-md">
+            <div class="input-box otp-input">
+                <p class="alert-phone-data alert-danger p-4">Código de Verificação Errado</p>
+             <input type="text" class="form-control" name="code" placeholder="Insira o Código">
+            </div>
+        </div>
+        <button type="submit" class="btn-solid">Confirmar</button>
+        </form>
+    <!-- Login Form End -->
+</section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+
+    <script>
+        $("#confirmPhone").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('app/app_phone_user_confirm_state')}}",
+                data: formData, // serializes the form's elements.
+                success: function(data)
+                {
+                    var state = data.state;
+
+
+                    if(state === 0){
+                        $('.alert-phone-data').slideDown();
+                    }else{
+                        location.replace('{{ path('app/app_dashboard') }}');
+                    }
+
+
+
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+    </script>
+
+{% endblock %}

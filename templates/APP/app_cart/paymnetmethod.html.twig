@@ -1,0 +1,271 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+
+    <style>
+        .regular-header{
+            display: none;
+        }
+        .regular-footer{
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/jquery.datetimepicker.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css" />
+
+    <header class="header">
+        <div class="logo-wrap">
+            <a href="{{ path('appapp_cart') }}"><i class="iconly-Arrow-Left-Square icli"></i></a>
+            <h1 class="title-color font-md">Tipo da Encomenda</h1>
+        </div>
+    </header>
+<form id="submitPayment">
+
+
+    <main class="main-wrap payment-page mb-xxl">
+        <!-- Payment Section Start -->
+        <section class="payment-section">
+            <!-- Payment Method Accordian Start -->
+            <div class="accordion" id="accordionExample">
+                <!-- Accordion Start -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button font-md title-color" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Tipo da Encomenda
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul class="filter-row">
+                                <li class="filter-col ordertype" data-order-type="pickup">
+                                    <img class="payment-card" src="{{ asset('images/takeaway.png') }}" alt="card" /> Levantar no Local<span class="check"><img src="assets/icons/svg/active.svg" alt="active" /></span>
+                                </li>
+
+                                <li class="filter-col ordertype " data-order-type="delivery">
+                                    <img class="payment-card" src="{{ asset('images/delivery.png') }}" alt="card" />Entrega<span class="check"><img src="assets/icons/svg/active.svg" alt="active" /></span>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Accordion End -->
+                <!-- Accordion Start -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button font-md title-color collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Escolha a Hora
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body net-banking">
+                            <div class="date-pick">
+                                <div class="input-box">
+                                <input class="form-control" placeholder="Escolha a Data" type="text" id="datepicker" required>
+                                </div>
+                            </div>
+                            <div class="date-pick">
+                            <div class="time-pick">
+                                <input class="form-control" placeholder="Escolha a Hora" type="text" id="timepicker" required>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Accordion End -->
+
+                <!-- Accordion Start -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button font-md title-color collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                           Método de Pagamento
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                                    <ul class="filter-row">
+                                        <li class="filter-col paymenttype" data-payment-type="cash">
+                                            <img class="payment-card" src="{{ asset('images/payincash.png') }}" alt="card" /> Pagar em Dinheiro<span class="check"><img src="assets/icons/svg/active.svg" alt="active" /></span>
+                                        </li>
+
+                                        <li class="filter-col paymenttype" data-payment-type="card">
+                                            <img class="payment-card" src="{{ asset('images/payincard.png') }}" alt="card" />Pagar com cartão (no ato de entrega)<span class="check"><img src="assets/icons/svg/active.svg" alt="active" /></span>
+                                        </li>
+
+                                        <li class="filter-col paymenttype" data-payment-type="online">
+                                            <img class="payment-card" src="{{ asset('images/payonline.png') }}" alt="card" />Pagamento Online<span class="check"><img src="assets/icons/svg/active.svg" alt="active" /></span>
+                                        </li>
+                                    </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Accordion End -->
+
+
+            </div>
+            <!-- Payment Method Accordian End -->
+        </section>
+        <!-- Payment Section End -->
+
+    </main>
+
+    <input type="hidden" id="ordertype" name="ordertype">
+    <input type="hidden" id="dateorder" name="dateorder">
+    <input type="hidden" id="timeorder" name="timeorder">
+    <input type="hidden" id="paymenttype" name="paymenttype">
+    <footer class="hide-confirm-payment footer-wrap footer-button">
+      <button type="submit" class="font-md" style="color: #ffffff;">Confirmar Pedido</button>
+    </footer>
+</form>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.full.min.js"></script>
+    <script src="http://cdn.craig.is/js/rainbow-custom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+
+    <script>
+        // $(document).ready(function() {
+        //     $.datetimepicker.setLocale('pt-BR');
+        //     $('#datetimepicker').datetimepicker({
+        //         format:'H:m',
+        //         datepicker:false,
+        //         minDate: getFormattedDate(new Date()),
+        //         allowTimes:[
+        //             '12:00', '13:00', '15:00',
+        //             '17:00', '17:05', '17:20', '19:00', '20:00'
+        //         ],
+        //         weekends:['Mon'],
+        //     });
+        //     function getFormattedDate(date) {
+        //         var day = date.getDate();
+        //         var month = date.getMonth() + 1;
+        //         var year = date.getFullYear().toString().slice(2);
+        //         return day + '-' + month + '-' + year;
+        //     }
+        // });
+
+
+        var dateToday = new Date();
+        $( function() {
+            $( "#datepicker" ).datepicker({
+                beforeShowDay: function(date) {
+                    var day = date.getDay();
+                    return [(day !== 1)];
+                },
+                firstDay: 1,
+                minDate: dateToday,
+            });
+        } );
+
+        let roundDate = (date = new Date(), roundToMinutes = 30) => {
+            const ms = 1000 * 60 * roundToMinutes;
+            return new Date(Math.ceil(date.getTime() / ms) * ms);
+        };
+
+        $('#timepicker').timepicker({
+            timeFormat: 'H:i',
+            minTime: roundDate,
+            maxTime: "23:00 pm",
+            step: '30',
+            disableTimeRanges: [
+                ['2:30pm', '6:30pm']
+            ]
+        });
+    </script>
+
+    <script>
+
+        $('.ordertype').click(function () {
+            var orderType = $(this).attr('data-order-type');
+            $('#ordertype').val(orderType);
+
+            if($('#ordertype').val() !== '' && $('#dateorder').val() !== '' && $('#timeorder').val() !== '' && $('#paymenttype').val() !== ''){
+                $('.hide-confirm-payment').fadeIn();
+            }
+
+
+        });
+
+        $('.paymenttype').click(function () {
+            var paymentType = $(this).attr('data-payment-type');
+            $('#paymenttype').val(paymentType);
+            if($('#ordertype').val() !== '' && $('#dateorder').val() !== '' && $('#timeorder').val() !== '' && $('#paymenttype').val() !== ''){
+                $('.hide-confirm-payment').fadeIn();
+
+            }
+        });
+
+        $('#datepicker').change(function () {
+            var dateOrder = $(this).val();
+            $('#dateorder').val(dateOrder);
+            if($('#ordertype').val() !== '' && $('#dateorder').val() !== '' && $('#timeorder').val() !== '' && $('#paymenttype').val() !== ''){
+                $('.hide-confirm-payment').fadeIn();
+
+            }
+        });
+        $('#timepicker').change(function () {
+            var timeOrder = $(this).val();
+            $('#timeorder').val(timeOrder);
+            if($('#ordertype').val() !== '' && $('#dateorder').val() !== '' && $('#timeorder').val() !== '' && $('#paymenttype').val() !== ''){
+                $('.hide-confirm-payment').fadeIn();
+
+            }
+        });
+
+        $("#submitPayment").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('app/app_place_data')}}",
+                data: formData, // serializes the form's elements.
+                success: function(data)
+                {
+
+                    var type = data.type;
+
+
+                    if(type === 'online'){
+
+                        var acessToken = data.acessToken;
+                        var reference = data.reference;
+
+                        $.ajax({
+                            type: "POST",
+                            url: "{{path('app/app_payment_order_code')}}",
+                            data: ({acessToken:acessToken, reference:reference}), // serializes the form's elements.
+                            success: function(dataOrder)
+                            {
+                                var orderCode = dataOrder.ordercode;
+
+                                const url = dataOrder.env == 'dev' ?  'https://checkout.stripe.com/c/pay/' : 'https://checkout.stripe.com/c/pay/'
+                                location.replace(url+orderCode);
+
+                            }
+                        });
+
+                    }else{
+                        var ordernr = data.ordernumber;
+                        location.replace('/app/order-sucess/'+ordernr);
+                    }
+
+
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+
+
+    </script>
+
+{% endblock %}

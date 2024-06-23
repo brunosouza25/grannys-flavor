@@ -1,0 +1,83 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Tabela de Produtos</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="
+                    ProductsTable" class="display table table-hover table-responsive-sm" style="min-width: 845px">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Codigo</th>
+                                    <th>Nome</th>
+                                    <th>Preço</th>
+                                    <th>Estado</th>
+                                    <th>Editar</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td><img class="rounded-circle" width="35" src="{{ bo_url }}{{ product.foto }}" alt=""></td>
+                            <td>{{product.codigo}}</td>
+                            <td>{{product.descricao}}</td>
+                            <td>{{product.price}} €</td>
+                            <td>
+                                {% set state = product.state %}
+                                 {% if state == 1 %}
+                                    <b data-id-product="{{ product.id }}" class="state-chenge alert-success p-2">Ativo</b>
+                                {% else %}
+                                    <b data-id-product="{{ product.id }}" class="state-chenge alert-danger p-2">Desativado</b>
+                                    {% endif %}
+                                    </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="{{ path('admin/app_product_detail', {'reference': product.id}) }}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="mdi mdi-pencil"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+
+    <script>
+        $('#ProductsTable').DataTable();
+        $('.state-chenge').click(function () {
+            var productID = $(this).attr('data-id-product');
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/app_products_state_change') }}',
+                data: ({productID:productID}),
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Estado Atualizado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+

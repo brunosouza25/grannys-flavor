@@ -1,0 +1,348 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RepairsAndCustomController!{% endblock %}
+
+{% block body %}
+
+    <!--================ End of Breadcrumb ================-->
+    <div class="mad-content no-pd container ">
+        <div class="row pt-5 " style="margin-top: 100px">
+            <div class="col-1 d-none d-xl-block d-xxl-block">
+                <!-- linhas verticais -->
+                <div class="container-linhas d-flex flex-column align-items-center ">
+                    <div class="line-1 mb-4 mt-2"></div>
+
+                    <div class="icon-1 mb-4">
+                        <a class="footer-facebook" target="_blank"><i
+                                    class="bi bi-facebook text-black-50 media"></i></a>
+
+                    </div>
+
+                    <div class="line-2 mb-3 mt-2"></div>
+
+                    <div class="icon-1 mb-4">
+                        <a class="footer-instagram-link" target="_blank" ><i class="bi bi-instagram text-black-50 media"></i></a>
+                    </div>
+
+                    <div class="line-2 mb-3 mt-2"></div>
+
+                    <div class="icon-1 mb-3 mt-2">
+                        <a class="footer-youtube" target="_blank"><i class="bi bi-youtube text-black-50 media"></i></a>
+                    </div>
+                    <div class="line-1 mb-4 mt-2"></div>
+                </div>
+                <!-- .. -->
+
+            </div>
+
+
+            <div id="products" class="col-11 ms-3 col-sm-11 col-lg-6 divMainImageCart pb-0 mb-5">
+
+                <div class="col-11 col-sm-12 mt-2 col-lg-12">
+
+                    <img src="/uploads/NimrodGreen-1677262559.webp" alt=""
+                         class="img-cart-product divCartProductImage  divMainImage col-2">
+
+
+                    <div class="col-7 col-sm-5 p-0 ms-0 t-0">
+                        <h5 class="product-name col-12 ps-3 p-0 m-0 h-0">meu teste</h5>
+                        <span class="product-info col-12 ps-3 p-0 m-0 h-0">465456 / marca / modelo</span>
+                        <div class="row ms-0 mt-4">
+                            <span class="fw-bolder price-product-cart col-3 " for="">10$</span>
+                            <div class="col-8">
+                                <span class="font-weight-bold col-3" for="">Quantidade</span>
+                                <input type="number" class="col-4 inputText productQuantity  p-0 m-0" value="1">
+                            </div>
+                        </div>
+{#                        <span class="col-12 text-success ms-3">Entrega em 3-4 Dias</span>#}
+                    </div>
+                    <a class="col-1 dark mt-5 float-end"><i class="bi bi-trash btn btn-outline-danger">Remover</i>
+                    </a>
+                    <hr class="mt-4">
+                </div>
+
+            </div>
+
+
+
+
+            <div class="col-11 ms-3 h-25 p-0 col-lg-3 row">
+                <div class="divLabelCartHeader p-0 labelPrice pb-0" style="background-color: #1c346c">
+                    <label style="height: 20px" class="mt-3 ms-3">
+                        Detalhes do valor
+                    </label>
+                </div>
+
+                <div class="divLabelCart pt-3 p-0 ms-0 row t-0">
+                    <div class="col-8 col-lg-8 pb-0">
+                        <label id="itemsQuantity" for="">Preço (0 Itens)</label>
+                    </div>
+
+                    <div class="col-4 col-lg-4 pb-0 float-end">
+                        <label id="productsTotal" class="float-end" for=""></label>
+                    </div>
+
+                    <hr>
+
+                    <div class="col-8 col-lg-8 pb-0">
+                        <label for="">Preço de envio</label>
+                    </div>
+
+                    <div class="col-4 pb-0 col-lg-4 float-end">
+                        <label id="totalFee" class="float-end" for="">10$</label>
+                    </div>
+
+
+                    <hr>
+
+                    <div class="col-12 col-lg-12 pb-0 row ps-0 pe-0">
+                        <div class="col-8 col-lg-8 pb-0">
+                            <label for="" >Voucher</label>
+
+                        </div>
+
+                        <div class="col-4 pb-0 col-lg-4 float-end">
+                            <label for="" class="float-end text-success " id="voucherDiscountValue"></label>
+
+                        </div>
+
+                        <div class="col-6">
+                            <label for="" class="float-end text-success "> <input type="text" id="voucher" class="mb-2 form-control col-8" value=""></label>
+
+                        </div>
+
+                        <div class="col-2" id="delete-voucher">
+
+                            {#                            <input type="text" id="voucher" class="mb-2 form-control col-8">#}
+                        </div>
+
+                        <div class="col-4">
+
+                            <button class=" btn btn-primary float-end" id="apply-voucher">Aplicar</button>
+                        </div>
+
+                        <hr>
+
+                        <div class="col-8 col-lg-8 pb-0" style="color: #1c346c">
+                            <label for="">Valor a Pagar</label>
+                        </div>
+
+                        <div class="col-4 pb-0 col-lg-4 float-end" style="color: #1c346c">
+                            <label id="total" class="float-end font-weight-bold" for="">10$</label>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        getProducts( );
+
+        /**
+         * Função para buscar produtos que estão no carrinho
+         */
+        function getProducts() {
+            // let products = JSON.parse(localStorage.getItem('products')) == null ? [] : JSON.parse(localStorage.getItem('products'));
+
+            const htmlProducts = document.getElementById('products');
+            htmlProducts.innerHTML = '';
+            $.ajax({
+                type: "POST",
+                url: "{{ path('get_products_to_cart') }}",
+                // data: {products: products},
+                success: function (json) {
+                    $('#itemsQuantity').text(`Preço (${json['products'].length} Itens)`)
+                    $('#productsTotal').text(`${Number(json['totalProducts'].replace(',', '')) }€`)
+                    $('#totalFee').text(`${json['fee']}€`)
+                    $('#total').text(`${(Number(json['totalProducts'].replace(',', ''))) + Number(json['fee'])}€`)
+
+                    if (json.voucher) {
+                        let deleteVoucher = document.getElementById('delete-voucher');
+                        let voucherName = document.getElementById('voucher');
+                        let voucherDiscountValue = document.getElementById('voucherDiscountValue');
+
+                        deleteVoucher.innerHTML = '';
+
+                        deleteVoucher.innerHTML = `<a href="#" class="delete-voucher" onclick="deleteVoucher(${json.voucher.orderCartId})"><i class="bi bi-trash black 50 text-danger" style="font-size: 24px"></i></a>`;
+
+                        voucherName.value = '';
+                        voucherName.value = json.voucher.voucher;
+
+
+                        voucherDiscountValue.innerHTML = '';
+                        voucherDiscountValue.innerHTML = `-${json.voucher.voucherDiscountValue}€`;
+
+                        $('#total').text(`${Number((Number(json['totalProducts'].replace(',', '')) - Number(json.voucher.voucherDiscountValue)).toFixed(2)) + Number(json['fee'])}€`)
+
+                    }
+
+                    for (const product of json['products']) {
+
+                        htmlProducts.innerHTML += `
+                            <div class="col-11 row ms-2 mt-4 mb-3">
+                                <div class="col-12 col-sm-5 mt-2">
+                                    <img src="{{ bo_url }}${product.image}" alt="${product.product_name}"
+                                         class="img-cart-product divCartProductImage divMainImageCart col-12">
+                                </div>
+
+                                <div class="col-12 col-sm-7 ml-3 p-0 ms-0 t-0 row">
+                                    <h5 class="product-name col-12 ps-4 p-0 m-0 h-0">${product.product_name}</h5>
+                                     <span class="product-info col-12 ps-4 p-0 m-0 h-0">${product.brandName != null ? product.brandName : ''} / ${product.categoryName != null ? product.categoryName : ''}</span> <br>
+                                     <span class="product-info col-12 ps-4 p-0 m-0 h-0"> ${typeof product.productColor != 'undefined' ? 'Cor: ' + product.productColor + ' /': ''} ${typeof product.productSize != 'undefined' ? 'Tamanho: ' + product.productSize: ''}</span>
+
+                                    <div class="row">
+                                        <span class="fw-bolder pb-0 price-product-cart col-lg-4 col-sm-12 " for="">${(product.price).toFixed(2)}€</span>
+                                        <div class="col-8 mt-1">
+                                            <span class="font-weight-bold col-3" for="">Quantidade</span>
+                                            <input type="number" class="col-4 inputText productQuantity p-0 m-0 mx-auto" data-id="${product.id}" value="${product.qtd}">
+                                        </div>
+
+                                       <div class="col-lg-12 mt-2">
+                                          <!-- <span class="col-1" style="color: ${product.totalCart > product.stock ? 'red' : 'black'}; background-color: ${product.totalCart > product.stock ? 'yellow' : 'white'}">
+                                                ${product.totalCart > product.stock ? `Restam apenas ${product.stock} itens em estoque!` : `Restam ${product.stock} itens em estoque!`}
+                                           </span>-->
+
+                                            <a class="col-12 dark mt-2 float-end">
+                                                <i class="removeProduct bi bi-trash btn btn-outline-danger" style="width: 95%;" data-id="${product.id}"> Remover</i>
+                                            </a>
+                                       </div>
+
+                                    </div>
+
+                                </div>
+                                <hr class="mt-3">
+                            </div>`
+
+                    }
+
+                    htmlProducts.innerHTML += `                <div class="col-12 mt-5">
+                    <a class="col-4 btn btn-primary btn-dark float-end ms-4 mb-3" href="/buy" style="background-color: #1c346c">
+                        Comprar agora
+                    </a>
+                    <a class="col-4 btn btn-primary btn-light float-end mb-3" href="/">
+                        Continuar compra
+                    </a>
+                </div>`
+
+                    $('.removeProduct').click(function () {
+                        const productCartId = $(this).data('id');
+                        $.confirm({
+                            title: 'Apagar!',
+                            content: `Apagar este produto do carrinho?`,
+                            buttons: {
+                                confirm: function () {
+                                    $.ajax({
+                                        url: `{{ path('delete_product_cart') }}`,
+                                        type: 'POST',
+                                        async: false,
+                                        data: ({productCartId:productCartId}),
+                                        success: function () {
+                                            getProducts()
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Apagado com sucesso',
+                                            });
+                                        },
+                                        error: function (e) {
+                                            $.alert({
+                                                title: 'Alert!',
+                                                content: 'Error!',
+                                            });
+                                        }
+                                    });
+                                },
+                                Cancelar: function () {
+
+                                }
+
+                            }
+                        });
+
+                    });
+
+                    $('.productQuantity').change(function () {
+                        const cartId = $(this).data('id');
+                        const quantity = $(this).val();
+
+                        $.ajax({
+                            url: `/update_cart_quantity`,
+                            type: 'POST',
+                            async: false,
+                            data: ({cartId:cartId, quantity: quantity}),
+                            success: function () {
+                                getProducts();
+                            },
+                            error: function (e) {
+                                $.alert({
+                                    title: 'Alert!',
+                                    content: 'Error!',
+                                });
+                            }
+                        });
+
+                    });
+
+                }, error: function (e) {
+                    console.log(e)
+                }
+            });
+        }
+
+        function deleteVoucher(orderCartId) {
+            $.ajax({
+                url: `/remove_voucher`,
+                type: 'POST',
+                data: {orderCartId: orderCartId},
+                success: function (data) {
+
+                    let deleteVoucher = document.getElementById('delete-voucher');
+                    deleteVoucher.innerHTML = ``;
+
+                    $.alert({
+                        title: 'Sucesso!',
+                        content: 'Voucher removido',
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+
+                }
+            })
+        }
+
+        $('#apply-voucher').click(function () {
+            let voucher = $('#voucher').val();
+            $.ajax({
+                url: `/apply_voucher`,
+                type: 'POST',
+                data: {voucher: voucher},
+                success: function (data) {
+                    if (data == false) {
+                        $.alert({
+                            title: 'Inválido!',
+                            content: 'Voucher inválido',
+                        });
+                        return;
+                    }
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+
+                }
+            })
+        })
+
+    </script>
+
+{% endblock %}

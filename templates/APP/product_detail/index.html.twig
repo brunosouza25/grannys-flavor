@@ -1,0 +1,212 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+
+    <style>
+        .regular-header{
+            display: none;
+        }
+        .regular-footer{
+            display: none;
+        }
+    </style>
+
+    <header class="header bg-theme-grey-light">
+        <div class="logo-wrap">
+            <a href="{{ path('app/app_foodcategories') }}"><i class="iconly-Arrow-Left-Square icli"></i></a>
+        </div>
+    </header>
+    <div class="main-wrap product-page mb-xxl">
+        <!-- Banner Section Start -->
+        <div class="banner-box product-banner">
+            <div class="banner">
+                {% if item.image|length > 0 %}
+                    <img class="" src="{{bo_url}}{{ item.image }}" alt="{{item.name}}" />
+                {% else %}
+                    <img class="" src="{{ asset('images/logo.png') }}" alt="{{item.name}}" />
+                {% endif %}
+            </div>
+        </div>
+        <!-- Banner Section End -->
+
+        <!-- Product Section Section Start -->
+        <div class="product-section">
+            <div class="hed"></div>
+
+            {% if item.type == 'multiple' %}
+            <div class="price" style=" font-size: 17px;">A partir dos:<span style=" font-size: 25px;">{{minprice}}€</span></div>
+            {% else %}
+                <div class="price"><span style=" font-size: 25px;">{{minprice}}€</span></div>
+            {% endif %}
+            <!-- Product Detail Start -->
+            <div class="product-detail section-p-t">
+                <div class="product-detail-box">
+                    <h2 class="title-color">Descrição do Produto</h2>
+                    <p class="content-color font-xs sk-1">
+                        {{ item.description }}
+                    </p>
+                </div>
+            </div>
+
+            <form id="addtocardItems">
+
+
+            {% if item.type == 'multiple' %}
+                        <div class="option-title-cart">
+                            <span>Tamanhos <span class="required-option">(Obrigatório)</span></span>
+                        </div>
+                        <div class="box-check-item">
+                    {% for size in sizes %}
+                        <div class="form-group checkgroup">
+                                <label><input type="radio" name="itemsize"  class="size-select required-check" value="{{ size.id }}"  data-target-size-id="{{ size.id }}" data-price-item="{{ size.itemprice }}"/> {{ size.itemname }} <span class="item-price-mt" >{{ size.itemprice }} EUR</span></label>
+                            </div>
+                        {% endfor %}
+                        </div>
+                         {% for size in sizes %}
+                        <div class="hide-multiple-options show-multiple-add-size-{{ size.id }}">
+                            {% for conectionm in multipleconections %}
+                                {% if conectionm.iditemmultiple == size.id %}
+                                    {% for adicional in adicionalCategory %}
+                                        {% if adicional.id == conectionm.idadicional %}
+                                            <div class="option-title-cart">
+                                                <span>{{adicional.name}}</span>
+                                            </div>
+                                            <div class="box-check-item">
+                                                {% for adicionalItem in adicionalItems %}
+                                                        {% if adicional.id == adicionalItem.idadicional %}
+                                                            {% if adicional.type == 'required' %}
+                                                                <div class="form-group checkgroup-regular">
+                                                                    <label><input type="checkbox"  name="extras[]" value="{{ adicionalItem.id }}" data-min-required = "{{ adicional.min }}" data-max-required="{{ adicional.max }}" class="required-checkbox adicional-id-{{ adicionalItem.idadicional }}" data-adicional-id="{{ adicionalItem.idadicional }}" data-item-m-id="{{ adicionalItem.id }}" data-size-item-id="{{ item.id }}" data-price-item="{{ adicionalItem.price }}"/> {{ adicionalItem.name }} <span class="item-price-mt" >{{ adicionalItem.price }} EUR</span></label>
+
+                                                                </div>
+                                                                {% else %}
+                                                                    <div class="form-group checkgroup-regular">
+                                                                        <label><input type="checkbox" name="extras[]"  class="required-check" value="{{ adicionalItem.id }}"  data-target-size-id="{{ adicionalItem.id }}" data-price-item="{{ adicionalItem.price }}"/> {{ adicionalItem.name }} <span class="item-price-mt" >{{ adicionalItem.price }} EUR</span></label>
+                                                                    </div>
+                                                                {% endif %}
+                                                        {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+            {% endif %}
+
+
+            <div class="option-title-cart">
+                <span>Observações </span>
+            </div>
+            <div class="input-box">
+            <textarea class="form-control" rows="4" name="comment-item" placeholder="Exemplo: Sem Pimenta / açúcar / sal por favor."></textarea>
+            </div>
+
+                <footer class="add-to-cart-section footer-wrap shop">
+                    <ul class="footer">
+                        <li class="footer-item">
+                            <div class="plus-minus">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus sub"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <input type="number" name="qtd" value="1" min="0" max="10">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus add"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            </div>
+                        </li>
+                        <li class="footer-item">
+                            <button type="submit" class="font-md">Adicionar ao Carrinho <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
+                        </li>
+                    </ul>
+                </footer>
+            </form>
+
+
+
+
+            <!-- Product Detail End -->
+        </div>
+
+    </div>
+
+
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+    <script src="{{ asset('app/assets/js/slick.js') }}"></script>
+    <script src="{{ asset('app/assets/js/slick.min.js') }}"></script>
+    <script src="{{ asset('app/assets/js/slick-custom.js') }}"></script>
+
+
+    <script>
+        $('.size-select').change(function () {
+            $('.hide-multiple-options').slideUp();
+            var itemSizeID = $(this).val();
+            $('.show-multiple-add-size-'+itemSizeID).slideDown();
+
+        });
+        $(".checkgroup").click(function () {
+            $(".checkgroup").removeClass("active");
+            // $(".tab").addClass("active"); // instead of this do the below
+            $(this).addClass("active");
+        });
+
+        $('input.required-checkbox').change(function(e){
+            var min = $(this).attr('data-min-required');
+            var maxL = $(this).attr('data-max-required');
+            var adicionalID = $(this).attr('data-adicional-id');
+
+            // alert($('input:checkbox.adicional-id-'+adicionalID+':checked').length);
+
+
+            var mtID = $(this).attr('data-item-m-id');
+            var itemID = $(this).attr('data-size-item-id');
+
+
+            if ($('input:checkbox.adicional-id-'+adicionalID+':checked').length > min) {
+                $('.button-add-cart-item-box button').prop('disabled', false);
+                $('input:checkbox.adicional-id-'+adicionalID+':not(:checked)').attr('disabled', 'disabled');
+
+                $('.add-to-cart-section').fadeIn();
+
+
+            }else{
+                $('.button-add-cart-item-box button').prop('disabled', true);
+                $('input:checkbox.adicional-id-'+adicionalID).removeAttr('disabled');
+            }
+            if ($('input:checkbox.adicional-id-'+adicionalID+':checked').length > maxL) {
+                $('input:checkbox.adicional-id-'+adicionalID+':not(:checked)').attr('disabled', 'disabled');
+
+                $(this).prop('checked', false);
+
+            }
+
+        });
+
+    </script>
+
+    <script>
+        $("#addtocardItems").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('app/app_add_to_cart_item')}}",
+                data: formData, // serializes the form's elements.
+                success: function(data)
+                {
+                    alert('Produto Adicionado');
+                    location.replace('{{ path('app/app_foodcategories') }}')
+
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+    </script>
+
+{% endblock %}
+

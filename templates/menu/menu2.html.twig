@@ -1,0 +1,287 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <div class="mad-breadcrumb with-bg-image mt-5" data-bg-image-src="{{ asset('/front/images/comida7.jpg') }}">
+        <div class="container">
+            <h1 class="mad-page-title">MENU</h1>
+            <nav class="mad-breadcrumb-path"><span><a href="{{ path('app_default') }}">Home</a></span> / <span>Menu</span>
+            </nav>
+        </div>
+    </div>
+    <!--================ End of Breadcrumb ================-->
+    <div class="mad-content no-pd">
+        <div class="container">
+            <div class="mad-section no-pd mad-bg-section mad-section--stretched mad-colorizer--scheme- mad-colorizer--parallax" data-bg-image-src="{{asset('front/images/pasta.jpg')}}"></div>
+            <div class="mad-section">
+                <h2 class="mad-page-title align-center">Pasta</h2>
+                <div class="content-element-7">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <!-- Our Specifications -->
+                            <div class="mad-specs">
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img7.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Bucatini<span class="mad-label"><img src="yummi_svg_icons/carrot.svg" alt=""
+                                                                                                                 class="svg"></span></div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">9.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">Penne or linguine pasta cooked in special tomato sauce topped with confit garlic, black olives, basil.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img8.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Bolognese</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">12.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">Linguine pasta with a lovely rich beef ragu bolognese cooked in homemade
+                                                    tomato sauce topped with fresh basil and
+                                                    parmesan.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img9.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Lasagna</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">15.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">A delicious traditional lasagne Bolognese layered with pasta, mozzarella
+                                                    and bechamel, topped with our Mama's homemade
+                                                    tomato sauce, fresh basil and parmesan. Served with a side salad.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                            </div>
+                            <!-- End of Our Specifications -->
+                        </div>
+                        <div class="col-lg-6">
+                            <!-- Our Specifications -->
+                            <div class="mad-specs">
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img10.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Carbonara<span class="mad-label"><img src="yummi_svg_icons/carrot.svg" alt=""
+                                                                                                                  class="svg"></span></div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">10.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">Penne pasta with bacon, onion and tomato cooked in a cream and cheese  sauce.   For vegetarian option swap bacon for mushrooms at no charge.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img11.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Pasta Di Mare</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">19.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">Linguine pasta with fresh green lip mussels cooked in a white wine and
+                                                    olive oil sauce, with cherry tomatoes, parsley
+                                                    and a hint of chilli seasoning.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img12.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Conchiglia Verdura</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">14.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">Giant pasta shells stuffed with spinach, ricotta, parmesan, basil and seasoning cooked in bechamel and Mama's homemade
+                                                    tomato sauce topped with fresh basil and parmesan.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                            </div>
+                            <!-- End of Our Specifications -->
+                        </div>
+                    </div>
+                </div>
+                <div class="align-center">
+                    <a href="#" class="btn btn-style-3 btn-big">Order Online</a>
+                </div>
+            </div>
+            <div class="mad-section no-pd mad-bg-section mad-section--stretched mad-colorizer--scheme- mad-colorizer--parallax" data-bg-image-src="{{asset('front/images/burger.jpg')}}"></div>
+            <div class="mad-section">
+                <h2 class="mad-page-title align-center">Burgers</h2>
+                <div class="content-element-7">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <!-- Our Specifications -->
+                            <div class="mad-specs">
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img13.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Vegan Burger<span class="mad-label"><img src="yummi_svg_icons/carrot.svg" alt=""
+                                                                                                                     class="svg"></span></div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">11.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">veganica patty made of lentil and dried tomatoes, vegi mayo sauce with
+                                                    chives and BBQ sauce, lettuce, tomato, red onion,
+                                                    and red cabbage. Served in durum bun with sesame.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img14.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Smoked Burger</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">14.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">Lightly smoked and minced pork tenderloin topped with our homemade sauce,
+                                                    Crispy bacon, lettuce, tomato & gouda cheese.
+                                                    All served in our classic potato bun.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img15.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Black Burger</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">19.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">Black Angus beef patty, pancetta, fig sauce & aged English Cheddar
+                                                    cheese. All served in activated charcoal bun.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                            </div>
+                            <!-- End of Our Specifications -->
+                        </div>
+                        <div class="col-lg-6">
+                            <!-- Our Specifications -->
+                            <div class="mad-specs">
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img16.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Chicken Burger</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">14.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">Chicken breasts, breaded with dried buttermilk, flour and eggs, homemade
+                                                    herbal ranch sauce, pickles, fresh letuce &
+                                                    tomato. All served in our classic potato bun.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img17.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Gluten Free Burger</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">17.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">100% beef topped with our homemade sauce, lettuce, tomato & Cheddar
+                                                    cheese. Gluten free bun.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                                <div class="mad-col">
+                                    <!-- Specification item -->
+                                    <div class="mad-spec-item">
+                                        <figure><img src="images/88x88_img18.jpg" alt=""></figure>
+                                        <div class="mad-spec-info">
+                                            <div class="mad-spec-header">
+                                                <div class="mad-spec-title">Egg Burger</div>
+                                                <div class="mad-line"></div>
+                                                <div class="mad-spec-price">12.99</div>
+                                            </div>
+                                            <div class="mad-spec-tags">
+                                                <div class="mad-spec-el">100% beef topped with our sauce, bacon, egg, lettuce, tomato & Cheddar cheese. All served in our classic potato bun.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End of Specification item -->
+                                </div>
+                            </div>
+                            <!-- End of Our Specifications -->
+                        </div>
+                    </div>
+                </div>
+                <div class="align-center">
+                    <a href="#" class="btn btn-style-3 btn-big">Order Online</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

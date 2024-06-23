@@ -1,0 +1,89 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}Hello FamiliesController!{% endblock %}
+
+{% block body %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Tabela de Sub Familias</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="FamilieTable" class="display table table-hover table-responsive-sm" style="min-width: 845px">
+                        <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Familia</th>
+                            <th>Subfamilia</th>
+                            <th>Estado</th>
+                            {#                            <th>Editar</th>#}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for subfamilie in subfamilies %}
+                            <tr>
+                                <td>{{subfamilie.codigo}}</td>
+                                <td>
+                                    {% set subfamilieId = subfamilie.idfamily %}
+
+                                    {% for familie in families %}
+                                            {% if familie.codigo == subfamilieId %}
+                                                {{ familie.descricao }}
+                                            {% endif %}
+                                    {% endfor %}
+                                </td>
+
+                                <td>{{subfamilie.descricao}}</td>
+                                <td>
+                                    {% set state = subfamilie.state %}
+                                    {% if state == 1 %}
+                                        <b data-id-product="{{ subfamilie.id }}" class="state-chenge alert-success p-2">Ativo</b>
+                                    {% else %}
+                                        <b data-id-product="{{ subfamilie.id }}" class="state-chenge alert-danger p-2">Desativado</b>
+                                    {% endif %}
+                                </td>
+                                {#                                <td>#}
+                                {#                                    <div class="d-flex">#}
+                                {#                                        <a href="{{ path('admin/app_products_detail', {'reference': familie.id}) }}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="mdi mdi-pencil"></i></a>#}
+                                {#                                    </div>#}
+                                {#                                </td>#}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('#FamilieTable').DataTable();
+        $('.state-chenge').click(function () {
+            var productID = $(this).attr('data-id-product');
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/app_sub_familie_state_change') }}',
+                data: ({productID:productID}),
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Estado Atualizado',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

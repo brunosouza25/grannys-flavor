@@ -1,0 +1,346 @@
+{% block body %}
+
+    <div class="col-lg-12">
+
+        <div class="container">
+
+            <div class="row" id="table_items">
+                <div class="col-8">
+                    <label for="brand_name">Nome</label>
+                    <input name="brand_name" id="brand_name" type="text" class="col-12">
+                </div>
+
+                <br>
+                <div class="col-5 dark">
+                    <button class="btn" id="new_brand">Criar novo</button>
+                </div>
+                <div class="col-12">
+                    <div role="tabpanel" class="tab-pane fade show active" id="first">
+                        <img class="img-fluid product-bo-image" src="/images/profile/noimagelist.png"
+                             alt="no-photo">
+                    </div>
+                    <div class="input-group custom_file_input mb-3">
+                        <div class="form-file">
+                            <input type="file" name="file"
+                                   class="form-file-input form-control" value="Upload"
+                                   multiple="multiple" id="image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr class="col-lg-11">
+                        <th class="col-1" scope="col">#</th>
+                        <th class="col-1" scope="col">Nome</th>
+                        <th class="col-1" scope="col">Subcategoria</th>
+                        <th class="col-1" scope="col">Editar</th>
+                        <th class="col-1" scope="col">Excluir</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_categories">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+
+        var tableBrands = document.getElementById('table_categories');
+        loadingTablCategories('category', tableBrands)
+
+        async function loadingTablCategories(type, table) {
+            const tableItems = document.getElementById('table_items');
+
+            tableItems.innerHTML = `
+
+                <br>
+                <div class="col-12 dark">
+                    <button class=" btn btn-primary "  style="float: right"; id="new_${type}">Criar novo</button>
+                </div>
+
+
+                </div>
+                <br>
+`;
+            table.innerHTML = '';
+
+            await fetch('get_categories')
+                .then((response) => response.json())
+                .then(function (itemsJson) {
+                    console.log(itemsJson)
+                    for (const item of itemsJson) {
+                        table.innerHTML += `
+                            <tr>
+                                <td>#${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.line}</td>
+                                <td><a href="#"  class="edit_${type}" data-${type}_id="${item.id}" data-${type}_name="${item.name}" ><i class="bi bi-pencil-square black 50"></i></a></td>
+                                <td><a href="#" class="delete_${type}" data-${type}_id="${item.id}"><i class="bi bi-trash black 50"></i></a></td>
+                            </tr>`
+                    }
+
+                    function createCategory(){
+
+                    }
+
+                    $(`#new_${type}`).click(function () {
+
+                        // debugger
+                        $.confirm({
+                            async: false,
+                            title: 'Categorias',
+                            columnClass: 'col-md-9',
+                            content: 'URL:{{ path('admin/new_category') }}',
+                            buttons: {
+                                fechar: function () {
+                                }
+                            }
+                        });
+
+
+
+                    })
+
+                    $(`.delete_${type}`).click(function () {
+                        const itemId = $(this).data(`${type}_id`);
+                        $.confirm({
+                            title: 'Apagar!',
+                            content: `Você tem certeza?! <br>
+                            Deletar essa categoria irá desvincular todos os produtos vinculados a ela`,
+                            buttons: {
+                                confirm: function () {
+                                    $.ajax({
+                                        url: `delete_${type}`,
+                                        type: 'POST',
+                                        data: {itemId: itemId},
+                                        success: function () {
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Apagado com sucesso',
+                                            });
+                                            loadingTablCategories(type, table)
+                                        }
+                                    })
+                                },
+                                Cancelar: function () {
+
+                                }
+
+
+                            }
+                        });
+
+                    })
+
+                    $(`.edit_${type}`).click(function () {
+                        const itemId = $(this).data(`${type}_id`);
+
+
+                        $.ajax({
+                            url: `get_edit_category `,
+                            type: 'POST',
+                            data: {itemId: itemId},
+                            success: function (data) {
+                                $.confirm({
+                                    async: false,
+                                    title: 'Editar',
+                                    columnClass: 'col-9',
+                                    content: data,
+                                    buttons: {
+                                        Confirmar: function () {
+
+                                            const fd = new FormData();
+                                            const files = $('#image')[0].files;
+
+                                            fd.append('itemName', $(`#category_name_edit`).val())
+                                            fd.append('categoryDescription', $(`#categoryDescription`).val())
+                                            fd.append('itemId', itemId)
+                                            fd.append('categoryParent', $(`#categoryParent`).val())
+
+                                            if(files.length > 0 ) {
+                                                fd.append('file', files[0]);
+                                            }
+
+                                            $.ajax({
+                                                url: `edit_${type}`,
+                                                type: 'POST',
+                                                data: fd,
+                                                contentType: false,
+                                                processData: false,
+                                                success: function () {
+                                                    $.alert({
+                                                        title: 'Sucesso!',
+                                                        content: 'Editado com sucesso',
+                                                    });
+                                                    loadingTablCategories(type, table)
+                                                }
+                                            })
+
+                                        },
+                                        Cancelar: function () {
+                                        },
+                                    }
+
+                                });
+
+
+                            }
+                        })
+
+                    })
+                    $('.table').DataTable();
+
+                });
+
+            {#$.ajax({#}
+            {#    url: `get_categories`,#}
+            {#    type: 'POST',#}
+            {#    async: false,#}
+            {#    success: function (itemsJson) {#}
+            {#        for (const item of itemsJson) {#}
+            {#            table.innerHTML += `#}
+            {#                <tr>#}
+            {#                    <td>#${item.id}</td>#}
+            {#                    <td>${item.name}</td>#}
+            {#                    <td>${item.line}</td>#}
+            {#                    <td><a href="#"  class="edit_${type}" data-${type}_id="${item.id}" data-${type}_name="${item.name}" ><i class="bi bi-pencil-square black 50"></i></a></td>#}
+            {#                    <td><a href="#" class="delete_${type}" data-${type}_id="${item.id}"><i class="bi bi-trash black 50"></i></a></td>#}
+            {#                </tr>`#}
+            {#        }#}
+
+            {#        function createCategory(){#}
+
+            {#        }#}
+
+            {#        $(`#new_${type}`).click(function () {#}
+
+            {#                // debugger#}
+            {#                $.confirm({#}
+            {#                    async: false,#}
+            {#                    title: 'Categorias',#}
+            {#                    columnClass: 'col-md-9',#}
+            {#                    content: 'URL:{{ path('admin/new_category') }}',#}
+            {#                    buttons: {#}
+            {#                        fechar: function () {#}
+            {#                        }#}
+            {#                    }#}
+            {#                });#}
+
+
+
+            {#        })#}
+
+            {#        $(`.delete_${type}`).click(function () {#}
+            {#            const itemId = $(this).data(`${type}_id`);#}
+            {#            $.confirm({#}
+            {#                title: 'Apagar!',#}
+            {#                content: `Você tem certeza?! <br>#}
+            {#                Deletar essa categoria irá desvincular todos os produtos vinculados a ela`,#}
+            {#                buttons: {#}
+            {#                    confirm: function () {#}
+            {#                        $.ajax({#}
+            {#                            url: `delete_${type}`,#}
+            {#                            type: 'POST',#}
+            {#                            data: {itemId: itemId},#}
+            {#                            success: function () {#}
+            {#                                $.alert({#}
+            {#                                    title: 'Sucesso!',#}
+            {#                                    content: 'Apagado com sucesso',#}
+            {#                                });#}
+            {#                                loadingTablCategories(type, table)#}
+            {#                            }#}
+            {#                        })#}
+            {#                    },#}
+            {#                    Cancelar: function () {#}
+
+            {#                    }#}
+
+
+            {#                }#}
+            {#            });#}
+
+            {#        })#}
+
+            {#        $(`.edit_${type}`).click(function () {#}
+            {#            const itemId = $(this).data(`${type}_id`);#}
+
+
+            {#            $.ajax({#}
+            {#                url: `get_edit_category `,#}
+            {#                type: 'POST',#}
+            {#                data: {itemId: itemId},#}
+            {#                success: function (data) {#}
+            {#                    $.confirm({#}
+            {#                        async: false,#}
+            {#                        title: 'Editar',#}
+            {#                        columnClass: 'col-9',#}
+            {#                        content: data,#}
+            {#                        buttons: {#}
+            {#                            Confirmar: function () {#}
+
+            {#                                const fd = new FormData();#}
+            {#                                const files = $('#image')[0].files;#}
+
+            {#                                fd.append('itemName', $(`#category_name_edit`).val())#}
+            {#                                fd.append('categoryDescription', $(`#categoryDescription`).val())#}
+            {#                                fd.append('itemId', itemId)#}
+            {#                                fd.append('categoryParent', $(`#categoryParent`).val())#}
+
+            {#                                if(files.length > 0 ) {#}
+            {#                                    fd.append('file', files[0]);#}
+            {#                                }#}
+
+            {#                                $.ajax({#}
+            {#                                    url: `edit_${type}`,#}
+            {#                                    type: 'POST',#}
+            {#                                    data: fd,#}
+            {#                                    contentType: false,#}
+            {#                                    processData: false,#}
+            {#                                    success: function () {#}
+            {#                                        $.alert({#}
+            {#                                            title: 'Sucesso!',#}
+            {#                                            content: 'Editado com sucesso',#}
+            {#                                        });#}
+            {#                                        loadingTablCategories(type, table)#}
+            {#                                    }#}
+            {#                                })#}
+
+            {#                            },#}
+            {#                            Cancelar: function () {#}
+            {#                            },#}
+            {#                        }#}
+
+            {#                    });#}
+
+
+            {#                }#}
+            {#            })#}
+
+            {#        })#}
+
+            {#    },#}
+            {#    error: function (e) {#}
+            {#        Swal.fire({#}
+            {#            position: 'top-end',#}
+            {#            icon: 'success',#}
+            {#            title: 'Occoreu erro!',#}
+            {#            showConfirmButton: false,#}
+            {#            timer: 2500#}
+            {#        });#}
+            {#    }#}
+            {#});#}
+        }
+
+
+
+    </script>
+
+{% endblock %}

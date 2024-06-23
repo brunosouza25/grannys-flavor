@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<!--     Navbar -->
+<nav class="navbar navbar-expand-lg bg-light navbar-light border-bottom border-1 border-dark py-0">
+    <div class="container">
+        <a class=" navbar-brand pb-3" href="/"><img src="/uploads/images/logo.png" width="100px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse px-1" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-auto justify-content-center mb-2 col-2 mb-lg-0 ">
+
+                <li class="nav-item mx-2 text-center  ">
+                    <a class="nav-link a-nav active active me-2 py-4 nav-items-top btn-navbar" aria-current="page"
+                       href="/">Home</a>
+                </li>
+                <li class="nav-item mx-2 text-center">
+                    <a class="nav-link a-nav active active me-2 py-4 nav-items-top btn-navbar" aria-current="page"
+                       href="/store">Loja</a>
+                </li>
+                <li class="nav-item mx-2 text-center">
+                    <a class="nav-link a-nav active active me-2 py-4 nav-items-top btn-navbar" aria-current="page"
+                       href="/">Sobre</a>
+                </li>
+
+
+
+               {#  <li class="nav-item mx-2 text-center">
+                    <a class="nav-link a-nav active active me-2 py-4 nav-items-top btn-navbar" aria-current="page"
+                       href="/">Blog</a>
+                </li>#}
+                <li class="nav-item mx-2 text-center">
+                    <a class="nav-link a-nav active active me-2 py-4 nav-items-top btn-navbar" aria-current="page"
+                       href="/page_contact">Contactos</a>
+                </li>
+
+                {#                <li class="nav-item"> #}
+                {#                    <a class="nav-link active jj" aria-current="page" href="#">Repairs & Custom</a> #}
+                {#                </li> #}
+                {#                <li class="nav-item"> #}
+                {#                    <a class="nav-link active" aria-current="page" href="#">Events</a> #}
+                {#                </li> #}
+
+            </ul>
+            <!--            icon user & cart -->
+
+            <style>
+                .btn-navbar {
+                    padding: 0;
+                    margin: 0;
+                }
+
+                .btn-navbar:hover {
+                    transition: 500ms;
+                    background-color: #1c346c;
+                    color: white;
+                }
+
+                .a-nav:hover {
+                    color: #1c346c;
+                    transition: 500ms;
+                }
+
+
+            </style>
+            <div class="col-lg-2 col-sm-12 me-2 d-none d-lg-block pd-0 not">
+                <div class="button-group d-flex justify-content-end divButtons">
+                    <button id="login" type="button" class="btn py-2 px-4 btn-navbar ">Login</button>
+                    <button id="register" type="button" class="btn  px-3 btn-navbar">Register</button>
+                </div>
+            </div>
+            <!--            icon user & cart -->
+            <div class="d-flex align-items-center d-none d-md-flex">
+                <span class="pt-2 pe-2"> <em id="userName" class="userName"></em></span>
+
+
+                <!--         Dropdown  -->
+                <ul class="navbar-nav mb-2 mb-lg-0">
+
+                    <!--         Dropdown  -->
+                    <li class="nav-item dropstart ">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownUser" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-fill fs-4 user-icon userLogin text-primary"></i> </a>
+                        <ul style="left: -100%" class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+                            <li><a href="/costumer_profile" class="dropdown-item">Definições</a></li>
+                            <li><a href="/logout" class="dropdown-item">Terminar sessão</a></li>
+                        </ul>
+                    </li>
+                    <!--         -.-  -->
+                </ul>
+                <!--         -.-  -->
+                <a type="button" href="/cart" id="cart" class="btn btn-light position-relative p-0">
+                    <i class="bi bi-cart3 fs-4"></i>
+                    <span id="lblCartCount"
+                          class="lblCartCount position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">0</span>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!--     ..-.. -->
+</body>
+
+<div class="gtranslate_wrapper"></div>
+<script>window.gtranslateSettings = {
+        "default_language": "pt",
+        "languages": ["pt", "en", "es"],
+        "wrapper_selector": ".gtranslate_wrapper",
+        "flag_style": "3d"
+    }</script>
+<script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+<script src="{{ asset('front/vendors/jquery-3.3.1.min.js') }}"></script>
+
+<script>
+
+
+    document.getElementById('cart').addEventListener('click', function () {
+        location.replace('/cart')
+
+    })
+
+    function updateCartQuantity(quantity) {
+        const label = document.getElementById('lblCartCount');
+        label.innerHTML = quantity;
+    }
+
+    function buttonClick() {
+        if ($('#navbarSupportedContent').hasClass("show")) {
+
+            $('#navbarSupportedContent').removeClass("show");
+        }
+    }
+
+    $.ajax({
+        url: '/user_status',
+        type: 'GET',
+
+        success: function (data) {
+
+            if (data) {
+                $('.divButtons').attr('style', 'display: none !important; position: absolute;');
+                $('.userName').text(data.name.substring(0, 11) + '...');
+            } else {
+                $('.userLogin').addClass('text-primary');
+            }
+        },
+        error: function (e) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'succFess',
+                title: 'Occoreu erro!',
+                showConfirmButton: false,
+                timer: 2500
+            });
+        }
+    });
+
+</script>
+
+
+</html>

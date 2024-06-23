@@ -1,0 +1,25 @@
+{% block body %}
+    <!DOCTYPE html>
+    <html>
+    <body style="font-family: Arial, sans-serif; background-color: #f0f0f0; color: #333;">
+
+    <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+            <h2 style="text-align: center; margin-top: 20px; color: #007BFF;">Você teve uma nova mensagem do seu pedido  #{{ emailInfo.orderId }}, acesse sua conta para poder visualizar-lá!</h2>
+
+
+        <div style="text-align: center;">
+            <a href="https://{{ emailInfo.url }}/costumer_profile" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; text-align: center;">Acesse Aqui</a>
+        </div>
+
+        <hr style="border: 1px solid #ccc; margin: 20px 0;">
+
+        <p>Agradecemos novamente pelo seu pedido e estamos à disposição para ajudar no que for necessário.</p>
+
+        <p style="text-align: center; color: #555;">Atenciosamente,<br>
+            <strong>{{ companyInfo.companyName }}</strong></p>
+    </div>
+
+    </body>
+    </html>
+
+{% endblock %}

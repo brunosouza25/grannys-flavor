@@ -1,0 +1,826 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}Hello OrderingZonesController!{% endblock %}
+
+{% block body %}
+    <style>
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        #map {
+            height: 60%;
+        }
+
+        button {
+            width: 100px;
+            margin: 10px;
+            background-color: #3b9ff3;
+            border-color: #3292e2;
+            color: #fff;
+            display: inline-block;
+            font-weight: normal;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 6px 12px;
+            font-size: 13px;
+            line-height: 1.42857143;
+        }
+
+        #bufferValue,
+        #tolerance {
+            font-size: 15px;
+            width: 100px;
+            height: 32px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 300px;
+            width: 100%;
+            float: left;
+            box-sizing: border-box;
+        }
+
+
+        /* Optional: Makes the sample page fill the window. */
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .map-control-button {
+            width: 23px;
+            text-align: center;
+            vertical-align: middle;
+            height: 23px;
+            display: inline-block;
+        }
+
+        .map-control-button:before {
+            vertical-align: middle;
+            display: inline-block;
+            content: '';
+            height: 100%;
+        }
+
+        .map-control-button i {
+            vertical-align: middle;
+        }
+
+        .custom-control-wrapper {
+            margin-right: 10px;
+            box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px;
+            border-radius: 2px;
+            background-color: #fff;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .gm-style-cc {
+            display: none;
+        }
+
+
+        /* Autocomplete input */
+
+        .controls {
+            margin-top: 10px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 32px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        #pac-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 14px;
+            font-weight: 300;
+            padding: 0 10px 0 10px;
+            text-overflow: ellipsis;
+            width: 200px;
+            height: 28px;
+        }
+
+        #pac-input:focus {
+            border-color: #4d90fe;
+        }
+
+        .pac-container {
+            font-family: Roboto;
+        }
+
+        #type-selector {
+            color: #fff;
+            background-color: #4d90fe;
+            padding: 5px 11px 0px 11px;
+        }
+
+        #type-selector label {
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 300;
+        }
+
+        #target {
+            width: 345px;
+        }
+
+
+        /*  */
+
+        #bufferValue {
+            padding-left: 5px;
+            margin-left: 0px;
+            width: 120px;
+        }
+
+        .disabled {
+            background-color: #D4D2D2;
+        }
+
+    </style>
+    <div id="map" style="position: relative;overflow: hidden;width: 100%;height: 450px;"></div>
+    <div>
+        <button id="edit">Edit</button>
+        <input type="number" id='bufferValue' disabled="disabled" placeholder='Buffer in Kms'>
+        <button id="addBuffer" class="disabled" disabled="disabled">Set Buffer</button>
+        <input type="number" id='tolerance' disabled="disabled" placeholder='Tolerance Value'>
+        <button id="simplify" class="disabled" disabled="disabled">Simplify</button>
+        <br>
+
+        <label for="output">Console >></label>
+        <textarea id="output"></textarea>
+    </div>
+    <!-- Replace the value of the key parameter with your own API key. -->
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK6nNviQUEpiNcutDf5W7bCjcL4OjHTFA&libraries=drawing,places&callback=initMap" async defer></script>
+    <script>
+        function getOptions(cprop) {
+            prop = cprop ? cprop : '{}';
+            return $.extend({
+                fillColor: '#f06eaa',
+                fillOpacity: 0.2,
+                strokeColor: '#f06eaa',
+                strokeOpacity: '0.5',
+                strokeWeight: 3,
+                clickable: true,
+                editable: false,
+                zIndex: 1,
+                draggable: true
+            }, prop);
+        }
+        var shapes = [],
+            selected_shape = null,
+            removed_shapes = [],
+            bufferShapes = [],
+            drawnOverlaysGeoJson;
+        var backedUpBuffers = [],
+            backedUpShapes = []; // To back up all the shapes
+
+        function getAllShapes() {
+            return shapes.concat(bufferShapes);
+        }
+
+        function backupBuffer(shape) {
+            //backupBuffers = JSON.parse(JSON.stringify(bufferShapes));
+            backedUpBuffers.push($.extend({}, shape));
+        }
+
+        function backupShape(shape) {
+            // backupShapes = JSON.parse(JSON.stringify(shapes));
+            backedUpShapes.push($.extend({}, shape));
+        }
+
+        function filterShape(shape) {
+            return this.filter(function(item) {
+                return (item.id === shape.id)
+            })[0]
+        }
+        var clearSelection = function() {
+            if (selected_shape) {
+                selected_shape = null;
+                $('#bufferValue, #tolerance').attr('disabled', 'disabled');
+                $('#addBuffer').attr('disabled', 'disabled').addClass('disabled');
+                $('#simplify').attr('disabled', 'disabled').addClass('disabled');
+                $('.custom-control-wrapper').hide()
+            }
+            var allShapes = getAllShapes();
+            $.each(allShapes, function(index, item) {
+                if (!item.isSimplify)
+                    item.setOptions({
+                        strokeColor: '#f06eaa'
+                    });
+            });
+        }
+
+        function toggleClickable(state) {
+            this.state = state
+            var allShapes = getAllShapes();
+            $.each(allShapes, function(index, item) {
+                item.setOptions({
+                    clickable: this.state
+                });
+            }.bind(this))
+        }
+
+        var setEditable = function(shape) {
+            $.each(shapes, function(index, item) {
+                if (shape && item.id == shape.id && !shape.isBuffer) {
+                    item.setEditable(!item.getEditable());
+                } else {
+                    item.setEditable(false);
+                }
+            });
+        }
+        var setSelection = function(shape) {
+            clearSelection();
+            shape.setOptions({
+                strokeColor: '#db4485',
+                strokeOpacity: '0.8'
+            });
+            selected_shape = shape;
+            if (selected_shape) {
+                $('#bufferValue, #tolerance').removeAttr('disabled', 'disabled');
+                if ($('#bufferValue').val()) {
+                    $('#addBuffer').removeAttr('disabled', 'disabled').removeClass('disabled');
+                }
+                $('#simplify').removeAttr('disabled', 'disabled').removeClass('disabled');
+                $('.custom-control-wrapper').show();
+            }
+        }
+        var removeShape = function(shape) {
+            if (!shape) {
+                return;
+            }
+            var dependentShapes = [];
+            var allShapes = getAllShapes();
+            var dependentShape = allShapes.filter(function(item) {
+                return (item.id === shape.id && item.isBuffer !== shape.isBuffer)
+            })[0]
+            dependentShapes.push(shape);
+            if (!shape.isBuffer && shape.hasBuffer) {
+                dependentShapes.push(dependentShape);
+            } else if (shape.isBuffer && dependentShape) {
+                dependentShape.hasBuffer = false;
+            }
+            $.each(dependentShapes, function(index, item) {
+                if (item) {
+                    item.setMap(null);
+                    var index = shapes.indexOf(item);
+                    var bufferIndex = bufferShapes.indexOf(item);
+                    if (index > -1) {
+                        removed_shapes.push(shapes.splice(index, 1));
+                        backedUpShapes.splice(index, 1)
+                    }
+                    if (bufferIndex > -1) {
+                        removed_shapes.push(bufferShapes.splice(bufferIndex, 1));
+                        backedUpBuffers.splice(bufferIndex, 1)
+                    }
+                    item = null;
+                }
+            })
+            $('#bufferValue').attr('disabled', 'disabled');
+            $('#addBuffer').attr('disabled', 'disabled').addClass('disabled');
+            $('#simplify').attr('disabled', 'disabled').addClass('disabled');
+            $('.custom-control-wrapper').hide();
+        }
+        var clearShapes = function() {
+            for (var i = 0; i < shapes.length; ++i) {
+                removeShape(shapes[i]);
+            }
+            shapes = [];
+        };
+        var IO = {
+            //returns array with storable google.maps.Overlay-definitions
+            //array with google.maps.Overlays
+            //boolean indicating whether pathes should be stored encoded
+            IN: function(arr, encoded) {
+                var shapes = [],
+                    goo = google.maps,
+                    shape, tmp;
+
+                for (var i = 0; i < arr.length; i++) {
+                    shape = arr[i];
+                    tmp = {
+                        "type": "Feature",
+                        "properties": {
+                            "id": shape.id || null,
+                            "zIndex": shape.zIndex
+                        },
+                        "geometry": {
+                            "type": this.t_(shape.type)
+                        }
+                    };
+
+                    switch (tmp.geometry.type.toUpperCase()) {
+                        case 'CIRCLE':
+                            tmp.geometry.radius = shape.getRadius();
+                            tmp.geometry.coordinates = this.p_(shape.getCenter());
+                            break;
+                        case 'POINT':
+                            tmp.geometry.coordinates = this.p_(shape.getPosition());
+                            break;
+                        case 'RECTANGLE':
+                            tmp.geometry.coordinates = this.b_(shape.getBounds());
+                            break;
+                        case 'LINESTRING':
+                            tmp.geometry.coordinates = this.l_(shape.getPath(), encoded);
+                            break;
+                        case 'POLYGON':
+                            tmp.geometry.coordinates = this.m_(shape.getPaths(), encoded);
+                            break;
+                    }
+                    shapes.push(tmp);
+                }
+
+                return shapes;
+            },
+            //returns array with google.maps.Overlays
+            //map where to draw the shapes
+            //array containg the stored shape-definitions
+            OUT: function(arr, parentShape, map, tag) {
+                isBuffer = tag == 'buffer' ? true : false;
+                // isSimplify = tag == 'simplify'? true:false;
+                var gMaps = google.maps,
+                    map = map || null,
+                    shapeGeoJson, tmp;
+
+                for (var i = 0; i < arr.length; i++) {
+                    shapeGeoJson = arr[i];
+
+                    switch (shapeGeoJson.geometry.type.toUpperCase()) {
+                        case 'CIRCLE':
+                            tmp = new gMaps.Circle({
+                                radius: Number(shapeGeoJson.geometry.radius),
+                                center: this.pp_.apply(this, shapeGeoJson.geometry.coordinates)
+                            });
+                            break;
+                        case 'POINT':
+                            tmp = new gMaps.Marker({
+                                position: this.pp_.apply(this, shapeGeoJson.geometry.coordinates)
+                            });
+                            break;
+                        case 'RECTANGLE':
+                            tmp = new gMaps.Rectangle({
+                                bounds: this.bb_.apply(this, shapeGeoJson.geometry.coordinates)
+                            });
+                            break;
+                        case 'LINESTRING':
+                            tmp = new gMaps.Polyline({
+                                path: this.ll_(shapeGeoJson.geometry.coordinates)
+                            });
+                            break;
+                        case 'POLYGON':
+                            tmp = new gMaps.Polygon({
+                                paths: this.mm_(shapeGeoJson.geometry.coordinates)
+                            });
+                            break;
+                        //case 'MULTIPOLYGON':
+                        // var x = [];
+                        //$.each(shapeGeoJson.geometry.coordinates, function(index, item) {
+                        //  var y = $.extend({}, shapeGeoJson)
+                        //  y.geometry.type = 'Polygon'
+                        //  y.geometry.coordinates = item;
+                        //  x.push(y)
+                        //  })
+                        //  arr = arr.concat(x);
+                        // continue;
+                        // break;
+                    }
+                    bool = isBuffer ? false : true
+                    var options = {
+                        editable: bool,
+                        draggable: bool
+                    }
+                    tmp.setValues($.extend(getOptions(options), {
+                        map: map,
+                        id: parentShape.properties.id,
+                        isBuffer: isBuffer,
+                        zIndex: isBuffer ? parentShape.properties.zIndex - 1 : parentShape.properties.zIndex,
+                        type: shapeGeoJson.geometry.type.toLowerCase()
+                    }))
+
+                    function updateBufferList(key) {
+                        var dflag = false,
+                            spliceIndex;
+                        $.each(bufferShapes, function(index, item) {
+                            if (item.id === tmp.id && item[key]) {
+                                item.setMap(null);
+                                item = null;
+                                spliceIndex = index;
+                                dflag = true;
+                            }
+                        });
+                        if (dflag) {
+                            bufferShapes.splice(spliceIndex, 1);
+                            backedUpBuffers.splice(spliceIndex, 1);
+                        }
+                        bufferShapes.push(tmp);
+                        backupBuffer(tmp);
+                    }
+                    if (isBuffer) {
+                        updateBufferList('isBuffer')
+                    }
+                    gMaps.event.addDomListener(tmp, 'click', function(e) {
+                        setSelection(this);
+                    });
+                }
+                return bufferShapes;
+            },
+            l_: function(path, e) {
+                path = (path.getArray) ? path.getArray() : path;
+                if (e) {
+                    return google.maps.geometry.encoding.encodePath(path);
+                } else {
+                    var r = [];
+                    for (var i = 0; i < path.length; ++i) {
+                        r.push(this.p_(path[i]));
+                    }
+                    return r;
+                }
+            },
+            ll_: function(path) {
+                if (typeof path === 'string') {
+                    return google.maps.geometry.encoding.decodePath(path);
+                } else {
+                    var r = [];
+                    for (var i = 0; i < path.length; ++i) {
+                        r.push(this.pp_.apply(this, path[i]));
+                    }
+                    return r;
+                }
+            },
+
+            m_: function(paths, e) {
+                var r = [];
+                paths = (paths.getArray) ? paths.getArray() : paths;
+                for (var i = 0; i < paths.length; ++i) {
+                    r.push(this.l_(paths[i], e));
+                }
+                return r;
+            },
+            mm_: function(paths) {
+                var r = [];
+                for (var i = 0; i < paths.length; ++i) {
+                    r.push(this.ll_.call(this, paths[i]));
+
+                }
+                return r;
+            },
+            p_: function(latLng) {
+                return ([latLng.lat(), latLng.lng()]);
+            },
+            pp_: function(lat, lng) {
+                return new google.maps.LatLng(lat, lng);
+            },
+            b_: function(bounds) {
+                return ([this.p_(bounds.getSouthWest()),
+                    this.p_(bounds.getNorthEast())
+                ]);
+            },
+            bb_: function(sw, ne) {
+                return new google.maps.LatLngBounds(this.pp_.apply(this, sw),
+                    this.pp_.apply(this, ne));
+            },
+            t_: function(s) {
+                var t = ['Circle', 'Marker', 'Rectangle', 'Polyline', 'Polygon'];
+                for (var i = 0; i < t.length; ++i) {
+                    if (s === google.maps.drawing.OverlayType[t[i].toUpperCase()]) {
+                        switch (t[i]) {
+                            case 'Polyline':
+                                return 'LineString';
+                                break;
+                            case 'Marker':
+                                return 'Point'
+                            default:
+                                return t[i];
+                        }
+                    }
+                }
+            }
+        }
+
+        function initMap() {
+            var gMaps = google.maps;
+            var map = new gMaps.Map(document.getElementById('map'), {
+                center: {
+                    lat: 37.10694328493825,
+                    lng: -8.353567417304514
+
+
+                },
+                zoom: 15,
+                zoomControlOptions: {
+                    position: gMaps.ControlPosition.TOP_RIGHT
+                },
+                streetViewControlOptions: {
+                    position: google.maps.ControlPosition.TOP_RIGHT
+                }
+            });
+            $("#bufferValue").keyup(function(e) {
+                if (e.target.value.length) {
+                    $('#addBuffer').removeAttr('disabled', 'disabled');
+                    $('#addBuffer').removeClass('disabled');
+                } else {
+                    $('#addBuffer').attr('disabled', 'disabled');
+                    $('#addBuffer').addClass('disabled');
+                }
+            });
+            initAutocomplete(map)
+
+            var drawingManager = new gMaps.drawing.DrawingManager({
+                drawingMode: null,
+                drawingControl: false,
+                drawingControlOptions: {
+                    position: gMaps.ControlPosition.TOP_CENTER,
+                    drawingModes: ['marker', 'polygon', 'polyline', 'rectangle']
+                },
+                markerOptions: {
+                    draggable: true
+                },
+                polylineOptions: getOptions(),
+                rectangleOptions: getOptions(),
+                polygonOptions: getOptions()
+            });
+
+            drawingManager.setMap(map);
+
+            var customControlWrapper = $('<div class="custom-control-wrapper">');
+            var deleteBtn = $('<div class="map-control-button"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></div>');
+            var editBtn = $('<div class="map-control-button"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></div>');
+            customControlWrapper.append(deleteBtn);
+            customControlWrapper.append(editBtn);
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(customControlWrapper[0]);
+
+            gMaps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+                var shape = e.overlay;
+                shape.type = e.type;
+                shape.setOptions({
+                    zIndex: shapes.length + 1
+                });
+                drawingManager.setOptions({
+                    drawingMode: null
+                });
+                shape.id = Math.random() * 5;
+                gMaps.event.addDomListener(shape, 'mousedown', function(e) {
+                    setSelection(this);
+                });
+                gMaps.event.addDomListener(shape, 'dragstart', function(e) {
+                    setSelection(this);
+                });
+                gMaps.event.addListener(shape, 'dragend', function(e) {
+                    if (shape.hasBuffer) {
+                        drawBuffer(shape.bufferVal);
+                    }
+                });
+
+                setSelection(shape);
+                shapes.push(shape);
+                backupShape(shape);
+                if (shapes.length > 0) {
+                    drawnOverlaysGeoJson = IO.IN(shapes, false);
+                }
+                $('#output').val(JSON.stringify(drawnOverlaysGeoJson, null, 4))
+                if (selected_shape.type == 'marker' || selected_shape.type == 'rectangle') {
+                    $('#simplify').attr('disabled', 'disabled').addClass('disabled');
+                }
+            });
+            gMaps.event.addDomListener(document.getElementById('edit'), 'click', function() {
+                var bool = false;
+                $(this).text(function(i, text) {
+                    bool = text === "Edit" ? true : false;
+                    return bool ? "Save" : "Edit"
+                })
+                drawingManager.setOptions({
+                    drawingControl: bool,
+                    drawingMode: null
+                });
+                if (!bool) {
+                    clearSelection();
+                    toggleClickable(false)
+                } else {
+                    toggleClickable(true)
+                }
+            });
+
+            function drawBuffer(bufferVal) {
+                if (selected_shape == null || !selected_shape.hasBuffer) {
+                    return;
+                }
+                var bufferVal = bufferVal ? bufferVal : 10;
+                var selectedOverlay = IO.IN([selected_shape], false)[0];
+                selected_shape.bufferVal = bufferVal;
+                if (selectedOverlay) {
+                    switch (selectedOverlay.geometry.type) {
+                        case 'Polygon':
+                            selectedOverlay.geometry.coordinates[0].push(selectedOverlay.geometry.coordinates[0][0]);
+                            break;
+                        case 'Circle':
+                            bufferVal = selectedOverlay.geometry.radius / 1000 + bufferVal;
+                            selectedOverlay.geometry.type = 'Point';
+                            selected_shape.bufferVal = bufferVal;
+                            break;
+                        case 'Rectangle':
+                            var bounds = selected_shape.getBounds();
+                            var NE = bounds.getNorthEast();
+                            var SW = bounds.getSouthWest();
+                            var NW = new google.maps.LatLng(NE.lat(), SW.lng());
+                            var SE = new google.maps.LatLng(SW.lat(), NE.lng());
+                            var corners = [NW, SW, SE, NE];
+                            selectedOverlay.geometry.type = 'Polygon';
+                            var coord = [];
+                            $.each(corners, function(index, item) {
+                                var x = []
+                                x.push(item.lat())
+                                x.push(item.lng())
+                                coord.push(x)
+                            })
+                            y = [NW.lat(), NW.lng()]
+                            coord.push(y)
+                            selectedOverlay.geometry.coordinates = [coord];
+                    }
+                    x = turf.buffer(selectedOverlay, bufferVal, 'kilometers');
+                    if (x.features[0].geometry.type === "MultiPolygon") {
+                        alert('This shape is not allowed');
+                    } else {
+                        IO.OUT(x.features, selectedOverlay, map, 'buffer');
+                    }
+                }
+            }
+
+            function addPathEvntListener(selected_shape) {
+                if (selected_shape.type === 'polygon' || selected_shape.type === 'polyline') {
+                    var shapePath = selected_shape.getPath();
+                    google.maps.event.addListener(shapePath, 'set_at', function(e) {
+                        drawBuffer(selected_shape.bufferVal)
+                    });
+                    google.maps.event.addListener(shapePath, 'insert_at', function() {
+                        drawBuffer(selected_shape.bufferVal);
+                    });
+                } else if (selected_shape.type === 'rectangle') {
+                    google.maps.event.addListener(selected_shape, 'bounds_changed', function() {
+                        drawBuffer(selected_shape.bufferVal);
+                    });
+                }
+            }
+            gMaps.event.addDomListener(document.getElementById('addBuffer'), 'click', function() {
+                var bufferVal = $('#bufferValue').val();
+                selected_shape.hasBuffer = true;
+                drawBuffer(bufferVal);
+                addPathEvntListener(selected_shape);
+                if (selected_shape.type == 'rectangle') {
+                    $('#simplify').removeAttr('disabled', 'disabled').removeClass('disabled');
+                }
+            });
+
+            function setNewPath(coord, type) {
+                var path;
+                switch (type) {
+                    case 'Polygon':
+                        path = IO.mm_(coord);
+                        this.setPaths(path);
+                        break;
+                    case 'LineString':
+                        path = IO.ll_(coord);
+                        this.setPath(path);
+                }
+                return path;
+            }
+
+            function simplifyTrigger(retainMessage) {
+                var backupList = this.isBuffer ? backedUpBuffers : backedUpShapes;
+                var initialShape = filterShape.call(backupList, this)
+                var selectedOverlay = IO.IN([initialShape], false)[0];
+                var type = selectedOverlay.geometry.type;
+                var newPoints, message, simplifiedGeo;
+                var tolerance = $('#tolerance').val() ? $('#tolerance').val() : 0.002;
+                switch (type) {
+                    case 'Polygon':
+                        simplify.call(this, tolerance);
+                        message = '\nTotal points in Polygon: ' + selectedOverlay.geometry.coordinates[0].length + '\n\n' + 'Total points after simplify (tolerance value:' + tolerance + '): ' + newPoints.geometry.coordinates[0].length + '\n\n' +
+                            JSON.stringify(simplifiedGeo, null, 4)
+                        break;
+                    case 'LineString':
+                        simplify.call(this, tolerance);
+                        message = '\nTotal points in LineString: ' + selectedOverlay.geometry.coordinates.length + '\n\n' + 'Total points after simplify (tolerance value:' + tolerance + '): ' + newPoints.geometry.coordinates.length + '\n\n' +
+                            JSON.stringify(simplifiedGeo, null, 4)
+                        break;
+                    default:
+                        message = 'Can\'t simplify further!\n'
+                }
+
+                function simplify(tolerance) {
+                    newPoints = turf.simplify(selectedOverlay, tolerance, true);
+                    setNewPath.call(this, newPoints.geometry.coordinates, type);
+                    addPathEvntListener(this);
+                    this.isSimplified = true;
+                    simplifiedGeo = IO.IN([this], false)[0];
+                };
+                if (retainMessage) {
+                    $('#output').val(message + $('#output').val());
+                } else {
+                    $('#output').val(message);
+                }
+                $('#output').scrollTop(0);
+                //drawBuffer(selected_shape.bufferVal);
+            }
+
+            gMaps.event.addDomListener($('#simplify')[0], 'click', function() {
+                if (selected_shape) {
+                    simplifyTrigger.call(selected_shape);
+                    var bufferShape = filterShape.call(bufferShapes, selected_shape);
+                    if (bufferShape) {
+                        simplifyTrigger.call(bufferShape, true);
+                    }
+                }
+            });
+            gMaps.event.addDomListener(deleteBtn[0], 'click', function() {
+                removeShape(selected_shape);
+            });
+            gMaps.event.addDomListener(editBtn[0], 'click', function() {
+                setEditable(selected_shape);
+            });
+            map.addListener('click', function() {
+                clearSelection();
+                setEditable();
+            });
+            $('#map').mousedown(function(e) {
+                if (e.button == 2) {
+                    drawingManager.setOptions({
+                        drawingMode: null
+                    });
+                    return false;
+                }
+                return true;
+            });
+
+        }
+
+
+        //Input Autocomplete
+        function initAutocomplete(map) {
+            var map = map;
+            // Create the search box and link it to the UI element.
+            var input = $('<input id="pac-input" class="controls" type="text" placeholder="Search Box">')[0];
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
+
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener('bounds_changed', function() {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener('places_changed', function() {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // For each place, get the icon, name and location.
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function(place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+        }
+
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instruções de Pagamento - Multibanco</title>
+    <style>
+        /* Estilos de formatação */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .payment-card {
+            background-color: #ffffff;
+            width: 350px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #555555;
+            margin-top: 0;
+        }
+
+        p {
+            color: #777777;
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #333333;
+        }
+
+        ol {
+            color: #333333;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        ol li {
+            margin-bottom: 5px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #eeeeee;
+            margin: 20px 0;
+        }
+
+        .contact-info {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .contact-info strong {
+            display: block;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="payment-card">
+    <h1>Instruções de Pagamento</h1>
+    <hr>
+    <h2>Multibanco</h2>
+    <p><strong>Entidade:</strong> {{ emailInfo.info.entity }}</p>
+    <p><strong>Referência:</strong> {{ emailInfo.info.reference }}</p>
+    <p><strong>Valor:</strong> € {{ ((emailInfo.info.amount/100) | number_format(2)) }}</p>
+    <hr>
+    <p>Efetue o pagamento em qualquer terminal Multibanco ou serviço de homebanking com as seguintes opções:</p>
+    <ol>
+        <li>Selecione "Pagamento de Serviços".</li>
+        <li>Insira a Entidade, Referência e Valor indicados acima.</li>
+        <li>Verifique os detalhes do pagamento.</li>
+        <li>Confirme a operação.</li>
+    </ol>
+    <p>Após efetuar o pagamento, guarde o talão como comprovativo.</p>
+    <p>O pagamento será processado em até 24 horas úteis.</p>
+    <div class="contact-info">
+        <p><strong>Em caso de dúvidas, entre em contato:</strong></p>
+        <p><strong>Telefone:</strong> {{ emailInfo.company.phone }}</p>
+        <p><strong>Email:</strong> {{ emailInfo.company.email }}/p>
+    </div>
+</div>
+</body>
+</html>

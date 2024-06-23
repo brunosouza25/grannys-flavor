@@ -1,0 +1,21 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <main class="main-wrap empty-cart mb-xxl">
+        <!-- Banner Start -->
+        <div class="banner-box">
+            <img src="{{ asset('app/assets/svg/empty-cart.svg') }}" class="img-fluid" alt="404" />
+        </div>
+        <!-- Banner End -->
+
+        <!-- Error Section Start -->
+        <section class="error mb-large">
+            <h2 class="font-lg">Opa!! Carrinho esta vazio</h2>
+            <p class="content-color font-md">Parece que ainda não adicionou nada ao seu carrinho.</p>
+            <a href="{{ path('app/app_foodcategories') }}" class="btn-solid">Escolher Comida</a>
+        </section>
+        <!-- Error Section End -->
+    </main>
+{% endblock %}

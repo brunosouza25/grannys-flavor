@@ -1,0 +1,76 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <style>
+        .regular-header{
+            display: none;
+        }
+        .regular-footer{
+            display: none;
+        }
+    </style>
+    <header class="header">
+        <div class="logo-wrap">
+            <a href="{{ path('app/app_dashboard') }}"><i class="iconly-Arrow-Left-Square icli"></i></a>
+            <h1 class="title-color font-md">Pedidos</h1>
+        </div>
+        <div class="avatar-wrap">
+            <a href="{{path('app/app_dashboard')}}">
+                <i class="iconly-Home icli"></i>
+            </a>
+        </div>
+    </header>
+    <main class="main-wrap order-history mb-xxl">
+        <!-- Tab Content Start -->
+        <section class="tab-content ratio2_1" id="pills-tabContent">
+            <!-- Catagories Content Start -->
+            <div class="tab-pane fade show active" id="catagories1" role="tabpanel" aria-labelledby="catagories1-tab">
+                <!-- Order Box Start -->
+                {% for order in orders %}
+                <div class="order-box">
+                    <div class="media">
+                        <a href="{{ path('app/app_orders_detail', {'orderid': order.id}) }}" class="content-box">
+                            <h2 class="font-sm title-color">ID: #{{ order.ordernr }} , Dt: {{order.dateorder}} - {{ order.timeorder }}</h2>
+                            <p class="font-xs content-color" style="color: #000;">
+                                {% if order.ordertype == 'delivery' %}
+                                   <span>Tipo do Pedido: </span> <span>Entrega</span>
+                                {% else %}
+                                    <span>Tipo do Pedido: </span>
+                                    <span>
+                                        Levantar no Local
+                                    </span>
+                                    {% endif %}
+                                </p>
+                            <span class="content-color font-xs">Preço: <span class="font-theme">{{ order.total }} €</span></span>
+                        </a>
+                        <div class="media-body">
+                            <img src="{{ asset('app/assets/images/map/map.jpg') }}" alt="map" />
+                        </div>
+                    </div>
+                    <div class="bottom-content">
+                        <a href="{{ path('app/app_orders_detail', {'orderid': order.id}) }}" class="title-color font-sm fw-600">ESTADO</a>
+                        {% if order.orderstate == '0' %}
+                        <a href="javascript:void(0)" class="give-rating content-color font-sm">EM CONFIRMAÇÃO</a>
+                        {% endif %}
+                        {% if order.orderstate == '1' %}
+                            <a href="javascript:void(0)" class="give-rating content-color font-sm">A PREPARAR</a>
+                        {% endif %}
+                        {% if order.orderstate == '2' %}
+                            <a href="javascript:void(0)" class="give-rating content-color font-sm">AGUARDA MOTOBOY</a>
+                        {% endif %}
+                        {% if order.orderstate == '3' %}
+                            <a href="javascript:void(0)" class="give-rating content-color font-sm">A ENTREGAR</a>
+                        {% endif %}
+                        {% if order.orderstate == '4' %}
+                            <a href="javascript:void(0)" class="give-rating content-color font-sm">ENTREGE</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        <!-- Tab Content End -->
+    </main>
+{% endblock %}

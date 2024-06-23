@@ -1,0 +1,117 @@
+{% extends 'costumer_profile/base-costumer.html.twig' %}
+
+{# {% block title %}{{ titlePage }}{% endblock %} #}
+
+{% block body %}
+
+    <div class="col-lg-12 ">
+        <h5>Favoritos</h5>
+        <div class="container">
+            <div class="row flex-column" id="product-list"></div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+
+    <script>
+        function loadProducts() {
+            $.ajax({
+                url: "{{ path('get_favorite_products') }}",
+                type: 'GET',
+                success: function (productsArray) {
+                    createProductList(productsArray);
+                },
+                error: function (e) {
+                    alert("erro" + e.toString());
+                }
+            })
+        }
+
+        loadProducts();
+
+
+        function createProductList(products) {
+
+            var productList = $("#product-list");
+            productList.html('');
+            for (const product of products) {
+                // Criação dos elementos HTML
+                var col = $("<div></div>").addClass("col-lg-6");
+
+                var card = $("<div></div>").addClass("card h-100 d-flex flex-row align-items-center");
+
+                var imageCol = $("<div></div>").addClass("col-3 p-0");
+                var image = $("<img>").addClass("card-img-top w-100 h-100")
+                    .attr("src", product.image);
+
+                var cardBody = $("<div></div>").addClass("col p-3 d-flex flex-column");
+
+                var description = $("<p></p>").addClass("card-title text-sm mb-0").text(product.description);
+
+
+                var priceDeleteWrapper = $("<div></div>").addClass("d-flex justify-content-between align-items-center");
+                var price = $("<p></p>").addClass("card-text m-0").text(product.price + "€");
+                var deleteButton = $("<button></button>").addClass("btn btn-outline-danger removeProduct")
+                    .attr("data-id-favorite-product", product.id);
+                var deleteIcon = $("<i></i>").addClass("bi bi-trash");
+
+                deleteButton.append(deleteIcon);
+                priceDeleteWrapper.append(price);
+                priceDeleteWrapper.append(deleteButton);
+
+                // Aninhamento dos elementos
+                cardBody.append(description);
+                cardBody.append(priceDeleteWrapper);
+
+                imageCol.append(image);
+                card.append(imageCol);
+                card.append(cardBody);
+
+                col.append(card);
+
+                productList.append(col);
+
+            }
+            $('.removeProduct').click(function () {
+                const productId = $(this).data('id-favorite-product');
+                $.confirm({
+                    async: true,
+                    title: 'Apagar produto',
+                    columnClass: 'col-md-4',
+                    content: `Tem certeza que deseja remover este produto dos favoritos?`,
+                    buttons: {
+                        apagar: function () {
+                            $.ajax({
+
+                                type: "POST",
+                                url: "{{ path('delete_favorite_product') }}",
+                                data: {productId: productId},
+                                success: function (jsonAddresses) {
+                                    $.alert({
+                                        title: 'Apagado',
+                                        content: 'Produto removido com sucesso!',
+                                    });
+
+                                    loadProducts();
+                                }, error: function (e) {
+
+                                }
+                            });
+                        },
+                        cancelar: function () {
+
+                        }
+                    }
+                });
+            })
+
+        }
+    </script>
+
+{% endblock %}

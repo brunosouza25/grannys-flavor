@@ -1,0 +1,80 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}Hello FamiliesController!{% endblock %}
+
+{% block body %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Tabela de Familias</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="FamilieTable" class="display table table-hover table-responsive-sm" style="min-width: 845px">
+                        <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Nome</th>
+                            <th>Estado</th>
+{#                            <th>Editar</th>#}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for familie in families %}
+                            <tr>
+                                <td>{{familie.codigo}}</td>
+                                <td>{{familie.descricao}}</td>
+                                <td>
+                                    {% set state = familie.state %}
+                                    {% if state == 1 %}
+                                        <b data-id-product="{{ familie.id }}" class="state-chenge alert-success p-2" onclick="stateChange({{ familie.id }})">Ativo</b>
+                                    {% else %}
+                                        <b data-id-product="{{ familie.id }}" class="state-chenge alert-danger p-2" onclick="stateChange({{ familie.id }})">Desativado</b>
+                                    {% endif %}
+                                </td>
+{#                                <td>#}
+{#                                    <div class="d-flex">#}
+{#                                        <a href="{{ path('admin/app_zonesoft_products_detail', {'reference': familie.id}) }}" class="btn btn-primary shadow btn-xs sharp me-1"><i class="mdi mdi-pencil"></i></a>#}
+{#                                    </div>#}
+{#                                </td>#}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('#FamilieTable').DataTable();
+
+        function stateChange(id){
+
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/app_familie_state_change') }}',
+                data: ({productID:id}),
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Estado Atualizado',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        }
+
+    </script>
+
+{% endblock %}

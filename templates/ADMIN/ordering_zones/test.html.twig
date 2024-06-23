@@ -1,0 +1,599 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+
+    <style>
+        #map-canvas{
+            width: 100%;
+            height: 100vh;
+        }
+        .container-fluid{
+            padding: 0 !important;
+        }
+    </style>
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;border:0;max-width:600px">
+        <tbody>
+        <tr>
+            <td valign="top" id="m_-7190579756368962722m_-1793210779212732005templateHeader" style="background-color:#262b32;background-image:none;background-repeat:no-repeat;background-position:center;background-size:cover;border-top:0;border-bottom:0;padding-top:9px;padding-bottom:0" bgcolor="#262b32" background="https://ci6.googleusercontent.com/proxy/9uIx1Nti7V8mlBL1cRK__wYQta5bvCO_arp6xmrR=s0-d-e1-ft#http://none">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;min-width:100%">
+                    <tbody>
+                    <tr>
+                        <td valign="top">
+                            <table align="left" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:100%;min-width:100%" width="100%">
+                                <tbody>
+                                <tr>
+                                    <td valign="top" style="word-break:normal;font-size:16px;line-height:150%;padding:13px 13px 18px 25px;color:#ffffff;font-family:Arial,Helvetica Neue,Helvetica,sans-serif;text-align:center" align="center">
+                                        <h1 style="display:block;margin:0;padding:0;color:#f8f8f8;font-family:'Helvetica Neue',Helvetica,Arial,Verdana,sans-serif;font-size:26px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:normal;text-align:center"><span class="il">Fabio</span>'s <span class="il">Roadstop</span> - Pedido # 535232548</h1>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" id="m_-7190579756368962722m_-1793210779212732005templateBody" style="background-color:#ffffff;background-image:none;background-repeat:no-repeat;background-position:center;background-size:cover;border-top:0;border-bottom:2px solid #eaeaea;padding-top:0;padding-bottom:9px" bgcolor="#ffffff" background="https://ci6.googleusercontent.com/proxy/9uIx1Nti7V8mlBL1cRK__wYQta5bvCO_arp6xmrR=s0-d-e1-ft#http://none">
+                <br>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+                    <tbody>
+                    <tr>
+                        <td valign="top">
+                            <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse">
+                                <tbody>
+                                <tr>
+                                    <td valign="top" style="word-break:normal;color:#606060;font-family:Arial;font-size:14px;line-height:150%;padding:9px 18px;text-align:left" align="left">
+                                        <div>
+                                       <span id="m_-7190579756368962722m_-1793210779212732005docs-internal-guid-6035f703-8c06-2131-54a9-a468a12bfaa8">
+                                          <span style="background-color:transparent;font-family:arial;font-size:14px;vertical-align:baseline">
+                                             <table style="border-collapse:collapse;width:100%" width="100%">
+                                                <tbody>
+                                                   <tr>
+                                                      <td>
+                                                         <div style="text-align:center">
+                                                            Novo pedido aceite<br><strong>ENTREGA</strong>
+                                                            <br>
+                                                            20 minutos&nbsp;&nbsp;
+                                                         </div>
+                                                      </td>
+                                                      <td valign="top">
+                                                         <div style="text-align:center">
+                                                            Total<br>
+                                                            <strong>12,70&nbsp;€
+                                                            <br>CASH
+                                                            </strong>
+                                                         </div>
+                                                      </td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                             <hr style="margin-top:18px;margin-bottom:18px;height:1px;border:0;border-top:1px solid #ccc">
+                                             <table align="left" border="0" cellpadding="0" cellspacing="0" width="260" style="border-collapse:collapse">
+                                                <tbody>
+                                                   <tr>
+                                                      <td style="padding-top:0px;padding-left:18px;padding-bottom:0px;padding-right:0">
+                                                         <table border="0" cellpadding="9" cellspacing="0" width="100%" style="border-collapse:collapse">
+                                                            <tbody>
+                                                               <tr>
+                                                                  <td valign="top" style="word-break:normal;color:#606060;font-family:Arial;font-size:14px;line-height:150%">
+                                                                     <span style="line-height:150%">
+                                                                     <strong style="line-height:20.7999992370605px">Filomena Mogo</strong>
+                                                                     <br>
+                                                                     <strong><a href="tel:+351967774441" style="color:#5ac15e;font-weight:normal;text-decoration:underline" rel="noreferrer" target="_blank">+351967774441</a></strong>
+                                                                     <br>
+                                                                     <a href="mailto:menamogo@gmail.com" rel="noreferrer" target="_blank">menamogo@gmail.com</a>
+                                                                     <br>
+                                                                     IP: 217.129.153.151
+                                                                     <br><br>
+                                                                     <a href="https://maps.google.com/maps?q=37.1029988,-8.3647248&amp;hl=pt;z=16" style="color:#5ac15e;font-weight:normal;text-decoration:underline" rel="noreferrer" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://maps.google.com/maps?q%3D37.1029988,-8.3647248%26hl%3Dpt;z%3D16&amp;source=gmail&amp;ust=1663423092009000&amp;usg=AOvVaw0EPRQG7J4BjtfiZNNWzBms">Rua D.Joao ll Edif Rosamar, Frente ao restaurante Fernando, 8365-130, Armação de Pera</a>
+                                                                     </span>
+                                                                     <br><br>
+                                                                     <span style="line-height:150%">
+                                                                     Observações: <strong style="white-space:pre-wrap">-</strong>
+                                                                     </span>
+                                                                  </td>
+                                                               </tr>
+                                                            </tbody>
+                                                         </table>
+                                                      </td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                             <table align="right" border="0" cellpadding="0" cellspacing="0" width="300" style="border-collapse:collapse">
+                                                <tbody>
+                                                   <tr>
+                                                      <td style="padding-top:0px;padding-right:18px;padding-bottom:0px;padding-left:0">
+                                                         <table border="0" cellpadding="9" cellspacing="0" width="100%" style="border-collapse:collapse">
+                                                            <tbody>
+                                                               <tr>
+                                                                  <td valign="top" style="word-break:normal;color:#606060;font-family:Arial;font-size:14px;line-height:150%">
+                                                                     <span style="font-family:Tahoma,Verdana,Segoe,sans-serif;font-size:12px;font-weight:normal;line-height:125%">
+                                                                     </span>
+                                                                  </td>
+                                                               </tr>
+                                                            </tbody>
+                                                         </table>
+                                                      </td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+                                                <tbody>
+                                                   <tr>
+                                                      <td valign="top">
+                                                         <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse">
+                                                            <tbody>
+                                                               <tr>
+                                                                  <td style="padding-top:9px;padding-left:18px;padding-bottom:0px;padding-right:18px">
+                                                                     <table style="border-collapse:collapse;border-bottom:1px solid #999999" cellpadding="0" cellspacing="0" width="100%">
+                                                                        <tbody>
+                                                                           <tr>
+                                                                              <td valign="top">
+                                                                                 <table width="100%" border="0" style="border-collapse:collapse;word-break:normal;color:#606060;font-family:Arial;font-size:14px;line-height:150%">
+                                                                                    <tbody>
+                                                                                       <tr style="line-height:110%">
+                                                                                          <td style="text-align:left" nowrap="" align="left"><strong><span>Qtde</span></strong></td>
+                                                                                          <td style="text-align:left" align="left"><strong><span>Itens</span></strong></td>
+                                                                                          <td style="text-align:right" align="right"><strong><span>Preço (EUR)</span></strong></td>
+                                                                                       </tr>
+                                                                                       <tr style="border-top:1px solid #999999;line-height:110%">
+                                                                                          <td style="text-align:left" align="left"><span>1x</span></td>
+                                                                                          <td style="text-align:left" align="left"><span><span class="il">Fabio</span>'s Burger</span></td>
+                                                                                          <td style="text-align:right" align="right"><span>10,50&nbsp;€</span></td>
+                                                                                       </tr>
+                                                                                       <tr style="line-height:110%">
+                                                                                          <td>&nbsp;</td>
+                                                                                          <td>
+                                                                                             <span>Tamanho: <strong>Regular</strong></span>
+                                                                                          </td>
+                                                                                          <td style="text-align:right" align="right">&nbsp;</td>
+                                                                                       </tr>
+                                                                                       <tr style="line-height:110%">
+                                                                                          <td>&nbsp;</td>
+                                                                                          <td>
+                                                                                             <span>Personaliza com os ingredientes que mais gostas: <strong>Ovo</strong></span>
+                                                                                             <span>(+1,00&nbsp;€)</span>
+                                                                                          </td>
+                                                                                          <td style="text-align:right" align="right">&nbsp;</td>
+                                                                                       </tr>
+                                                                                       <tr style="border-top:1px solid #999999;line-height:110%">
+                                                                                          <td>&nbsp;</td>
+                                                                                          <td style="text-align:left" align="left"><span style="text-transform:uppercase">SUBTOTAL</span></td>
+                                                                                          <td style="text-align:right" align="right"><span>10,50&nbsp;€</span></td>
+                                                                                       </tr>
+                                                                                       <tr style="line-height:110%">
+                                                                                          <td>&nbsp;</td>
+                                                                                          <td style="text-align:left" align="left"><span style="text-transform:uppercase">
+                                                                                             IVA (13% incluido):
+                                                                                             </span>
+                                                                                          </td>
+                                                                                          <td style="text-align:right" align="right"><span>1,21&nbsp;€</span></td>
+                                                                                       </tr>
+                                                                                       <tr style="line-height:110%">
+                                                                                          <td>&nbsp;</td>
+                                                                                          <td style="text-align:left" align="left"><span style="text-transform:uppercase">Taxa de entrega</span></td>
+                                                                                          <td style="text-align:right" align="right"><span>2,00&nbsp;€</span></td>
+                                                                                       </tr>
+                                                                                       <tr style="line-height:110%">
+                                                                                          <td>&nbsp;</td>
+                                                                                          <td style="text-align:left" align="left"><span style="text-transform:uppercase">
+                                                                                             Taxa de entrega  (23% incluído):
+                                                                                             </span>
+                                                                                          </td>
+                                                                                          <td style="text-align:right" align="right"><span>0,37&nbsp;€</span></td>
+                                                                                       </tr>
+                                                                                       <tr style="line-height:110%">
+                                                                                          <td>&nbsp;</td>
+                                                                                          <td style="text-align:left" align="left"><span style="text-transform:uppercase">Bag</span></td>
+                                                                                          <td style="text-align:right" align="right"><span>0,20&nbsp;€</span></td>
+                                                                                       </tr>
+                                                                                       <tr style="line-height:110%">
+                                                                                          <td>&nbsp;</td>
+                                                                                          <td style="text-align:left" align="left"><span style="text-transform:uppercase">
+                                                                                             TAX ON FEES (23% included):
+                                                                                             </span>
+                                                                                          </td>
+                                                                                          <td style="text-align:right" align="right"><span>0,04&nbsp;€</span></td>
+                                                                                       </tr>
+                                                                                       <tr style="line-height:110%">
+                                                                                          <td>&nbsp;</td>
+                                                                                          <td style="text-align:left" align="left"><span style="text-transform:uppercase"><strong>Total</strong></span></td>
+                                                                                          <td style="text-align:right" align="right"><span><strong>12,70&nbsp;€</strong></span></td>
+                                                                                       </tr>
+                                                                                    </tbody>
+                                                                                 </table>
+                                                                              </td>
+                                                                           </tr>
+                                                                        </tbody>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                            </tbody>
+                                                         </table>
+                                                      </td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                             <p style="margin:10px 0;padding:0;color:#606060;font-family:Arial;font-size:14px;line-height:150%;text-align:center"><br>Aceite para: quarta-feira, 13/07/2022, 12:25</p>
+                                          </span>
+                                       </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+                    <tbody>
+                    <tr>
+                        <td valign="top">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;min-width:100%">
+                                <tbody>
+                                <tr>
+                                    <td valign="top">
+                                        <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;min-width:100%">
+                                            <tbody>
+                                            <tr>
+                                                <td style="padding-top:9px;padding-left:18px;padding-bottom:9px;padding-right:18px">
+                                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;min-width:100%;border:1px solid #dedede">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td valign="top">
+                                                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="310" style="border-collapse:collapse">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td style="padding-top:0px;padding-right:18px;padding-bottom:0px;padding-left:0px">
+                                                                            <table border="0" cellpadding="18" cellspacing="0" width="100%" style="border-collapse:collapse;min-width:100%">
+                                                                                <tbody>
+                                                                                <tr>
+                                                                                    <td valign="top" style="word-break:normal;color:#606060;font-family:Arial;line-height:150%;font-size:12px;font-weight:normal;text-align:left" align="left">
+                                                                                        <div style="text-align:left">Distribuído por:<br><a href="http://www.fabiosroadstop.com" style="color:#5ac15e;font-weight:normal;text-decoration:underline" rel="noreferrer" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://www.fabiosroadstop.com&amp;source=gmail&amp;ust=1663423092009000&amp;usg=AOvVaw2QnCYPUbCH5eaoXEBVv5mp"><img src="https://ci6.googleusercontent.com/proxy/s1TqByrcaMna-7z9WixydmQ22d3V9r4qROdqn9ftixS29ccsW9LvJdd0kUa29br65c0GJyppebYEcQF1bAt0czcpV_Q8kl37YIJvZ-eDzjEh9Kdua2HR1bxRH-5LRXB1tA=s0-d-e1-ft#https://d2vwsr3mua7yp8.cloudfront.net/4918216c-ae81-4b96-afff-376e3bf60989.png" style="outline:none;text-decoration:none;border:0px initial;max-height:50px;max-width:200px;margin:0px;height:auto" class="CToWUd" data-bit="iit"></a>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="252" style="border-collapse:collapse">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td style="padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px">
+                                                                            <table border="0" cellpadding="18" cellspacing="0" width="100%" style="border-collapse:collapse;min-width:100%">
+                                                                                <tbody>
+                                                                                <tr>
+                                                                                    <td valign="top" style="word-break:normal;color:#606060;font-family:Arial;line-height:150%;font-size:12px;font-weight:normal;text-align:left" align="left">
+                                                                                        <strong><span class="il">RoadStop</span> exploração hoteleira, lda</strong><br>
+                                                                                        <div style="width:212px"><a href="mailto:info@fabiosroadstop.com" rel="noreferrer" target="_blank">info@fabiosroadstop.com</a></div>
+                                                                                        <span>Entrar: </span><a href="https://www.restaurantlogin.com" style="font-weight:normal;text-decoration:underline;color:#5ac15e" rel="noreferrer" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.restaurantlogin.com&amp;source=gmail&amp;ust=1663423092009000&amp;usg=AOvVaw2oPdOSh7VESxsiTWeL8ufo">https://www.restaurantlogin.<wbr>com</a><br>
+                                                                                        <span>Contacto: </span><a href="http://www.fabiosroadstop.com" style="font-weight:normal;text-decoration:underline;color:#5ac15e" rel="noreferrer" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://www.fabiosroadstop.com&amp;source=gmail&amp;ust=1663423092009000&amp;usg=AOvVaw2QnCYPUbCH5eaoXEBVv5mp">www.fabiosroadstop.com</a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" id="m_-7190579756368962722m_-1793210779212732005templateFooter" style="background-color:#f0efed;background-image:none;background-repeat:no-repeat;background-position:center;background-size:cover;border-top:0;border-bottom:0;padding-top:9px;padding-bottom:9px" bgcolor="#f0efed" background="https://ci6.googleusercontent.com/proxy/9uIx1Nti7V8mlBL1cRK__wYQta5bvCO_arp6xmrR=s0-d-e1-ft#http://none">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;min-width:100%">
+                    <tbody>
+                    <tr>
+                        <td valign="top" style="padding-top:9px">
+                            <table align="left" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;max-width:100%;min-width:100%" width="100%">
+                                <tbody>
+                                <tr>
+                                    <td valign="top" style="word-break:normal;color:#656565;font-family:Helvetica;font-size:12px;line-height:150%;text-align:center;padding-top:0;padding-right:18px;padding-bottom:9px;padding-left:18px" align="center">
+                                        Número ID: 208173
+                                        |
+                                        Nome: <span class="il">Fabio</span>'s <span class="il">Roadstop</span> — Rua Dr. Manuel de Arriaga, edifício mar salgado, lote 1 loja E, 8365-140 ARMAÇÃO DE PÊRA
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+<div id="map-canvas"></div>
+    <div class="zones-box">
+        <h5>Zonas de Entrega</h5>
+        <form id="saveNewZone">
+            <div class="zone-form">
+                <div class="mb-3">
+                    <input type="text" name="zonename" id="zonemane" class="form-control" placeholder="Titulo da Zona" required>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="pricezone" id="pricezone" class="form-control" placeholder="Preço" required>
+                </div>
+                <div class="mb-3">
+                    <input type="hidden" name="vertices" value="" id="vertices" />
+                </div>
+                <label class="alert-success p-2 text-center" id="infozone"></label>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                </div>
+            </div>
+            <div class="zone-form-add">
+                <button type="button" id="newCordinate" class="btn btn-sm btn-outline-secondary">Adicionar Novo</button>
+                <input type="color" id="color" name="colorZone" style=" float: right;   margin-top: 4px;">
+            </div>
+        </form>
+    </div>
+    <div class="zone-box-edit">
+        <form id="editNewZone">
+                <h5>Editar a <span class="zone-name-edit"></span></h5>
+                <div class="mb-3">
+                    <label>Nome da Zona</label>
+                    <input type="text" name="zonename" id="zonemane-edit" class="form-control" placeholder="Titulo da Zona" required>
+                </div>
+                <div class="mb-3">
+                    <label>Preço</label>
+                    <input type="text" name="pricezone" id="pricezone-edit" class="form-control" placeholder="Preço" required>
+                </div>
+                <div class="mb-3">
+                    <input type="hidden" name="vertices" value="" id="vertices-edit" />
+                    <input type="hidden" name="zoneID" value="" id="zone-id-edit" />
+
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                    <button type="button" id="deleteDrawing" class="btn btn-sm btn-outline-warning">Eliminar</button>
+                </div>
+
+
+        </form>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwoetFWD_58gajSuz86rp6cwu6QTHqO1E&libraries=drawing"></script>
+   <script>
+       var map; // Global declaration of the map
+       var iw = new google.maps.InfoWindow(); // Global declaration of the infowindow
+       var lat_longs = [];
+       var markers = [];
+       var drawingManager;
+
+       $('#newCordinate').click(function () {
+           $('.zone-form-add').slideUp(function () {
+               $('.zone-form').slideDown();
+
+           });
+
+           var colortoUse = $('#color').val();
+           drawingManager = new google.maps.drawing.DrawingManager({
+               drawingMode: google.maps.drawing.OverlayType.POLYGON,
+               drawingControl: true,
+               drawingControlOptions: {
+                   position: google.maps.ControlPosition.TOP_CENTER,
+                   drawingModes: [google.maps.drawing.OverlayType.POLYGON]
+               },
+               polygonOptions: {
+                   editable: true,
+                   fillColor: colortoUse,
+                   strokeColor: colortoUse,
+                   strokeOpacity: '0.8'
+               }
+           });
+
+           drawingManager.setMap(map);
+
+           google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
+               var newShape = event.overlay;
+               newShape.type = event.type;
+
+           });
+
+           google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
+               overlayClickListener(event.overlay);
+               $('#vertices').val(event.overlay.getPath().getArray());
+               $('#infozone').text('Coordenados Obtidos');
+               var lsa = lat_longs[''] = event.overlay.getPath().getArray();
+
+           });
+
+           function overlayClickListener(overlay) {
+               google.maps.event.addListener(overlay, "mouseup", function(event) {
+                   var lsa = lat_longs[overlay.getPath().getArray()];
+               });
+           }
+
+       });
+   </script>
+
+
+    <script>
+        var map; // Global declaration of the map
+        var iw = new google.maps.InfoWindow(); // Global declaration of the infowindow
+        var lat_longs = [];
+        var markers = [];
+        var drawingManager;
+        var polygons = [];
+        var ltd = {{ ltd }};
+        var lng = {{ lng }};
+        var bounds = new google.maps.LatLngBounds();
+
+
+        function initialize(listener) {
+            var myLatlng = new google.maps.LatLng(ltd, lng);
+            var myOptions = {
+                zoom: 13,
+                center: myLatlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+            map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map,
+                title: "House location",
+            });
+
+
+            {% for zone in zones %}
+
+            var zone_{{ zone.reference }} = [
+                {% for cordinate in cordinates %}
+                    {% if cordinate.cordinate == zone.reference %}
+                        new google.maps.LatLng({{ cordinate.lat }}, {{ cordinate.lng }}),
+                    {% endif %}
+                {% endfor %}
+            ];
+
+            var polys_{{ zone.reference }} = new google.maps.Polygon({
+                path: zone_{{zone.reference}},
+                geodesic: true,
+                strokeColor: '{{ zone.color }}',
+                strokeOpacity: 1.00,
+                fillColor: '{{ zone.color }}',
+                fillOpacity: 0.10,
+                strokeWeight: 3,
+                zIndex: {{zone.positions}},
+                map: map,
+                zonename: '{{ zone.title }}',
+                pricezone: '{{ zone.price }}',
+                zoneIdReference: '{{ zone.id }}',
+                clickable: true
+            });
+            google.maps.event.addListener(polys_{{ zone.reference }}, 'mouseover', function() {+
+                polys_{{ zone.reference }}.setOptions({
+                    fillOpacity: 0.5
+                });
+            });
+            google.maps.event.addListener(polys_{{ zone.reference }}, 'mouseout', function() {+
+                polys_{{ zone.reference }}.setOptions({
+                    fillOpacity: 0.10
+                });
+
+                google.maps.event.addListener(polys_{{ zone.reference }}.getPath(), 'set_at',  function() {+
+                    console.log("set_at");
+                    var curLatLng;
+                    curLatLng = polys_{{ zone.reference }}.getPath().getArray();
+                    $('#vertices-edit').val(curLatLng);
+                });
+            });
+            google.maps.event.addListener(polys_{{ zone.reference }}, 'click', function() {+
+                polys_{{ zone.reference }}.setOptions({
+                    editable: true,
+                });
+                $('.zones-box').slideUp(function () {
+                   $('.zone-box-edit').slideDown();
+                   $('.zone-name-edit').text(polys_{{ zone.reference }}.zonename);
+                   $('#zonemane-edit').val(polys_{{ zone.reference }}.zonename);
+                    $('#pricezone-edit').val(polys_{{ zone.reference }}.pricezone);
+                    $('#zone-id-edit').val(polys_{{ zone.reference }}.zoneIdReference);
+                });
+            });
+            {% endfor %}
+
+            for (var j = 0; j < polygons.length; j++) {
+                for (var i = 0; i < polygons[j].getPath().getLength(); i++) {
+                    bounds.extend(polygons[j].getPath().getAt(i));
+                }
+            }
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+
+    </script>
+
+
+    <script>
+        $("#saveNewZone").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_new_zones')}}",
+                data: formData, // serializes the form's elements.
+                contentType: false,
+                processData: false,
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $("#editNewZone").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin/app_edit_existed_zone')}}",
+                data: formData, // serializes the form's elements.
+                contentType: false,
+                processData: false,
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Editado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

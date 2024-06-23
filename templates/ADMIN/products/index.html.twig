@@ -1,0 +1,356 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Tabela de Produtos</h4>
+
+                <a href="{{ path('admin/new_product') }}" id="new_product" class="btn btn-primary btn-sm">Criar novo produto</a>
+                <button class=" sync_stock btn btn-primary btn-sm">Atualizar Estoque</button>
+                <button class=" sync_stock_grid btn btn-primary btn-sm">Atualizar Estoque Grid</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="ProductsTable" class="display table table-hover table-responsive-sm" style="min-width: 845px">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>#</th>
+                                    <th>Nome</th>
+                                    <th>Preço</th>
+
+                                    <th>Valor final</th>
+                                    <th>Estado</th>
+                                    <th>Destaque</th>
+                                    <th>Estoque</th>
+                                    <th>Excluir</th>
+                                    <th>Editar</th>
+                                    <th>Atualizar estoque</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td><img class="" width="35" src="/{{ product.image }}" alt=""></td>
+                            <td>{{product.code}}</td>
+                            <td>{{product.name}}</td>
+                            <td>{{product.price}} €</td>
+
+                            <td>{{product.price * (product.iva / 100 + 1)}} €</td>
+                            <td>
+                                {% set state = product.state %}
+                                 {% if state == 1 %}
+                                    <b data-id-product="{{ product.id }}" class="state-chenge alert-success p-2">Ativo</b>
+                                {% else %}
+                                    <b data-id-product="{{ product.id }}" class="state-chenge alert-danger p-2">Desativado</b>
+                                    {% endif %}
+
+                            </td>
+                            <td>
+                                 {% if product.highlight == 1 %}
+                                    <b data-id-product="{{ product.id }}" onclick="changeHigh({{ product.id }})" class="high-change alert-success p-2">Ativo</b>
+                                {% else %}
+                                    <b data-id-product="{{ product.id }}" onclick="changeHigh({{ product.id }})" class="high-change alert-danger p-2">Desativado</b>
+                                {% endif %}
+
+                            </td>
+                            <td>
+                                {{product.stock}}
+                            </td>
+                            <td>
+                                <a href="#" class="delete_product align-content-center" data-id="{{ product.id }}"><i class="bi bi-trash black 50"></i></a>
+                            </td>
+
+                            <td>
+                                <div class="align-content-center">
+                                    <a href="#" class="btn btn-primary shadow btn-xs sharp me-1 product_detail" data-id-product="{{ product.id }}"><i class="mdi mdi-pencil"></i></a>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div  class="align-content-center">
+                                    <span class="sync_stock  btn btn-primary shadow btn-xs sharp me-1 product_detail" onclick="syncProduct({{ product.code }})" data-id-product-code="{{ product.code }}"><i class="mdi mdi-sync"></i></span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+
+    <style>
+        .align-content-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <script>
+        $('.delete_product').click(function () {
+            const productId = $(this).data(`id`);
+            $.confirm({
+                title: 'Apagar!',
+                content: 'Você tem certeza?!',
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            url: `delete_product`,
+                            type: 'POST',
+                            data: {productId: productId},
+                            success: function () {
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Apagado com sucesso',
+                                });
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 2000);
+                            }
+                        })
+                    },
+                    Cancelar: function () {
+
+                    }
+
+
+                }
+            });
+        })
+
+
+        $('.product_detail').click(function () {
+            var productId = $(this).attr('data-id-product');
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/app_product_detail') }}',
+                data: ({productId:productId}),
+                success: function(data)
+                {
+                    $.confirm({
+                        async: true,
+                        title: 'Editar Produto',
+                        columnClass: 'col-md-12 product-detail',
+                        content: data,
+                        buttons: {
+                            fechar: function () {}
+                        }
+                    });
+                }
+            })
+        })
+
+        $('#ProductsTable').DataTable();
+
+        $('.state-chenge').click(function () {
+            var productId = $(this).attr('data-id-product');
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/desactive_active_product') }}',
+                data: ({productId:productId}),
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Estado Atualizado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                }
+            });
+        });
+
+        function changeHigh(productId) {
+
+            $.ajax({
+                type: "POST",
+                url: '{{ path('admin/change_product_high') }}',
+                data: ({productId:productId}),
+                success: function(data)
+                {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Estado Atualizado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                }
+            });
+        }
+
+        function syncProduct(productId) {
+            $('.product_detail').remove();
+
+
+            $.ajax({
+                url: `{{ path('admin/sync_products_stock') }}`,
+                type: 'POST',
+                data: {productId: productId},
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'A Enviar',
+                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function (e) {
+                    if(e) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Estoque atualizado!',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: 'Não tivemos resposta do zonesoft!',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+
+
+
+                },
+                error(){
+                    alert("erro");
+                }
+            })
+        }
+
+        $('.sync_stock').click(function () {
+            $('.product_detail').remove();
+
+            var productId = $(this).attr('data-id-product-code');
+            $.ajax({
+                url: `{{ path('admin/sync_products_stock') }}`,
+                type: 'POST',
+                data: {productId: productId},
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'A Enviar',
+                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function (e) {
+                    if(e) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Estoque atualizado!',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: 'Não tivemos resposta do zonesoft!',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+
+
+
+                },
+                error(){
+                    alert("erro");
+                }
+            })
+        })
+
+        $('.sync_stock_grid').click(function () {
+            $('.product_detail').remove();
+
+            var productId = $(this).attr('data-id-product-code');
+            $.ajax({
+                url: `{{ path('admin/sync_all_products_grids_stock') }}`,
+                type: 'POST',
+                data: {productId: productId},
+                beforeSend: function() {
+                    Swal.fire({
+                        title: 'A Enviar',
+                        html: '<span style="font-size: 130px" class="iconify" data-icon="eos-icons:loading"></span>',// add html attribute if you want or remove
+                        allowOutsideClick: false,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+                },
+                success: function (e) {
+                    if(e) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Estoque atualizado!',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: 'Não tivemos resposta do zonesoft!',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+
+
+
+                },
+                error(){
+                    alert("erro");
+                }
+            })
+        })
+
+    </script>
+
+{% endblock %}
+

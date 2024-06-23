@@ -1,0 +1,50 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+
+    <h4>Insira a sua Morada</h4>
+        <form id="saveuserdata" class="custom-form mt-3">
+                <div class="input-box">
+                    <input type="text" class="form-control" name="street" placeholder="Morada">
+                </div>
+                <div class="input-box">
+                    <input type="text" class="form-control" name="city" placeholder="Cidade">
+                </div>
+                <div class="input-box">
+                    <input type="text" class="form-control" name="postalcode" placeholder="Código Potal">
+                </div>
+                <input type="hidden" name="userID" value="{{ app.user.id }}">
+                <button type="submit" class="btn-solid font-md">Seguinte</button>
+         </form>
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $("#saveuserdata").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('app/app_save_user_address')}}",
+                data: formData, // serializes the form's elements.
+                success: function(data)
+                {
+                  location.replace('{{ path('app/app_location_user_address') }}');
+
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+    </script>
+
+{% endblock %}
+
+
+

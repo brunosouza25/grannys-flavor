@@ -1,0 +1,113 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <div class="row">
+    <div class="col-lg-5">
+                <div class="dsp container">
+                    <h5>Carregar Imagens</h5>
+                    <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-lg-12 pakainfo">
+
+                                    <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                                    <hr>
+                                    <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+                            </div>
+                            <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                        </div>
+                    </form>
+                </div>
+    </div>
+        <!-- /# card -->
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        {% for image in images %}
+                            <div class="col-lg-4">
+                                <div class="image-box-admin" style="margin-bottom: 2rem;">
+                                    <button class="custom-delete-image" data-gallery-image="{{ image.id }}"><span class="mdi mdi-delete"></span></button>
+                                    <img class="image-admin-show" src="{{ bo_url }}{{ image.image }}">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $("form#multiple-files-upload").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: '{{ path('admin/app_gallery_new_images') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+
+                success: function(data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function(e) {
+
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Occoreu erro!',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('.custom-delete-image').click(function () {
+            var imageID = $(this).attr('data-gallery-image');
+
+            $.ajax({
+                url: '{{ path('admin/app_gallery_delete_images') }}',
+                type: 'POST',
+                data: ({imageID:imageID}),
+                success: function(data) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Eliminado',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                }
+            });
+
+        });
+    </script>
+
+
+{% endblock %}
+

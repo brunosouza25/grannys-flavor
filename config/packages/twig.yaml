@@ -1,0 +1,10 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        app_logo: '%env(APP_LOGO)%'
+        bo_url: '%env(APP_BO_URL)%'
+        app_env: '%env(APP_ENV)%'
+        app_vivawallet: '%env(APP_VIVAWALLET)%'
+when@test:
+    twig:
+        strict_variables: true

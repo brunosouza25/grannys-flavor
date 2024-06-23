@@ -1,0 +1,1128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+
+
+    <html lang="pt-PT">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Riot</title>
+
+    </head>
+    <body style="background-color: #1c346c">
+    <style>
+        .bannerHome {
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .bannerHomeTitle {
+            @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+            font-family: 'Anton', sans-serif !important;
+        }
+
+        @media (min-width: 1400px) {
+            .bannerHome {
+                margin: auto;
+            }
+        }
+
+        .pp {
+            font-size: large;
+        }
+
+
+    </style>
+    <!--   Banner principal -->
+    <section id="main-banner">
+        <div class="container-fluid p-0 bannerHome mb-5"
+             style="background-image:url('{% if banner1 is not empty %} {{ banner1.path }} {% endif %}'); ">
+            <div class="row rounded" style="background-color: rgba(100, 120, 150, 0.7);">
+                <!-- hero -->
+                <div class="col-xl-10 col-lg-12 col-md-12 col-sm-12 col-12  py-2 mt-2 justify-content-center">
+                    <div class="hero pt-2 text-light d-flex flex-column align-items-center justify-content-center ">
+                        <div class="mx-5 col-10">
+                            <h1><strong>O Melhor Mel do Algarve num Pack!</strong></h1>
+                            <h1 class="bannerHomeTitle">
+                                <p class="text-white"
+                                   style="font-family: 'Anton', sans-serif !important; font-size: 18px;">- 1 Frasco de
+                                    Quilo de Mel Rosmaninho <br> - 1 Frasco de Quilo de Mel Flor de Laranjeira</p>
+                            </h1>
+                            <form class="row py-5">
+                                <input type="text" class="search-bar text-align-right col-lg-9 col-sm-8 py-1"
+                                       style="border-radius: 10px;" placeholder="Procure, produtos, categorias, etc...">
+                                <button type="submit" class="btn-search-div col-1 d-sm-none d-md-block ">
+                                    <i class="bi bi-search btn-search pt-0 mt-0"></i>
+                                </button>
+                                <button type="submit" class="btn text-white col-lg-2 mt-sm-1 col-sm-3 "
+                                        style="background-color: #1c346c; border-radius: 10px;">
+                                    <i class="bi bi-search btn-search pt-0 mt-0"></i> PESQUISAR
+                                </button>
+                            </form>
+                        </div>
+                        <!--         aa -->
+                    </div>
+                </div> <!-- 12 -->
+
+                <div class="col-1 d-none d-xl-block d-xxl-block">
+                    <!-- linhas verticais -->
+                    <div class="container-linhas d-flex flex-column align-items-center ">
+                        <div class="line-1 mb-4 mt-2"></div>
+
+                        <div class="icon-1 mb-4">
+                            <a class="footer-facebook" target="_blank"><i
+                                        class="bi bi-facebook text-white media"></i></a>
+                        </div>
+
+                        <div class="line-2 mb-3 mt-2"></div>
+
+                        <div class="icon-1 mb-4">
+                            <a class="footer-instagram-link" target="_blank"><i
+                                        class="bi bi-instagram text-white media"></i></a>
+                        </div>
+
+                        <div class="line-2 mb-3 mt-2"></div>
+
+                        <div class="icon-1 mb-3 mt-2">
+                            <a class="footer-youtube" target="_blank"><i class="bi bi-youtube text-white media"></i></a>
+                        </div>
+                        <div class="line-1 mb-4 mt-2"></div>
+                    </div>
+                    <!-- .. -->
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Fim banner -->
+    <!-- icone chat -->
+    <div class="chat-ballon">
+        <i class="bi bi-chat-dots"></i>
+    </div>
+
+    <!--     cards produtos -->
+    <div class="p-5"
+         style="background-color:#c4dcf4; border-top-left-radius: 25px; border-top-right-radius: 25px; margin-left: 5%; margin-right: 5%">
+        <div class="container">
+            <div class="row mb-5 rounded">
+                <div class="col-6  mt-2 " style="color:#1c346c;">
+                    <h4>DESTAQUES</h4>
+                </div>
+                <div class="col-6  mt-2">
+                    <div class="buttons d-flex justify-content-end">
+                        <button type="button" class="prevHigh btn btn-light border-dark text-dark btn-sm"><</button>
+                        <button type="button" class="nextHigh btn btn-dark btn-sm">></button>
+                    </div>
+                </div>
+                <div id="productsHigh" class="col-12 mb-3"></div>
+                <div class="row">
+
+                </div>
+            </div>
+
+        </div>
+        <div class="row rounded">
+            <div class="col-xl-3 text-center col-sm-12">
+                <div id="filtros-selecionados"></div>
+            </div>
+
+            <div class="col-xl-12 text-center col-sm-12" style="color: #1c346c">
+                <h5 id="producutsQuantity">Foram encontrados .</h5>
+            </div>
+            <div class="btn btn-dark d-block d-lg-none mb-3 vertical-button  ps-0 pe-4 fixed-left ps-2" type="button"
+                 data-bs-toggle="offcanvas" data-bs-target="#menuAside">
+                Filtrar produtos
+            </div>
+
+            <div class="offcanvas offcanvas-start p-0" tabindex="-1" id="menuAside">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title"></h5>
+                    <button type="button" class="btn-close bg-danger text-reset" style="z-index: 3"
+                            data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body p-0">
+                    <div class="col-12 col-lg-3">
+                        <div class="gw-sidebar">
+                            <div id="gw-sidebar" class="gw-sidebar">
+                                <div class="nano-content">
+                                    <ul class="gw-nav gw-nav-list">
+                                        <!-- Title -->
+                                        <li class="init-un-active" style="background-color:#7494c4"><a
+                                                    style="background-color:#7494c4" href="javascript:void(0)"> <span
+                                                        class="gw-menu-text text-light fs-5">Filtros</span> </a></li>
+                                        <!-- CATEGORIES -->
+                                        <li class="init-arrow-down"><a href="javascript:void(0)"> <span
+                                                        class="gw-menu-text text-dark fs-5">Categorias</span> <b
+                                                        class="gw-arrow icon-arrow-up"></b> </a>
+                                            <ul class="gw-submenu" id="categories-mobile">
+
+                                            </ul>
+                                        </li>
+                                        <!-- FIM CATEGORIES -->
+
+
+                                        <!-- PREÇO -->
+                                        <li class=" init-arrow-down"><a href="javascript:void(0)"> <span
+                                                        class="gw-menu-text text-dark fs-5">Preços</span> <b
+                                                        class="gw-arrow"></b> </a>
+                                            <ul class="gw-submenu">
+                                                <li class="px-3">
+                                                    <input type="text" class="js-range-slider-mobile" name="my_range"
+                                                           value=""/>
+
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <!-- FIM PREÇO -->
+
+
+                                        <!-- BRANDS -->
+                                        <li class="init-arrow-down"><a href="javascript:void(0)"> <span
+                                                        class="gw-menu-text text-dark fs-5">Marcas</span> <b
+                                                        class="gw-arrow icon-arrow-up8"></b> </a>
+                                            <ul class="gw-submenu" id="brands-filter-mobile">
+
+                                            </ul>
+                                        </li>
+                                        <!-- FIM BRANDS -->
+
+
+                                        <li>
+                                            <div class="row ">
+                                                <button id="apply" style="background-color: #1c346c; color: #FFFFFF"
+                                                        onclick="FilterProducts(1)">
+                                                    Aplicar filtros selecionados
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3 d-none d-lg-block d-xl-block ">
+                <div class="gw-sidebar">
+                    <div id="gw-sidebar" class="gw-sidebar">
+                        <div class="nano-content">
+                            <ul class="gw-nav gw-nav-list">
+                                <!-- Title -->
+                                <li class="init-un-active" style="background-color: #7494c4"><a
+                                            style="background-color: #7494c4" href="javascript:void(0)"> <span
+                                                class="gw-menu-text text-light fs-5">Filtros</span> </a></li>
+                                <!-- CATEGORIES -->
+                                <li class="init-arrow-down"><a href="javascript:void(0)"> <span
+                                                class="gw-menu-text text-dark fs-5">Categorias</span> <b
+                                                class="gw-arrow icon-arrow-up"></b> </a>
+                                    <ul class="gw-submenu" id="categories">
+
+                                    </ul>
+                                </li>
+                                <!-- FIM CATEGORIES -->
+
+                                <!-- PREÇO -->
+                                <li class=" init-arrow-down"><a href="javascript:void(0)"> <span
+                                                class="gw-menu-text text-dark fs-5">Preço</span> <b
+                                                class="gw-arrow"></b>
+                                    </a>
+                                    <ul class="gw-submenu">
+                                        <li class="px-3">
+                                            <input type="text" class="js-range-slider" name="my_range" value=""/>
+
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!-- FIM PREÇO -->
+
+
+                                <!-- BRANDS -->
+                                <li class="init-arrow-down"><a href="javascript:void(0)"> <span
+                                                class="gw-menu-text text-dark fs-5">Marcas</span> <b
+                                                class="gw-arrow icon-arrow-up8"></b> </a>
+                                    <ul class="gw-submenu" id="brands-filter">
+
+                                    </ul>
+                                </li>
+                                <!-- FIM BRANDS -->
+
+                                <li>
+                                    <div class="row ">
+                                        <button id="apply"
+                                                style="background-color: #1c346c; color: #FFFFFF; border-style: none"
+                                                onclick="FilterProducts(0)">Aplicar
+                                            filtros selecionados
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="products" class="ms-sm-3 ms-md-0 bg-grid col-12 col-lg-9"></div>
+        </div>
+
+        <!--Mosaico de categorias -->
+        <section id="categorias">
+
+            <div class="row d-flex justify-content-center mb-5 mt-5">
+                <div class="col-lg-5 col-12 mb-4 align-items-center"
+                     style="background-image: url('{{ asset('uploads/images/productsBrands.jpeg') }}'); background-size: 100%; border-radius: 10px; height: 210px; background-size: cover;">
+                    <p class="text-center texto-imagem"
+                       style="color: white; font-size: 20px; padding-top: 65px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                        PRODUTOS GRANNY'S FLAVOR</p>
+                    <a href="/store">
+                        <button class="btn btn-outline-light rounded-pill mx-auto d-block mt-3 text-light fw-bold">SABER
+                            MAIS
+                        </button>
+                    </a>
+                </div>
+                <div class="col-lg-5 col-12 me-4 mb-4 ms-3 align-items-center"
+                     style="background-image: url('{{ asset('uploads/brands1.jpeg') }}'); background-size: 100%; border-radius: 10px; height: 210px; background-size: cover;">
+                    <p class="text-center texto-imagem"
+                       style="color: white; font-size: 25px; padding-top: 65px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                        TODAS AS MARCAS</p>
+                    <a href="/store">
+                        <button class="btn btn-outline-light rounded-pill mx-auto d-block mt-3 text-light fw-bold">SABER
+                            MAIS
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="carousel slide" data-ride="carousel">
+
+                <h4 class="section-title ms-3 pb-5" style="color:#1c346c;">Marcas</h4>
+                <!-- Slides do Carrossel -->
+                <div id="brands" class="carousel-inner">
+                    <div>
+                        <img src="{{ asset('uploads/Luz.jpg') }}" class="ms-5" alt="Imagem 1"
+                             style="max-width: 50%; height: 100px;">
+                    </div>
+                    <div>
+                        <img src="{{ asset('uploads/regionalartelogo.png') }}" class="ms-5" alt="Imagem 2"
+                             style="max-width: 50%; height: 100px;">
+                    </div>
+                    <div>
+                        <img src="{{ asset('uploads/montedosbenslogo.png') }}" class="ms-5" alt="Imagem 3"
+                             style="max-width: 50%; height: 100px;">
+                    </div>
+                    <div>
+                        <img src="{{ asset('uploads/RuiSimeao.jpg') }}" class="ms-5" alt="Imagem 4"
+                             style="max-width: 50%; height: 100px;">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="row mt-2">
+            <div class="col-12 ">
+                <nav aria-label="..." class="slider-dots2">
+
+
+                </nav>
+
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+    </div>
+    </body>
+    </html>
+{% endblock %}
+        {% block javascripts %}
+            {{ parent() }}
+
+            <script>
+                document.getElementById('register').addEventListener('click', function () {
+                    location.replace('/register_costumer');
+                })
+                document.getElementById('login').addEventListener('click', function () {
+                    location.replace('/login')
+                })
+                $('#brands').slick({
+                    dots: true,
+
+                    rows: 1,
+                    vertical: false,
+                    infinite: false,
+                    slidesToScroll: 4,
+                    slidesToShow: 4,
+                    accessibility: true,
+                    variableWidth: false,
+                    focusOnSelect: false,
+                    centerMode: false,
+                    responsive: [
+                        {
+                            breakpoint: 1000,
+                            settings: {
+                                slidesToScroll: 2,
+                                slidesToShow: 2
+                            }
+                        },
+                        {
+                            breakpoint: 600,
+                            settings: {
+                                slidesToScroll: 1,
+                                slidesToShow: 1
+                            }
+                        }
+                    ]
+                });
+
+                function createBrandsCard() {
+                    let divChild = ``;
+                    divChild +=
+                        `<div class=" col-md-4 col-sm-12 col-lg-8 my-1">
+                        <div class="position-relative bg-dark text-white border-radius-size">
+                            <img height="250" style="border-radius: 19px; object-fit: cover; " class="card-img border-radius-size " src="${'public/uploads/images/brands.png'}"
+                                 alt="Card image">
+                            <div class="card-img-overlay  d-flex justify-content-center align-items-end ">
+                                <h5 class="card-title justify-content-end font-white">${'Modelos'}</h5>
+                            </div>
+                        </div>
+                    </div>`
+
+                    divChild +=
+                        `<div class=" col-md-4 col-sm-12 col-lg-4 my-1">
+                        <div class="position-relative bg-dark text-white border-radius-size">
+                            <img height="250" style="border-radius: 19px; object-fit: cover; " class="card-img border-radius-size " src="${''}"
+                                 alt="Card image">
+                            <div class="card-img-overlay  d-flex justify-content-center align-items-end ">
+                                <h5 class="card-title justify-content-end font-white">${'public/uploads/images/brands.png'}</h5>
+                            </div>
+                        </div>
+                    </div>`
+                }
+
+
+                var searchProduct = '';
+                var categoryIdProduct = '';
+                var filtersProduct = '';
+
+                function getProducts(search, filtersProduct) {
+                    /**
+                     * Carregar produtos gerais
+                     */
+
+                    $.ajax({
+                        type: "GET",
+                        url: `/products`,
+                        data: {search: search, filtersProduct: filtersProduct},
+                        success: function (data) {
+                            productsArray = data.products;
+
+                            $('.search-bar').val(searchProduct);
+
+                            if (data.searchName == 'false') {
+
+                                $('#producutsQuantity').text(`Foram encontrados ${data.products.length} produtos`);
+                            } else {
+
+                                $('#producutsQuantity').text(`Foram encontrados ${data.products.length} produtos de "${data.searchName.toUpperCase()}"`);
+                            }
+
+                            var divProducts = document.getElementById('products');
+                            divProducts.innerHTML = '';
+                            createProductCard(data.products, divProducts)
+
+                            $("#products").removeClass("slick-initialized slick-slider");
+                            var numItems = data.products.length; // Obtém o número de itens
+                            var slidesPerRow = 3; // Número de colunas por linha
+                            var slidesToShow = slidesPerRow; // Inicialmente, definimos slidesToShow para o mesmo valor de slidesPerRow
+                            var slidesToScroll = slidesPerRow; // Defina slidesToScroll para o mesmo valor de slidesPerRow
+
+                            var row = 3;
+
+                            if (numItems <= 3) {
+                                row = 1
+
+                            }
+                            if (numItems > 3 && numItems <= 6) {
+                                row = 2
+                            }
+
+                            $('#products').slick({
+                                dots: true,
+                                customPaging: function (slider, i) {
+                                    var thumb = $(slider.$slides[i]).data();
+                                    return `<a class="ball border border-2">${i + 1}</a>`;
+                                },
+                                rows: row,
+                                vertical: false,
+                                infinite: false,
+                                slidesToScroll: 3,
+                                slidesToShow: 3,
+                                accessibility: true,
+                                variableWidth: false,
+                                focusOnSelect: false,
+                                centerMode: false,
+                                responsive: [
+                                    {
+                                        breakpoint: 1000,
+                                        settings: {
+                                            slidesToScroll: 2,
+                                            slidesToShow: 2
+                                        }
+                                    },
+                                    {
+                                        breakpoint: 600,
+                                        settings: {
+                                            slidesToScroll: 1,
+                                            slidesToShow: 1
+                                        }
+                                    }
+                                ]
+                            });
+
+                            $('.ball').click(function () {
+                                $('.ball').removeClass('ballActive')
+                                $(this).addClass('ballActive');
+
+                            })
+
+                        }
+                    });
+
+                }
+
+                function FilterProducts(type) {
+
+                    if (type) {
+                        var menuLateral = document.getElementById("menuAside");
+                        var offcanvas = bootstrap.Offcanvas.getInstance(menuLateral); // Obtenha a instância do menu offcanvas (necessário se estiver usando o Bootstrap)
+                        offcanvas.hide(); // Esconda o menu lateral
+                    }
+
+                    if (type == 0) {
+                        var filters = ['brands', 'categories'];
+
+                        var prices = {
+                            minPrice: $('.js-range-slider').data('from'),
+                            maxPrice: $('.js-range-slider').data('to')
+                        }
+                    } else {
+
+                        var filters = ['brands-mobile', 'categories-mobile'];
+
+                        var prices = {
+                            minPrice: $('.js-range-slider-mobile').data('from'),
+                            maxPrice: $('.js-range-slider-mobile').data('to')
+                        }
+
+                    }
+
+                    var filterObjects = []
+                    for (const filter of filters) {
+
+                        if ($(`input[name='${filter}[]']:checked`).length < 1) {
+                            continue;
+                        }
+                        var selecteds = [];
+                        $(`input[name='${filter}[]']:checked`).each(function () {
+                            selecteds.push($(this).val());
+                        });
+
+                        filterObjects.push({filter: filter, selecteds: selecteds})
+                    }
+
+
+                    filterObjects.push({filter: 'price', prices: prices});
+
+                    var selectedFilters = btoa(JSON.stringify(filterObjects));
+
+                    var search = $('.search-bar').val();
+
+                    // getProducts(search, selectedFilters);
+
+                    location.replace(`/store?filter=${selectedFilters}&search=${search}`);
+
+                }
+
+                getProducts(searchProduct, categoryIdProduct, filtersProduct);
+
+                var productsArray;
+                var resultados;
+
+
+                function getProductsByArray(array, colunas, termo) {
+                    return array.filter((produto) => {
+                        return colunas.some((coluna) => {
+                            const valor = produto[coluna];
+                            return valor && valor.toString().toLowerCase().includes(termo.toLowerCase());
+                        });
+                    });
+                }
+
+                function createProductCard(productsJson, divProducts) {
+                    if (productsJson == []) {
+
+                        divProducts.innerHTML += `
+                            <div class=" col-md-4 col-sm-12 ml-2 mb-2 " >
+                                <h2>No products found</h2>
+                            </div>
+                        `
+                    } else {
+                        var moreTag = '';
+                        for (const product of productsJson) {
+                            let colorDivs = '';
+                            let cont = 0;
+
+                            const imagesArray = product.gridColors;
+                            //debugger
+                            if (typeof imagesArray != 'undefined') {
+                                for (const image of imagesArray) {
+                                    if (cont >= 4) {
+                                        break;
+                                    }
+                                    colorDivs += `<img style='width: 25px; height: 25px; margin-right: 5px; border-radius: 50%;' src="${image.image}" alt="" class="">`;
+                                    cont++;
+                                }
+                                const quantity = imagesArray.length - cont;
+                                moreTag = imagesArray.length > 4 ? `<p>mais ${quantity}</p>` : '';
+
+                            }
+
+                            divProducts.innerHTML +=
+                                `
+                            <div class="card card-size col-md-4 col-sm-12 ml-2 mb-2 shadow">
+                                    <a href="{{ bo_url }}product/${product.id}">
+                                    <div class="info-card d-flex justify-content-between mx-4 mt-2">
+                                        <p class="text-light mt-3 px-2 py-1 rounded" style="background-color: #1c346c;">Novo</p>
+                                        <p class="fx-10">
+                                        <i ${product.isFavorite ? 'class="favorite bi bi-heart-fill text-danger' : 'class="favorite bi bi-suit-heart'}" data-product-id="${product.id}"></i>                                        </p>
+                                    </div>
+                                    <img width="500" style="object-fit: contain;" height="200" class="card-img-top image-fit" src="${product.image}"
+                                        alt="Card image cap">
+                                    <div class="card-body text-dark">
+                                        <span class="card-title d-block" ${colorDivs.length > 0 ? 'style="min-height: 46px"' : 'style="min-height: 70px"'}>${product.name}</span>
+                                        <h6 class="card-text card-price">${(Number(product.price)).toFixed(2)}€</h6>
+                                        <p class="card-text">
+                                        <small class="text-muted">${product.categoryName}</small>
+                                        </p>
+                                        <div class="mb-3">
+                                            <div class="color-options d-flex justify-content-start rounded-3">${colorDivs} ${moreTag}</div> <!-- Exibe os círculos de imagem -->
+                                        </div>
+                                    </div>
+                                    <div class="button-cart d-flex justify-content-center mb-3 ">
+                                    <button type="button" class="btn btn-dark w-75"  ${product.stock < 1 ? 'disabled' : ''} style="${product.stock < 1 ? 'background-color: #636161;' : 'background-color:#1c346c;'} position: relative; bottom: 6px;">${product.stock < 1 ? 'Sem Estoque' : 'Cart'}</button>
+                                    </div>
+                                </a>
+                            </div>
+                        `;
+                        }
+
+                        $(".favorite").click(function (event) {
+                            event.preventDefault();
+
+                            var $heartIcon = $(this);
+
+                            if ($heartIcon.hasClass('bi-heart-fill')) {
+                                $heartIcon.removeClass('bi-heart-fill text-danger').addClass('favorite bi bi-suit-heart');
+
+                                const productId = $(this).data('product-id');
+                                $.ajax({
+                                    type: "POST",
+                                    url: "{{ path('delete_favorite_product') }}",
+                                    data: {productId: productId},
+                                    success: function (data) {
+                                        $heartIcon.removeClass('favorite');
+
+                                        $heartIcon.off('click');
+                                    }, error: function (e) {
+                                        Swal.fire({
+                                            position: 'center',
+                                            icon: 'error',
+                                            title: 'Ocorreu um erro!',
+                                            showConfirmButton: false,
+                                            timer: 2500
+                                        });
+                                    }
+                                });
+
+                            } else {
+                                var productId = $(this).data("product-id");
+                                var url = "/add_product_to_favorite/" + productId;
+                                $heartIcon.removeClass('favorite bi bi-suit-heart').addClass('bi-heart-fill text-danger');
+                                $.ajax({
+                                    url: url,
+                                    type: 'POST',
+                                    success: function (data) {
+                                        if (data.login) {
+                                            location.replace('/login');
+                                            return;
+                                        }
+
+                                        $heartIcon.removeClass('favorite');
+
+                                        $heartIcon.off('click');
+                                    },
+                                    error: function (e) {
+                                        Swal.fire({
+                                            position: 'center',
+                                            icon: 'error',
+                                            title: 'Ocorreu um erro!',
+                                            showConfirmButton: false,
+                                            timer: 2500
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                };
+
+                /**
+                 *
+                 * @param {int} id id tag
+                 * @param {int} size number of columns
+                 * @param {int} rows number of rows
+                 */
+                function productCarousel(id, size, rows) {
+                    $(function () {
+
+                        $(`#${id}`).slick({
+                            dots: true,
+                            rows: rows,
+                            // appendDots: '.slider-dots',
+                            prevArrow: '.prev',
+                            nextArrow: ".next",
+                            // arrows: true,
+                            infinite: false,
+                            slidesToScroll: size,
+                            slidesToShow: size,
+                            accessibility: true,
+                            variableWidth: false,
+                            focusOnSelect: false,
+                            centerMode: false,
+                            responsive: [
+                                {
+                                    breakpoint: 992,
+                                    settings: {
+                                        slidesToScroll: size,
+                                        slidesToShow: size
+                                    }
+                                },
+                                {
+                                    breakpoint: 600,
+                                    settings: {
+                                        slidesToScroll: size,
+                                        slidesToShow: size
+                                    }
+                                }
+                            ]
+                        });
+
+                    });
+                }
+
+
+                function createCategory(categoriesJson, divCategories) {
+                    for (const category of categoriesJson) {
+                        divCategories.innerHTML +=
+                            `<div class=" col-6 col-md-4 col-sm-4 col-lg-3 mb-4 ">
+                            <img height="250" style="border-radius: 19px;" class="card-img borderborder-radius-size" src="${category.image}"
+                                 alt="Card image">
+                            <div class="card-img-overlay  d-flex justify-content-center align-items-end ">
+                                <h5 class="card-title justify-content-end font-white">${category.name}</h5>
+                            </div>
+                        </div>
+                    </div>`
+                    }
+
+                };
+
+                $('.dropdown-item').click(function () {
+                    $("#products").removeClass("slick-initialized slick-slider");
+
+                    var categoryId = $(this).data('id');
+                    getProducts('', categoryId)
+                })
+
+
+                // iniciopag filtro de produtos
+
+                $(document).ready(function () {
+                    /**
+                     * Carregar categorias
+                     */
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ path('admin/get_categories') }}",
+                        success: function (categoriesJson) {
+
+                            createBrandsCard();
+                        }
+                    });
+
+                    var nav = function () {
+
+                        $('.gw-nav > li > a').click(function () {
+
+
+                            var gw_nav = $('.gw-nav');
+                            // gw_nav.find('li').removeClass('active');
+                            $('.gw-nav > li > ul > li').removeClass('active');
+
+                            var checkElement = $(this).parent();
+                            var ulDom = checkElement.find('.gw-submenu')[0];
+
+                            if (ulDom == undefined) {
+                                if ($(this).data('type') != 'title') {
+
+                                    // checkElement.addClass('active');
+                                }
+                                $('.gw-nav').find('li').find('ul:visible').slideUp();
+                                return;
+                            }
+
+                            if (checkElement.hasClass('active')) {
+                                checkElement.removeClass('active');
+
+                            } else {
+                                if (ulDom.style.display != 'block') {
+
+                                    gw_nav.find('li.init-arrow-up').removeClass('init-arrow-up').addClass('arrow-down');
+                                    gw_nav.find('li.arrow-up').removeClass('arrow-up').addClass('arrow-down');
+                                    checkElement.removeClass('init-arrow-down');
+                                    checkElement.removeClass('arrow-down');
+                                    checkElement.addClass('arrow-up');
+                                    checkElement.addClass('active');
+                                } else {
+
+
+                                }
+                            }
+
+                        });
+
+                        $('.gw-nav > li > ul > li > a').click(function () {
+                            $(this).parent().parent().parent().removeClass('active');
+                            $('.gw-nav > li > ul > li').removeClass('active');
+                            $(this).parent().addClass('active')
+                        });
+                    };
+                    nav();
+
+                    // fim filtro de produtos
+
+                    $(document).ready(function () {
+                        $('.js-example-basic-multiple').select2({tags: true});
+                    });
+
+
+                });
+
+
+                function getFilters(filter) {
+                    $.ajax({
+                        type: "GET",
+                        url: `/admin/get_${filter}`,
+                        success: function (filtersJson) {
+                            var ul = document.getElementById(`${filter}-filter`);
+                            ul.innerHTML = '';
+
+                            for (const filterJson of filtersJson) {
+                                ul.innerHTML +=
+                                    `<li class="ps-3">
+                            <div class="form-check">
+                                <input class="form-check-input ${filter} ${filterJson.name.replaceAll(' ', '')} checkbox-item ipt-menu brand-checkbox"
+                                    type="checkbox"
+                                    name="${filter}[]"
+                                    id="flexCheckDefault"
+                                    value="${filterJson.id}" data-name="${filterJson.name}">
+                                <label class="form-check-label fs-5 lb-menu ps-2" for="flexCheckDefault">
+                                    ${filterJson.name}
+                                </label>
+                            </div>
+                        </li>`
+                            }
+
+                            $(`.${filter}`).click(function () {
+                                var name = $(this).data('name');
+                                if (!$(this).is(":checked")) {
+                                    removerFiltroPorNome(name)
+                                } else {
+
+                                    adicionarFiltro(name);
+                                }
+
+                            })
+                        }
+                    });
+
+
+                }
+
+
+                function getFilters(filter) {
+                    $.ajax({
+                        type: "GET",
+                        async: true,
+                        url: `/admin/get_${filter}`,
+                        success: function (filtersJson) {
+                            var ul = document.getElementById(`${filter}-filter`);
+                            var ulMobile = document.getElementById(`${filter}-filter-mobile`);
+                            ul.innerHTML = '';
+                            ulMobile.innerHTML = '';
+
+                            for (const filterJson of filtersJson) {
+                                ul.innerHTML +=
+                                    `<li class="ps-3">
+                            <div class="form-check">
+                                <input class="form-check-input ${filter} ${filterJson.name.replaceAll(' ', '')} checkbox-item ipt-menu brand-checkbox"
+                                    type="checkbox"
+                                    name="${filter}[]"
+                                    id="flexCheckDefault"
+                                    value="${filterJson.id}" data-name="${filterJson.name}">
+                                <label class="form-check-label fs-5 lb-menu ps-2" for="flexCheckDefault">
+                                    ${filterJson.name}
+                                </label>
+                            </div>
+                        </li>`;
+
+                                ulMobile.innerHTML +=
+                                    `<li class="ps-3">
+                            <div class="form-check">
+                                <input class="form-check-input ${filter} ${filterJson.name.replaceAll(' ', '')} checkbox-item ipt-menu brand-checkbox"
+                                    type="checkbox"
+                                    name="${filter}-mobile[]"
+                                    id="flexCheckDefault"
+                                    value="${filterJson.id}" data-name="${filterJson.name}">
+                                <label class="form-check-label fs-5 lb-menu ps-2" for="flexCheckDefault">
+                                    ${filterJson.name}
+                                </label>
+                            </div>
+                        </li>`
+                            }
+
+                            $(`.${filter}`).click(function () {
+                                var name = $(this).data('name');
+                                if (!$(this).is(":checked")) {
+                                    removerFiltroPorNome(name)
+                                } else {
+
+                                    adicionarFiltro(name);
+                                }
+
+                            });
+
+                        }
+                    });
+
+
+                }
+
+                $(".js-range-slider").ionRangeSlider({
+                    type: "double",
+                    skin: "round",
+                    min: {{ minPrice }},
+                    max: {{ maxPrice }},
+                    from: {{ minPrice }},
+                    to: {{ maxPrice }},
+                    grid: true,
+                    prefix: "€"
+                });
+
+                $(".js-range-slider-mobile").ionRangeSlider({
+                    type: "double",
+                    skin: "round",
+                    min: {{ minPrice }},
+                    max: {{ maxPrice }},
+                    from: {{ minPrice }},
+                    to: {{ maxPrice }},
+                    grid: true,
+                    prefix: "€"
+                });
+
+
+                function loadFilter() {
+                    getFilters('brands');
+                }
+
+                loadFilter()
+
+
+                $(".btn-search-div").click(function () {
+                    // $("#products").removeClass("slick-initialized slick-slider");
+                    // getProducts($('.search-bar').val(), '');
+                    location.replace(`/store?search=${$('.search-bar').val()}`)
+
+                })
+
+                $(".search-bar").keyup(function (e) {
+                    // $("#products").removeClass("slick-initialized slick-slider");
+                    // getProducts($('.search-bar').val(), '');
+                    if (e.key == 'Enter') {
+
+                        location.replace(`/store?search=${$('.search-bar').val()}`)
+                    }
+
+                })
+
+                // inicio filtros exibidos
+
+                let filtrosSelecionados = [];
+
+                // Referência para o input
+                const filtroInput = document.getElementById('filtro');
+
+                // Referência para a div de filtros selecionados
+                const filtrosSelecionadosDiv = document.getElementById('filtros-selecionados');
+
+                // Função para adicionar um filtro selecionado
+                function adicionarFiltro(filtro) {
+
+                    if (filtro !== '') {
+                        filtrosSelecionados.push(filtro);
+
+                        // Cria a tag do filtro selecionado
+                        const tag = document.createElement('div');
+                        tag.classList.add('tag');
+                        tag.innerHTML = filtro;
+
+                        // Cria o botão para remover o filtro
+                        const removerBtn = document.createElement('span');
+                        removerBtn.classList.add('remover');
+
+                        removerBtn.setAttribute("data-filter", `${filtro}`);
+
+                        removerBtn.innerHTML = 'x';
+                        removerBtn.addEventListener('click', function () {
+                            removerFiltro(filtro);
+                        });
+
+                        // Adiciona o botão à tag do filtro
+                        tag.appendChild(removerBtn);
+
+                        // Adiciona a tag à div de filtros selecionados
+                        filtrosSelecionadosDiv.appendChild(tag);
+
+                    }
+                }
+
+                // Função para remover um filtro selecionado
+                function removerFiltro(filtro) {
+                    $(`.${filtro.replaceAll(' ', '')}`).prop("checked", false);
+
+                    filtrosSelecionados = filtrosSelecionados.filter(f => f !== filtro);
+                    atualizarFiltrosSelecionados();
+                }
+
+                function removerFiltroPorNome(nomeFiltro) {
+
+                    filtrosSelecionados = filtrosSelecionados.filter(filtro => filtro !== nomeFiltro);
+                    atualizarFiltrosSelecionados();
+                }
+
+                // Função para atualizar a exibição dos filtros selecionados
+                function atualizarFiltrosSelecionados() {
+                    filtrosSelecionadosDiv.innerHTML = '';
+
+                    filtrosSelecionados.forEach(filtro => {
+                        const tag = document.createElement('div');
+                        tag.classList.add('tag');
+                        tag.innerHTML = filtro;
+
+                        const removerBtn = document.createElement('span');
+                        removerBtn.classList.add('remover');
+                        removerBtn.innerHTML = 'x';
+                        removerBtn.addEventListener('click', function () {
+                            removerFiltro(filtro);
+                        });
+
+                        tag.appendChild(removerBtn);
+                        filtrosSelecionadosDiv.appendChild(tag);
+                    });
+                }
+
+
+                // fim filtros exibidos
+
+                function createDropdownMenu(categories) {
+                    var dropdownMenu = document.createElement('ul');
+                    dropdownMenu.classList.add('gw-submenu');
+                    // dropdownMenu.classList.add('dropdown-toggle');
+
+                    for (var i = 0; i < categories.length; i++) {
+                        var category = categories[i];
+                        var listItem = document.createElement('li');
+
+                        if (category.divider) {
+                            var divider = document.createElement('hr');
+                            divider.classList.add('dropdown-divider');
+                            listItem.appendChild(divider);
+                        } else {
+                            var link = document.createElement('a');
+                            link.classList.add('dropdown-item');
+                            if (category.subcategories && category.subcategories.length > 0) {
+                                link.classList.add('dropdown-toggle');
+                                link.classList.add('textblack');
+                            }
+
+
+                            link.setAttribute('data-id', category.id);
+                            // link.href = `/STORE?categoryId=${category.id}`;
+                            link.innerText = category.name;
+                            listItem.appendChild(link);
+
+                            if (category.subcategories && category.subcategories.length > 0) {
+                                var subMenu = createDropdownMenu(category.subcategories);
+                                subMenu.classList.add('dropdown-menu');
+                                subMenu.classList.add('subcategory');
+                                subMenu.classList.add('dropend');
+
+                                listItem.classList.add('dropdown-submenu');
+                                listItem.appendChild(subMenu);
+                            }
+                        }
+
+                        dropdownMenu.appendChild(listItem);
+                    }
+
+                    return dropdownMenu;
+                }
+
+                var selectedCategories = [];
+
+                function loadCategories() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ path('admin/get_categories_menu') }}",
+                        success: function (categoriesJson) {
+                            var ul = document.getElementById('categories')
+                            ul.innerHTML = '';
+
+                            var ulMobile = document.getElementById('categories-mobile')
+                            ulMobile.innerHTML = '';
+
+
+                            createCategoryMenu(categoriesJson, ul, ulMobile);
+
+
+                        }
+                    });
+                }
+
+                loadCategories();
+
+
+            </script>
+
+
+        {% endblock %}
+

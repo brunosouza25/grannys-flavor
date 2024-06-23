@@ -1,0 +1,212 @@
+{% block body %}
+    <link  href="/node_modules/cropperjs/dist/cropper.css" rel="stylesheet">
+
+    <div class="col-lg-11">
+
+        <div class="container px-4">
+
+            <div class="row" id="table_items">
+
+            </div>
+            <hr>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr class="col-lg-11">
+                        <th class="col-1" scope="col">#</th>
+                        <th class="col-1" scope="col">Nome</th>
+                        <th class="col-1" scope="col">Grade Tipo</th>
+                        <th class="col-1" scope="col">Posição</th>
+                        <th class="col-1" scope="col">Editar</th>
+                        <th class="col-1" scope="col">Excluir</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_grid">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="/node_modules/cropperjs/dist/cropper.js"></script>
+    <script src="/node_modules/jquery-cropper/dist/jquery-cropper.js"></script>
+
+    <script>
+
+
+        var tableGrid = document.getElementById('table_grid');
+        loadingTableGrid('grid', tableGrid)
+
+        function loadingTableGrid(type, table) {
+            const tableItems = document.getElementById('table_items');
+
+            tableItems.innerHTML = `<div class="col-8">
+                    <label for="${type}_name">Nome</label>
+                    <input name="${type}_name" id="${type}_name" type="text" class="col-12">
+
+                    <label for="${type}_name">Grade tipo</label>
+                    <div class="col-8">
+                        <select class="col-12" name="grid_type" id="grid_type">
+                            <option value="0" selected>Tamanho</option>
+                            <option value="1">Cor</option>
+                        </select>
+
+                    </div>
+
+                        <div class="col-12 mt-3">
+                        <label for="${type}_position" class="col-12">Posição</label>
+
+                        <input name="${type}_position" type="number" id="${type}_position" value="0">
+                        </div>
+
+                </div>
+
+                <br>
+                <div class="col-3 dark">
+                    <button class="btn btn-dark" id="new_${type}">Criar novo</button>
+
+                </div>`;
+            table.innerHTML = '';
+
+            $.ajax({
+                url: `get_${type}s`,
+                type: 'POST',
+                async: false,
+                success: function (itemsJson) {
+                    for (const item of itemsJson) {
+                        table.innerHTML += `
+                            <tr>
+                                <td>#${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.type == 0 ? 'Tamanho' : 'Cor'}</td>
+                                <td>${item.position_sort == null ? '0' : item.position_sort}</td>
+                                <td><a href="#" data-grid_type="${item.type == 0 ? 0 : 1}" class="edit_${type}" data-${type}_id="${item.id}" data-${type}_name="${item.name}" ><i class="bi bi-pencil-square black 50"></i></a></td>
+                                <td><a href="#" class="delete_${type}" data-${type}_id="${item.id}"><i class="bi bi-trash black 50"></i></a></td>
+                            </tr>`
+                    }
+
+                    /**
+                     * /new_grid
+                     */
+                    $(`#new_${type}`).click(function () {
+
+                        if($(`#${type}_name`).val().length < 1){
+                            $.alert({
+                                title: 'Nome vazio!',
+                                content: 'Favor inserir um nome',
+                            });
+                            return;
+                        }
+
+                        $.ajax({
+                            url: `new_${type}`,
+                            type: 'POST',
+                            data: {
+                                itemName: $(`#${type}_name`).val(),
+                                itemType: $(`#${type}_type`).val(),
+                                itemPosition: $(`#${type}_position`).val()
+                            },
+                            success: function () {
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Cadastrado com sucesso',
+                                });
+                                loadingTableGrid(type, table)
+
+                            }
+                        })
+                    })
+
+                    $(`.delete_${type}`).click(function () {
+                        const itemId = $(this).data(`${type}_id`);
+                        $.confirm({
+                            title: 'Apagar!',
+                            content: `Você tem certeza?! <br>
+                                       Isso irá desvincular todos os produtos a esse grid`,
+                            buttons: {
+                                confirm: function () {
+                                    $.ajax({
+                                        url: `delete_${type}`,
+                                        type: 'POST',
+                                        data: {itemId: itemId},
+                                        success: function () {
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Apagado com sucesso',
+                                            });
+                                            loadingTableGrid(type, table)
+                                        }
+                                    })
+                                },
+                                Cancelar: function () {
+
+                                }
+
+                            }
+                        });
+
+                    })
+
+                    $(`.edit_${type}`).click(function () {
+                        const itemId = $(this).data(`${type}_id`);
+                        const itemName = $(this).data(`${type}_name`);
+                        const itemType = $(this).data(`${type}_type`);
+                        var url = `/admin/get_edit_grid?itemId=${itemId}&itemName=${itemName}&itemType=${itemType}&type=${type}`;
+                        $.confirm({
+                            async: true,
+                            title: 'Editar',
+                            columnClass: 'col-md-8',
+                            content: `URL:${url}`,
+                            buttons: {
+                                Confirmar: function () {
+                                    $.ajax({
+                                        url: `edit_${type}`,
+                                        type: 'POST',
+                                        data: {
+                                            itemId: itemId,
+                                            itemName: $(`#${type}_name_edit`).val(),
+                                            itemType: $(`#${type}_type_edit`).val(),
+                                            itemPosition: $(`#${type}_position_edit`).val(),
+                                        },
+
+                                        success: function () {
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Editado com sucesso',
+                                            });
+                                            loadingTableGrid(type, table)
+                                        }
+                                    })
+
+                                },
+                                Cancelar: function () {
+                                },
+                            }
+
+                        });
+
+                    })
+
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+
+        }
+
+
+    </script>
+
+{% endblock %}

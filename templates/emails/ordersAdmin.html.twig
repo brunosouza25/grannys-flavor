@@ -1,0 +1,46 @@
+{% block body %}
+    <h2 style="text-align: center; margin-top: 20px;">Order ID: #{{ emailInfo.orderId }}</h2>
+    <strong>Order date:</strong> <br>
+    {{ emailInfo.time }} <br> <br>
+
+    <strong>Costumer Details: </strong> <br>
+    {{ emailInfo.costumerInfo.name }} <br>
+    {{ emailInfo.costumerInfo.email }} <br>
+    {{ emailInfo.costumerInfo.contact }} <br>
+
+    {% if emailInfo.costumerAddress is defined %}
+        <br><strong>Endereço:</strong> <br>
+        {{ emailInfo.costumerAddress.street }} <br>
+        {{ emailInfo.costumerAddress.city }} <br>
+        {{ emailInfo.costumerAddress.postalcode }} <br>
+    {% endif %}
+
+    <hr style="border: 1px solid #ccc; margin: 20px 0;">
+
+
+    <strong>Order Details: </strong> <br>
+
+    {% for product in emailInfo.products %}
+
+        <div style="display: flex; align-items: center; padding-top: 10px">
+            <div>
+                <strong> {{ product.qtd }} x </strong>  {{ product.item }} <br>
+
+                          - (small / black)
+
+            </div>
+        </div>
+
+    {% endfor %}
+    <hr style="border: 1px solid #ccc; margin: 20px 0;">
+
+    Shipping fee: € {{ (emailInfo.feePrice / 100) | number_format(2) }} <br>
+    <br>
+    Total: € {{ ((((emailInfo.total ) / 100) | number_format(2)) + ((emailInfo.feePrice / 100) | number_format(2))) | number_format(2) }}
+
+    </div>
+
+    </body>
+    </html>
+
+{% endblock %}

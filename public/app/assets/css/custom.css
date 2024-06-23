@@ -1,0 +1,123 @@
+.map-section{
+    width: 100%;
+    height: 55vh;
+}
+.location{
+    margin-top: 1rem;
+}
+.location-box{
+    margin: 5px;
+    border: 1px solid #eaeaea;
+    padding: 26px;
+}
+.custom-btn-app{
+    width: 100%;
+    background-color: #f7d00c;
+    height: 45px;
+    color: #000;
+    font-size: 19px;
+    font-weight: 700;
+}
+.alert-phone-data{
+    display: none;
+}
+
+.option-title-cart{
+    font-size: 20px;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+.required-option{
+    font-size: 15px;
+    color: #918e8e;
+}
+.box-check-item{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0.5rem;
+    background-color: #fff;
+    font-size: 16px;
+    color: #616161;
+}
+.checkgroup{
+    border-bottom: 1px solid #ccc;
+    padding: 0.5rem;
+}
+.checkgroup-regular{
+    border-bottom: 1px solid #ccc;
+    padding: 0.5rem;
+}
+.checkgroup:last-child{
+    border: none;
+}
+
+
+.checkgroup-regular:last-child{
+    border: none;
+}
+.checkgroup label{
+    width: 100% ;
+}
+
+.checkgroup-regular label{
+    width: 100% ;
+}
+.checkgroup input{
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+    vertical-align: sub;
+    accent-color: #e53630;
+}
+.checkgroup-regular input{
+    margin-right: 1rem;
+    width: 20px;
+    height: 20px;
+    vertical-align: sub;
+    accent-color: #e53630;
+}
+
+.checkgroup.active{
+    background-color: #e53630;
+    color: #fff;
+}
+.checkgroup.active span{
+    color: #fff;
+}
+.hide-multiple-options{
+    display: none;
+}
+.item-price-mt{
+    float: right;
+    font-weight: 700;
+    color: #000;
+}
+.add-to-cart-section{
+    display: none;
+}
+.cart-item-img{
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+ .title-span{
+    font-weight: 800;
+}
+ .price-list-item{
+     float: right;
+     position: absolute;
+     top: 1%;
+     right: 1%;
+     font-size: 1.3rem !important;
+     color: #e6352f;
+     font-weight: 700;
+ }
+ .item-size-title{
+     font-size: 11px;
+ }
+.product-list.media .media-body {
+    width: calc(100% - 60px) !important;
+}
+.hide-confirm-payment{
+    display: none;
+}

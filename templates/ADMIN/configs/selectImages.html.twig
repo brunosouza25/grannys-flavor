@@ -1,0 +1,518 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+
+<div class="col-lg-5">
+    <div class="dsp container">
+        <h5>Carregar Logo (SOMENTE PNG)</h5>
+        <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-lg-12 pakainfo">
+                    {% for image in images %}
+                        {% if image.type == 'logo' %}
+                            <div>
+                            <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <input type="file" accept="image/png" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                    <input name="type" hidden value="logo">
+                    <hr>
+                    <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                </div>
+                <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Banner 1</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'banner1' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="banner1">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Banner 2</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'banner2' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="banner2">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Banner 3</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'banner3' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="banner3">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Banner 4</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'banner4' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="banner4">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Delivery</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'delivery' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="delivery">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 1</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'image1' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="image1">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 2</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'image2' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="image2">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 3</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'image3' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="image3">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 4</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'image4' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="image4">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+    <h2>Sobre Nós</h2>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 1</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'imageaboutus1' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="imageaboutus1">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 2</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'imageaboutus2' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="imageaboutus2">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 3</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'imageaboutus3' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="imageaboutus3">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 4</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'imageaboutus4' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="imageaboutus4">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 5</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'imageaboutus5' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="imageaboutus5">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 6</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'imageaboutus6' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="imageaboutus6">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="dsp container">
+            <h5>Carregar Imagem 7</h5>
+            <form action="method" name="upload-file" id="multiple-files-upload" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-12 pakainfo">
+                        {% for image in images %}
+                            {% if image.type == 'imageaboutus7' %}
+                                <div>
+                                    <img src="/{{ image.path }}" alt="{{ image.path }}" width="150px" height="150px">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <input type="file" name="products_uploaded[]" id="products_uploaded" value="Upload" multiple="multiple">
+                        <input name="type" hidden value="imageaboutus7">
+                        <hr>
+                        <span class="input-group-btn">
+                                                <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">Carregar</button>
+                                              </span>
+
+                    </div>
+                    <div class="col-lg-12" id="display_product_list"><ul></ul></div>
+                </div>
+            </form>
+        </div>
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $("form#multiple-files-upload").submit(function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            $.ajax({
+                url: '{{ path('admin/select_images') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+
+                success: function(data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adicionado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function(e) {
+
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

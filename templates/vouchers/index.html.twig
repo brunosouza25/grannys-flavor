@@ -1,0 +1,192 @@
+
+    <div class="col-12">
+        <div class="card">
+
+            <div class="card-body">
+                <div class="row" id="table_items">
+
+                </div>
+                <hr>
+                <div class="table-responsive">
+                    <table id="vouchersTable" class="display table table-hover table-responsive-sm" style="min-width: 845px">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Voucher</th>
+                                    <th>Desconto %</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                        <tbody id="table_voucher">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        var tableVoucher = document.getElementById('table_voucher');
+        loadingTableVoucher('voucher', tableVoucher)
+
+        function loadingTableVoucher(type, table) {
+            const tableItems = document.getElementById('table_items');
+
+            tableItems.innerHTML = `<div class="col-8">
+
+                    <label for="${type}_name">Nome</label>
+                    <input name="${type}_name" id="${type}_name" type="text" class="col-12">
+
+                    <label for="${type}_percentage">Porcentagem</label>
+                    <br>
+                    <div class="col-12">
+                        <input name="${type}_percentage" id="${type}_percentage" type="number" class="col-2">
+                        <span>%</span>
+                    </div>
+                    <div class="form-check col-12 mt-2">
+                      <input class="form-check-input" type="checkbox" value="" id="${type}_active">
+                         <label for="${type}_active" class="col-2">Ativo
+                      </label>
+                    </div>
+
+
+
+                </div>
+
+                <br>
+                <div class="col-3 dark">
+                    <button class="btn btn-dark" id="new_${type}">Criar novo</button>
+
+                </div>`;
+            table.innerHTML = '';
+
+            $.ajax({
+                url: `/get_${type}s`,
+                type: 'POST',
+                async: false,
+                success: function (itemsJson) {
+                    for (const item of itemsJson) {
+                        table.innerHTML += `
+                            <tr>
+                                <td>#${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.percentage}</td>
+                                <td>${item.active ? `<b data-voucher-id='${item.id}' class='state-change alert-success p-2'>Ativo</b>`: `<b data-voucher-id='${item.id}' class='state-change alert-danger p-2'>Desativado</b>`}</td>
+
+                            </tr>`
+                    }
+
+                    /**
+                     * /new_voucher
+                     */
+                    $(`#new_${type}`).click(function () {
+
+                        if($(`#${type}_name`).val().length < 1){
+                            $.alert({
+                                title: 'Nome vazio!',
+                                content: 'Favor inserir um nome',
+                            });
+                            return;
+                        }
+
+                        $.ajax({
+                            url: `/new_${type}`,
+                            type: 'POST',
+                            data: {
+                                itemName: $(`#${type}_name`).val(),
+                                itemPercentage: $(`#${type}_percentage`).val(),
+                                itemActive: $(`#${type}_active`).is(':checked')
+                            },
+                            success: function () {
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Cadastrado com sucesso',
+                                });
+                                loadingTableVoucher(type, table)
+
+                            }
+                        })
+                    })
+
+
+
+                    // $(`.edit_${type}`).click(function () {
+                    //     const itemId = $(this).data(`${type}_id`);
+                    //     const itemName = $(this).data(`${type}_name`);
+                    //     const itemType = $(this).data(`${type}_type`);
+                    //     var url = `/admin/get_edit_voucher?itemId=${itemId}&itemName=${itemName}&itemType=${itemType}&type=${type}`;
+                    //     $.confirm({
+                    //         async: true,
+                    //         title: 'Editar',
+                    //         columnClass: 'col-md-8',
+                    //         content: `URL:${url}`,
+                    //         buttons: {
+                    //             Confirmar: function () {
+                    //                 $.ajax({
+                    //                     url: `edit_${type}`,
+                    //                     type: 'POST',
+                    //                     data: {
+                    //                         itemId: itemId,
+                    //                         itemName: $(`#${type}_name_edit`).val(),
+                    //                         itemType: $(`#${type}_type_edit`).val(),
+                    //                         itemPosition: $(`#${type}_position_edit`).val(),
+                    //                     },
+                    //
+                    //                     success: function () {
+                    //                         $.alert({
+                    //                             title: 'Sucesso!',
+                    //                             content: 'Editado com sucesso',
+                    //                         });
+                    //                         loadingTableVoucher(type, table)
+                    //                     }
+                    //                 })
+                    //
+                    //             },
+                    //             Cancelar: function () {
+                    //             },
+                    //         }
+                    //
+                    //     });
+                    //
+                    // })
+
+                    $(`.state-change`).click(function () {
+                        const voucherId = $(this).data(`voucher-id`);
+
+                        $.ajax({
+                            url: `/change_voucher_state`,
+                            type: 'POST',
+                            data: {
+                                voucherId: voucherId,
+                            },
+                            success: function () {
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Editado com sucesso',
+                                });
+                                loadingTableVoucher(type, table)
+                            }
+                        })
+
+                    })
+
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+
+        }
+
+
+    </script>
+

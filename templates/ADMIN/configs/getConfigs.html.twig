@@ -1,0 +1,168 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}{{ titlePage }}{% endblock %}
+
+{% block body %}
+
+    <div class="col-lg-12">
+        <div class="dsp container">
+            <h4>Configurações gerais</h4>
+            <br>
+            <form action="method" name="upload-file" id="save-config" enctype="multipart/form-data">
+                <div class="container px-4">
+                    <h5>Configurações da empresa</h5>
+                    <div class="row">
+
+                        <div class="col-6">
+                            <label for="address">Endereço</label>
+                            <input name="address" id="address" type="text" value="{{ configs.address }}" class="col-12">
+                        </div>
+
+                        <div class="col-3">
+                            <label for="nif">NIF</label>
+                            <input name="nif" id="nif" type="text" value="{{ configs.nif }}" class="col-12">
+                        </div>
+
+                        <div class="col-3">
+                            <label for="phone1">Telefone 1</label>
+                            <input name="phone1" id="phone1" type="text" value="{{ configs.phone1 }}" class="col-12">
+                        </div>
+
+                        <div class="col-3">
+                            <label for="phone2">Telefone 2</label>
+                            <input name="phone2" id="phone2" type="text" value="{{ configs.phone2 }}" class="col-12">
+                        </div>
+
+                        <div class="col-4">
+                            <label for="emailUserName">Email</label>
+                            <input name="emailUserName" id="emailUserName" type="text" value="{{ configs.emailusername }}" class="col-12">
+                        </div>
+
+                        <div class="col-4">
+                            <label for="emailHost">Email Host</label>
+                            <input name="emailHost" id="emailHost" type="text" value="{{ configs.emailhost }}" class="col-12">
+                        </div>
+
+                        <div class="col-4">
+                            <label for="emailContact">Email contacto</label>
+                            <input name="emailContact" id="emailContact" type="text" value="{{ configs.emailContact }}" class="col-12">
+                        </div>
+
+                        <div class="col-4">
+                            <label for="companyname">Nome da Empresa</label>
+                            <input name="companyname" id="companyname" type="text" value="{{ configs.companyName }}" class="col-12">
+                        </div>
+
+{#                        <div class="col-4">#}
+{#                            <label for="hoursopen">Horário funcionamento</label>#}
+{#                            <input name="hoursopen" id="hoursopen" type="text" value="{{ configs.hoursopen }}" class="col-12">#}
+{#                        </div>     #}
+
+                        <div class="col-4">
+                            <label for="hoursopen">Taxa de entrega fixa</label>
+                            <input name="fee" id="fee" type="text" value="{{ configs.fixedFee }}" class="col-12 inputNumber">
+                        </div>
+                        {#                        <label for="nif">NIF</label> #}
+                        {#                        <input type="text" class="col-lg-4"> #}
+
+                    </div>
+                    <hr>
+                    <h5>Redes sociais</h5>
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="instagram">Instagram</label>
+                            <input name="instagram" id="instagram" type="text" value="{{ configs.instagram }}" class="col-12">
+                        </div>
+
+                        <div class="col-4">
+                            <label for="facebook">Facebook</label>
+                            <input name="facebook" id="facebook" type="text" value="{{ configs.facebook }}" class="col-12">
+                        </div>
+
+                        <!--<div class="col-4">
+                            <label for="tripadvisorLink">TripAdvisor Link</label>
+                            <input name="tripadvisorlink" id="tripadvisorlink" type="text" value="{{ configs.tripadvisorLink }}" class="col-12">
+                        </div>-->
+
+                        <div class="col-4">
+                            <label for="youtubeLink">YouTube Link</label>
+                            <input name="youtubeLink" id="youtubeLink" type="text" value="{{ configs.youtubeLink }}" class="col-12">
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <h5>Stripe</h5>
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="customerid">Live Token</label>
+                            <input name="token" id="token" type="text" value="{{ stripe.token ?? '' }}" class="col-12">
+                        </div>
+
+                        <div class="col-4">
+                            <label for="customerid">Developer Token</label>
+                            <input name="tokenDev" id="tokenDev" type="text" value="{{ stripe.devToken ?? '' }}" class="col-12">
+                        </div>
+                    </div>
+
+
+
+                    <br>
+                    <br>
+                    <button type="submit" name="submit" id="submit" class="ml-3 btn btn-primary dsp" type="button">
+                        Salvar configurações
+                    </button>
+                    <div class="col-lg-12" id="display_product_list">
+                        <ul></ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $("form#save-config").submit(function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            $.ajax({
+                url: '{{ path('admin/set_configs') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+
+                success: function (data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Atualizado',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function (e) {
+                    console.log(e);
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <div class="main-wrap order-success-page mb-xxl">
+        <!-- Banner Section Start -->
+        <div class="banner-section section-p-tb">
+            <div class="banner-wrap">
+                <img src="{{ asset('app/assets/svg/order-success.svg') }}" alt="order-success" />
+            </div>
+            <div class="content-wrap">
+                <h1 class="font-lg title-color">Obrigado pelo seu Pedido!</h1>
+                <p class="font-sm content-color">Fabios Roadstop recebeu o seu pedido!</p>
+            </div>
+
+        </div>
+        <!-- Banner Section End -->
+
+        <!-- Order Id Section Start -->
+        <div class="order-id-section section-p-tb">
+            <div class="media">
+                <span><i class="iconly-Calendar icli"></i></span>
+                <div class="media-body">
+                    <h2 class="font-sm color-title">Data e Hora do Pedido</h2>
+                    <span class="content-color">{{ order.dateorder }} / {{ order.timeorder }}</span>
+                </div>
+            </div>
+            <div class="media">
+                <span><i class="iconly-Document icli"></i></span>
+                <div class="media-body">
+                    <h2 class="font-sm color-title">Numero do Pedido</h2>
+                    <span class="content-color">#{{order.ordernr}}</span>
+                </div>
+            </div>
+        </div>
+        <!-- Order Id Section End -->
+
+{#        <div class="cart-item-wrap pt-0">#}
+{#            {% for item in items %}#}
+{#                <div class="swipe-to-show">#}
+{#                    <div class="product-list media">#}
+{#                        <div class="link">#}
+{#                            <div class="img">#}
+{#                                <img class="cart-item-img" src="{{ bo_url }}{{ item.image }}">#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="media-body">#}
+{#                            <a href="javascript:void(0)" class="font-sm"> {{item.item}} </a>#}
+{#                            {% if item.type == 'multiple' %}#}
+{#                                <div class="item-size-title">#}
+{#                                    <span class="title-span">Tamanho:</span>#}
+{#                                    {% for size in sizes %}#}
+{#                                        {% if size.id == item.sizeid %}#}
+{#                                            <span>{{ size.itemname }}</span> - <span><b>({{ size.itemprice }} €)</b></span>#}
+{#                                        {% endif %}#}
+{#                                    {% endfor %}#}
+{#                                </div>#}
+{#                                <div class="item-size-title">#}
+{#                                    {% for extra in extras %}#}
+{#                                        {% for adicinalitem in extraitems.0 %}#}
+{#                                            {% for adicionalcat in extracat %}#}
+{#                                                {% if adicionalcat.id == adicinalitem.idadicional %}#}
+{#                                                    {% if extra.extraid == adicinalitem.id and extra.itemid == item.id %}#}
+{#                                                        <div class="item-size-title">#}
+{#                                                            <span class="title-span">{{adicionalcat.name}}:</span>#}
+{#                                                            <span>{{ adicinalitem.name }}</span> - <span><b>({{ adicinalitem.price }} €)</b></span>#}
+{#                                                        </div>#}
+{#                                                    {% endif %}#}
+{#                                                {% endif %}#}
+{#                                            {% endfor %}#}
+
+{#                                        {% endfor %}#}
+{#                                    {% endfor %}#}
+{#                                </div>#}
+{#                            {% endif %}#}
+{#                            <span class="price-list-item title-color font-sm" style="      font-size: 1.3rem !important;"><span> {{item.price}} €</span></span>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        </div>#}
+
+
+        <!-- Order Detail Start -->
+{#        <div class="order-detail">#}
+{#            <h3 class="title-2">Order Summary:</h3>#}
+{#            <!-- Product Detail  Start -->#}
+{#            <ul>#}
+{#                <li>#}
+{#                    <span>Bag total</span>#}
+{#                    <span>$220.00</span>#}
+{#                </li>#}
+
+{#                <li>#}
+{#                    <span>Bag savings</span>#}
+{#                    <span class="font-theme">-$20.00</span>#}
+{#                </li>#}
+
+{#                <li>#}
+{#                    <span>Coupon Discount</span>#}
+{#                    <span> <a href="offer.html" class="font-danger">Apply Coupon</a></span>#}
+{#                </li>#}
+
+{#                <li>#}
+{#                    <span>Delivery</span>#}
+{#                    <span>$50.00</span>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <span>Total Amount</span>#}
+{#                    <span>$270.00</span>#}
+{#                </li>#}
+{#            </ul>#}
+{#            <!-- Product Detail  End -->#}
+{#        </div>#}
+        <!-- Order Detail End -->
+    </div>
+{% endblock %}

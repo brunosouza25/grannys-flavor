@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <div class="mad-breadcrumb with-bg-image" data-bg-image-src="{{ banner.path }}">
+        <div class="container">
+            <h1 class="mad-page-title">Notícias</h1>
+            <nav class="mad-breadcrumb-path"><span><a href="{{ path('app_default') }}">Home</a></span> / <span>Notícias</span>
+            </nav>
+        </div>
+    </div>
+    <div class="mad-content no-pd">
+        <div class="container">
+            <div class="mad-section">
+                <div class="row justify-content-center">
+                    <main id="main" class="col-xl-9">
+                        <!--================ Image Boxes ================-->
+                        <div class="mad-entities with-big-date with-img type-3 mad-entities-big">
+                            {% for blog in blogs %}
+                            <div class="mad-col">
+                                <article class="mad-entity">
+                                    <div class="mad-entity-media">
+                                        <a href="{{ path('app_blog_detail', {'referencekey': blog.reference}) }}"><img src="{{ bo_url }}{{ blog.image }}" alt=""></a>
+                                    </div>
+                                    <div class="mad-entity-body">
+                                        <span class="mad-entity-date"><span>{{ blog.date }}</span></span>
+                                        <div class="mad-entity-content">
+                                            <h3 class="mad-entity-title"><a href="{{ path('app_blog_detail', {'referencekey': blog.reference}) }}" class="mad-link">{{ blog.title }}</a></h3>
+                                            <div class="textshortblog"> {{ blog.text|raw }}</div>
+                                            <div class="mad-entity-footer">
+                                                <a href="{{ path('app_blog_detail', {'referencekey': blog.reference}) }}" class="mad-read-more size-2">Ler Mais</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                             {% endfor %}
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

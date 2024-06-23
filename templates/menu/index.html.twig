@@ -1,0 +1,233 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <div class="mad-breadcrumb with-bg-image mt-5" data-bg-image-src="{{ banner.path }}">
+        <div class="container">
+            <h1 class="mad-page-title">MENU</h1>
+            <nav class="mad-breadcrumb-path"><span><a href="{{ path('app_default') }}">Home</a></span> / <span>Menu</span>
+            </nav>
+        </div>
+    </div>
+    <!--================ End of Breadcrumb ================-->
+    <div class="mad-content no-pd">
+        <div class="container">
+            <div class="mad-section">
+                <!--================ Tabs ================-->
+                <div class="mad-tabs">
+                    <div class="mad-tabs-container">
+                        <!--================ Tab ================-->
+                        <div id="tab-1" tabindex="0" role="tabpanel" aria-labelledby="tab-1-link" class="mad-tab">
+                            <div class="mad-specs-section">
+
+                                {% for category in categories %}
+                                        {% if loop.index0 % 2 == 0 %}
+                                            <div class="row no-gutters">
+                                                <div class="col-xl-6">
+                                                    <!-- Our Specifications -->
+                                                    <div class="mad-specs">
+                                                        <h2 class="mad-page-title">{{category.name}}</h2>
+                                                        {% for item in items %}
+                                                            {% if item.categoryId == category.id %}
+                                                                {% if item.type == 'single' %}
+                                                                    <div class="mad-col">
+                                                                        <!-- Specification item -->
+                                                                        <div class="mad-spec-item">
+                                                                            <div class="mad-spec-info">
+                                                                                <div class="mad-spec-header">
+                                                                                    <div class="mad-spec-title">{{item.name}}</div>
+                                                                                    <div class="mad-line"></div>
+                                                                                    <div class="mad-spec-price">{{ item.price }}</div>
+                                                                                </div>
+                                                                                <div class="mad-spec-tags">
+                                                                                    <div class="mad-spec-el">{{ item.description }}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- End of Specification item -->
+                                                                    </div>
+                                                                    {% else %}
+                                                                        <div class="mad-col">
+                                                                            <!-- Specification item -->
+                                                                            <div class="mad-spec-item">
+                                                                                <div class="mad-spec-info">
+                                                                                    <div class="mad-spec-header">
+                                                                                        <div class="mad-spec-title">{{item.name}}</div>
+                                                                                    </div>
+                                                                                    <div class="mad-spec-tags">
+                                                                                        <div class="mad-spec-el">{{ item.description }}</div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- End of Specification item -->
+                                                                        </div>
+                                                                        {% for multiple in multipleitems %}
+                                                                            {% if multiple.idfooditem == item.id %}
+                                                                            <div class="mad-col">
+                                                                                <!-- Specification item -->
+                                                                                <div class="mad-spec-item">
+                                                                                    <div class="mad-spec-info">
+                                                                                        <div class="mad-spec-header">
+                                                                                            <div class="mad-spec-title">{{multiple.itemname}}</div>
+                                                                                            <div class="mad-line"></div>
+                                                                                            <div class="mad-spec-price">{{ multiple.itemprice }}</div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- End of Specification item -->
+                                                                            </div>
+                                                                            {% endif %}
+
+                                                                        {% endfor %}
+                                                                     {% endif %}
+                                                             {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <!-- End of Our Specifications -->
+                                                </div>
+                                                <div class="col-xl-6">
+                                                    {% if category.image is null %}
+                                                    <figure class="mad-img"><img src="{{ asset('images/logo.png') }}" alt=""></figure>
+                                                        {% else %}
+                                                            <figure class="mad-img"><img src="{{bo_url}}{{ category.image }}" alt=""></figure>
+
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {# other stuff #}
+                                        {% if loop.index0 % 2 == 1  %}
+                                            <div class="row no-gutters">
+                                                <div class="col-xl-6">
+                                                    <figure class="mad-img"><img src="{{bo_url}}{{ category.image }}" alt=""></figure>
+                                                </div>
+                                                <div class="col-xl-6">
+                                                    <!-- Our Specifications -->
+                                                    <div class="mad-specs">
+                                                        <h2 class="mad-page-title">{{category.name}}</h2>
+                                                        {% for item in items %}
+                                                            {% if item.categoryId == category.id %}
+                                                                {% if item.type == 'single' %}
+                                                                    <div class="mad-col">
+                                                                        <!-- Specification item -->
+                                                                        <div class="mad-spec-item">
+                                                                            <div class="mad-spec-info">
+                                                                                <div class="mad-spec-header">
+                                                                                    <div class="mad-spec-title">{{item.name}}</div>
+                                                                                    <div class="mad-line"></div>
+                                                                                    <div class="mad-spec-price">{{ item.price }}</div>
+                                                                                </div>
+                                                                                <div class="mad-spec-tags">
+                                                                                    <div class="mad-spec-el">{{ item.description }}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- End of Specification item -->
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="mad-col">
+                                                                        <!-- Specification item -->
+                                                                        <div class="mad-spec-item">
+                                                                            <div class="mad-spec-info">
+                                                                                <div class="mad-spec-header">
+                                                                                    <div class="mad-spec-title">{{item.name}}</div>
+                                                                                </div>
+                                                                                <div class="mad-spec-tags">
+                                                                                    <div class="mad-spec-el">{{ item.description }}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- End of Specification item -->
+                                                                    </div>
+                                                                    {% for multiple in multipleitems %}
+                                                                        {% if multiple.idfooditem == item.id %}
+                                                                            <div class="mad-col">
+                                                                                <!-- Specification item -->
+                                                                                <div class="mad-spec-item">
+                                                                                    <div class="mad-spec-info">
+                                                                                        <div class="mad-spec-header">
+                                                                                            <div class="mad-spec-title">{{multiple.itemname}}</div>
+                                                                                            <div class="mad-line"></div>
+                                                                                            <div class="mad-spec-price">{{ multiple.itemprice }}</div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- End of Specification item -->
+                                                                            </div>
+                                                                        {% endif %}
+
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <!-- End of Our Specifications -->
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!--================ End of Tab ================-->
+                    </div>
+                    <!--================ End of Tabs Container ================-->
+                </div>
+                <!--================ End of Tabs ================-->
+            </div>
+            <div class="mad-section">
+                <div class="mad-banners">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-6">
+                                <div class="mad-banner with-icon">
+                                    <i class="mad-banner-icon"><img src="yummi_svg_icons/delivery3.svg" alt="" class="svg"></i>
+                                    <div class="mad-banner-content">
+                                        <h4 class="mad-page-title"><span>Entrega Rápida e</span>
+                                            Confiável</h4>
+                                        <a href="#" class="mad-read-more small-size order-frame-btn">Encomendar Agora</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-6">
+                                <div class="mad-banner with-icon">
+                                    <i class="mad-banner-icon"><img src="yummi_svg_icons/24_7_preorder.svg" alt="" class="svg"></i>
+                                    <div class="mad-banner-content">
+                                        <h4 class="mad-page-title"><span>24/7 Pré-encomenda </span>
+                                            Disponível</h4>
+                                        <a href="#" class="mad-read-more small-size order-frame-btn">Encomendar Agora</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-6">
+                                <div class="mad-banner with-icon">
+                                    <i class="mad-banner-icon"><img src="yummi_svg_icons/rewards_program.svg" alt="" class="svg"></i>
+                                    <div class="mad-banner-content">
+                                        <h4 class="mad-page-title"><span>Junte-se a Nossa<br></span>
+                                            Equipa</h4>
+                                        <a href="/contacto" class="mad-read-more small-size">Contactar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {#            <article class="mad-cta mad-section text-color-1 align-center mad-section--stretched mad-colorizer--scheme-color-3">#}
+    {#                <div class="content-element-6">#}
+    {#                    <h2 class="mad-page-title">Aprecie o verdadeiro sabor da comida</h2>#}
+    {#                    <p>Vestibulum libero nisl, porta vel, scelerisque eget, malesuada at, neque. Vivamus <br> eget nibh. Etiam cursus#}
+    {#                        leo vel metus.#}
+    {#                        Nulla facilisi.</p>#}
+    {#                </div>#}
+    {#                <div class="btn-set big-btns justify-content-center">#}
+    {#                    <a href="#" class="btn btn-huge order-frame-btn"><span>Encomende agora!</span></a>#}
+    {#                    <a href="#" class="btn btn-huge"><span>Book a Table</span></a>#}
+    {#                </div>#}
+    {#            </article>#}
+
+        </div>
+    </div>
+{% endblock %}

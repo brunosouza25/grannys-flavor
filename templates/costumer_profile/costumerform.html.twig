@@ -1,0 +1,270 @@
+{% extends 'costumer_profile/base-costumer.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-lg-6 col-12">
+            <div class="dsp container">
+                <h4>Configurações gerais</h4>
+                <br>
+                <form id="save">
+                    <div class="container px-4">
+                        <h5>Configurações da empresa</h5>
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="Name">Nome</label>
+                                <input name="name" id="name" type="text" value="{{ name }}" class="col-12 rounded p-2 mb-3">
+                            </div>
+                            <div class="col-12">
+                                <label for="phone">Telefone</label>
+                                <input name="phone" id="phone" type="text" value="{{ phone }}" class="col-12 rounded p-2 mb-3">
+                            </div>
+                            <div class="col-12">
+                                <label for="emailUserName">Email</label>
+                                <input name="emailUserName" id="emailUserName" type="text" value="{{ email }}" class="col-12 rounded p-2 mb-3">
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="ml-3 mb-3 btn btn-primary dsp">SALVAR</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6 col-12">
+            <div class="container" id="address">
+                <div  class="border border-dark rounded col-lg-8 p-2">
+                    <div class="row mb-3">
+                        <div id="address1" class="">
+                            <div class="d-flex align-items-center col-lg-6">
+                                <span class="col-12 col-lg-12 mr-1">Bruno Souza</span>
+                                <i class="bi bi-trash" style="color: red;"></i>
+                                <button class="me-2 btn btn-sm p-0"> Excluir
+                                </button>
+                                <i class="bi bi-pencil edit_address" style="color: green;"></i>
+                                <button class="btn btn-sm p-0 edit_address " data-id="1"> Editar
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 ">
+                                    <span class="col-12 mr-1">222222222222</span>
+                                </div>
+                                <div class="col-12">
+                                    <span class="col-12 mr-1">Rua Alfredo Mastrandeia</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex justify-content-center">
+                <button class="mt-3 btn btn-primary dsp add_new_address">NOVO</button>
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function () {
+            $("#save").submit(function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                $.ajax({
+                    url: '/update_user',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+
+                    success: function (data) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Atualizado',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    },
+                    error: function (e) {
+                        console.log(e);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Occoreu erro!',
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+                });
+            });
+
+        })
+
+        getAddresses();
+
+        function getAddresses() {
+            $.ajax({
+                type: "POST",
+                url: "{{ path('get_guest_contact') }}",
+                success: function (jsonAddresses) {
+                    createAddress(jsonAddresses);
+                }, error: function (e) {
+
+                }
+            });
+        }
+
+        function createAddress(jsonAddresses) {
+            const invoicingAddresses = document.getElementById('address');
+
+            invoicingAddresses.innerHTML = '';
+
+            if(jsonAddresses.length == 0) {
+                invoicingAddresses.innerHTML += `
+                                <div class="inputAddress row mb-3 p-3">
+                                    <div class="col-lg-6 col-10 pb-0">
+                                        <span class="col-12" >Não tens endereço, favor cadastrar!</span>
+                                    </div>
+
+                                </div>`
+                return
+            }
+
+            for (const address of jsonAddresses) {
+                invoicingAddresses.innerHTML += `
+                   <div  class="border border-dark rounded col-lg-8 p-2 mb-2">
+                    <div class="row mb-2">
+                        <div id="address1" class="">
+                            <div class="d-flex align-items-center col-lg-7 col-6">
+                                <span class="col-12 col-lg-12 mr-1">${address.name.substring(0, 18)}</span >
+                                <i class="bi bi-trash removeAddress" style="color: red; "></i>
+                                <button class="me-2 btn btn-sm p-0 removeAddress" data-id="${address.id}"> Excluir
+                                </button>
+                                <i class="bi bi-pencil edit_address editAddress" style="color: green;"></i>
+                                <button class="btn btn-sm p-0 editAddress" data-id="${address.id}"> Editar
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="">
+                                    <span class="col-12 mr-1">${address.contact}</span>
+                                </div>
+                                <div class="col-12">
+                                    <span class="col-12 mr-1">${address.street}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            }
+
+            $('.removeAddress').click(function () {
+                const addressId = $(this).data('id');
+
+                $.confirm({
+                    async: true,
+                    title: 'Apagar morada',
+                    columnClass: 'col-md-4',
+                    content: `Tem certeza que deseja apagar esta morada?`,
+                    buttons: {
+                        apagar: function () {
+                            $.ajax({
+
+                                type: "POST",
+                                url: "{{ path('delete_address') }}",
+                                data: {addressId: addressId},
+                                success: function (jsonAddresses) {
+                                    $.alert({
+                                        title: 'Apagado',
+                                        content: 'Morada apagada com sucesso!',
+                                    });
+
+                                    getAddresses();
+                                }, error: function (e) {
+
+                                }
+                            });
+                        },
+                        cancelar: function () {
+
+                        }
+                    }
+                });
+            })
+
+            $('.editAddress').click(function () {
+                const addressId = $(this).data('id');
+                $.ajax({
+                    url: `/get_edit_address`,
+                    type: 'POST',
+                    data: {addressId: addressId},
+                    success: function (data) {
+                        $.confirm({
+                            async: false,
+                            title: 'Editar',
+                            columnClass: 'col-9',
+                            content: data,
+                            buttons: {
+                                Confirmar: function () {
+                                    const street = $('#street').val();
+                                    const city = $('#city').val();
+                                    const postalCode = $('#postalCode').val();
+                                    const additionalInformation = $('#additionalInformation').val();
+
+                                    $.ajax({
+                                        url: `/edit_address`,
+                                        type: 'POST',
+                                        data: {addressId: addressId, street: street, city: city, postalCode: postalCode, additionalInformation:additionalInformation},
+                                        success: function () {
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Editado com sucesso',
+                                            });
+                                            getAddresses();
+                                        }
+                                    })
+
+                                },
+                                Cancelar: function () {
+                                },
+                            }
+
+                        });
+
+
+                    }
+                });
+            })
+        };
+
+        $('.add_new_address').click(function () {
+            $.confirm({
+                async: true,
+                title: 'Nova morada',
+                columnClass: 'col-md-8',
+                content: `URL:{{ path('new_address') }}`,
+                buttons: {
+                    fechar: function () {
+
+
+                    }
+                }
+            });
+
+        })
+
+    </script>
+
+{% endblock %}

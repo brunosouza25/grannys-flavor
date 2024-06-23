@@ -1,0 +1,113 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <style>
+        .regular-header{
+            display: none;
+        }
+        .regular-footer{
+            display: none;
+        }
+    </style>
+    <header class="header">
+        <div class="logo-wrap">
+            <a href="{{ path('app/app_foodcategories') }}"><i class="iconly-Arrow-Left-Square icli"></i></a>
+            <h1 class="title-color font-md">Carrinho <span class="font-sm content-color">({{ qtditem }} Items)</span></h1>
+        </div>
+        <div class="avatar-wrap">
+            <a href="{{ path('app/app_dashboard') }}">
+                <i class="iconly-Home icli"></i>
+            </a>
+        </div>
+    </header>
+    <div class="main-wrap cart-page mb-xxl">
+        <!-- Cart Item Section Start  -->
+        <div class="cart-item-wrap pt-0">
+            {% for item in cartItem %}
+            <div class="swipe-to-show">
+                <div class="product-list media">
+                    <div class="link">
+                        <div class="img">
+
+                            {% if item.image|length > 0 %}
+                                <img class="cart-item-img" src="{{bo_url}}{{ item.image }}" alt="{{item.name}}" />
+                            {% else %}
+                                <img class="cart-item-img" src="{{ asset('images/logo.png') }}" alt="{{item.name}}" />
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="media-body">
+                        <a href="javascript:void(0)" class="font-sm"> {{item.item}} </a>
+                        {% if item.type == 'multiple' %}
+                            <div class="item-size-title">
+                                <span class="title-span">Tamanho:</span>
+                                {% for size in sizes %}
+                                 {% if size.id == item.sizeid %}
+                                     <span>{{ size.itemname }}</span> - <span><b>({{ size.itemprice }} €)</b></span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        <div class="item-size-title">
+                                {% for extra in extras %}
+                                           {% for adicinalitem in extraitems %}
+                                            {% if extra.extraid == adicinalitem.id and extra.orderid == item.id %}
+                                                {% for adicionalcat in extracat %}
+                                                        {% if adicionalcat.id == adicinalitem.idadicional %}
+                                                            <div class="item-size-title">
+                                                                <span class="title-span">{{adicionalcat.name}}:</span>
+                                                                        <span>{{ adicinalitem.name }}</span> - <span><b>({{ adicinalitem.price }} €)</b></span>
+                                                            </div>
+                                                        {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                           {% endfor %}
+                                {% endfor %}
+                        </div>
+                        {% endif %}
+                        <span class="price-list-item title-color font-sm" style="      font-size: 1.3rem !important;"><span> {{item.price}} €</span></span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+            <!-- Order Detail Start -->
+            <div class="order-detail section-p-t">
+                <h3 class="title-2"></h3>
+
+                <!-- Detail list Start -->
+                <ul>
+                    <li>
+                        <span>Saco</span>
+                        <span>{{bag}}€</span>
+                    </li>
+
+                    <li>
+                        <span>Entrega</span>
+                        <span>{{delivery}}€</span>
+                    </li>
+                    <li>
+                        <span>Subtotal</span>
+                        <span>{{subtotal}}€</span>
+                    </li>
+                    <li>
+                        <span>Total</span>
+                        <span>{{ total }}€</span>
+                    </li>
+                </ul>
+                <!-- Detail list End -->
+            </div>
+            <!-- Order Detail End -->
+        </div>
+        <!--Main End -->
+    </div>
+
+    <footer class="footer-wrap footer-button">
+        <a href="{{ path('app/app_payment_confirm') }}" class="font-md">Confirmar</a>
+    </footer>
+    <script src="{{ asset('app/assets/js/jquery-swipe-1.11.3.min.js') }}"></script>
+    <script src="{{ asset('app/assets/js/jquery.mobile-1.4.5.min.js') }}"></script>
+{% endblock %}

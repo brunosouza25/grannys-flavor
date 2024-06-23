@@ -1,0 +1,53 @@
+{% extends 'base-app.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <main class="main-wrap search-page mb-xxl">
+        <!-- Search Box Start -->
+        <div class="search-box">
+            <i class="iconly-Search icli search"></i>
+            <input id="searchInput" class="form-control" type="search" placeholder="Pesquisa aqui..." />
+            <i class="iconly-Voice icli mic"></i>
+        </div>
+        <!-- Search Box End -->
+
+        <section class="offer-section pb-0">
+            <h3 class="font-md title-color fw-600 title-mb">Lista de Produtos</h3>
+            <div class="offer">
+                 {% for product in products %}
+                    <div class="offer-wrap" style=" margin-bottom: 1rem;">
+                        <div class="product-list media">
+                            {% if product.image|length > 0 %}
+                                <a href="{{ path('app/app_product_detail', {'reference': product.id}) }}"><img class="img-fluid" style="    width: 100%;  height: 46px;   object-fit: cover;   border-radius: 50%; border: 1px solid #e6352f;" src="{{bo_url}}{{ product.image }}" alt="{{product.name}}" /></a>
+                            {% else %}
+                                <a href="{{ path('app/app_product_detail', {'reference': product.id}) }}"> <img class="img-fluid" style="    width: 100%;  height: 46px;   object-fit: cover;   border-radius: 50%; border: 1px solid #e6352f;" src="{{ asset('images/logo.png') }}" alt="{{product.name}}" /></a>
+                            {% endif %}
+                            <div class="media-body">
+                                <a href="{{ path('app/app_product_detail', {'reference': product.id}) }}" class="font-sm"> {{product.name}} </a>
+                                <div class="plus-minus d-inline-block d-xs-none">
+                                    <a href="{{ path('app/app_product_detail', {'reference': product.id}) }}">Ver</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+        <!-- Recent Search Section End -->
+    </main>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+    $(document).ready(function(){
+        $("#searchInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $(".offer-wrap").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock %}
+

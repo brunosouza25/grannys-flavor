@@ -1,0 +1,278 @@
+{% block body %}
+
+    <div class="col-lg-11">
+        <form id="form_grid_codes">
+
+
+        <div class="container px-4">
+            <hr>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr class="col-lg-11" id="table_th">
+                        <th class="col-1" scope="col">Id</th>
+                        <th class="col-1" scope="col">Cor</th>
+                        <th class="col-1" scope="col">Tamanho</th>
+                        <th class="col-1" scope="col">Stock</th>
+                        <th class="col-1" scope="col">Code</th>
+                        <th class="col-1" scope="col">Status</th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="table_grid_codes">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-4">
+            <button id="save_grid_codes" type="submit" class="btn btn-primary btn-sm">Salvar</button>
+        </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+
+        $('#form_grid_codes').submit(function (e) {
+            e.preventDefault();
+
+            var inputs = document.getElementsByClassName('gridCodes');
+
+            let codes2 = [];
+
+            for (var i = 0; i < inputs.length; i++) {
+                codes2.push({id: inputs[i].dataset.id,code: inputs[i].value, stock: $(`.stock-${inputs[i].dataset.id}`).val()});
+            }
+
+            $.ajax({
+                type: "POST",
+                // processData: false,
+                // contentType: false,
+                url: "{{ path('admin/save_grid_codes') }}",
+                data: {codes2:codes2}, // serializes the form's elements.
+                success: function (data) {
+                    // Swal.fire({
+                    //     position: 'top-end',
+                    //     icon: 'success',
+                    //     title: 'Adicionado',
+                    //     showConfirmButton: false,
+                    //     timer: 2500
+                    // });
+
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'Editado!',
+                    });
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+
+                }
+            });
+        });
+
+
+        var tableGrid = document.getElementById('table_grid_codes');
+        loadingTableGrid('grid', tableGrid)
+
+        function loadingTableGrid(type, table) {
+            const productId =  {{ productId }};
+            // var tableTh = document.getElementById('table_th');
+
+            // tableTh.innerHTML = '';
+
+            table.innerHTML = '';
+
+            $.ajax({
+                url: `get_grid_codes`,
+                type: 'POST',
+                data: {productId: productId},
+                async: false,
+                success: function (itemsJson) {
+
+                    for (const item of itemsJson) {
+
+                            table.innerHTML += `
+                                <tr>
+                                    <td class="col-1" scope="col">${item.product_grid_id}</td>
+                                    <td class="col-1" scope="col">${item.name_color == null ?  '' : item.name_color}</td>
+                                    <td class="col-1" scope="col">${item.name_size == null ?  '' : item.name_size}</td>
+                                    <td class="col-1" scope="col"><input class="stock-${item.product_grid_id}" type="text" value="${item.stock}"></td>
+                                    <td class="col-1" scope="col"><input class="gridCodes" data-id="${item.product_grid_id}" name="codes[]" type="text" value="${item.code == null ? '' : item.code}"></td>
+                                    <td><a href="#">${item.status == 1? `<b data-product-grid-id="${ item.product_grid_id }" class="change-status alert-success p-2">Ativo</b>` :
+                                                                        `<b data-product-grid-id="${ item.product_grid_id }" class="change-status alert-danger p-2">Desativado</b>`}</a></td>                                </tr>`;
+
+
+                        // table.innerHTML += `
+                        //     <tr>
+                        //         <td>#${item.id}</td>
+                        //         <td>${item.name}</td>
+                        //         <td>${item.type == 0 ? 'Tamanho' : 'Cor'}</td>
+                        //         <td><a href="#" data-grid_type="${item.type == 0 ? 0 : 1}" class="edit_${type}" data-${type}_id="${item.id}" data-${type}_name="${item.name}" ><i class="bi bi-pencil-square black 50"></i></a></td>
+                        //         <td><a href="#" class="delete_${type}" data-${type}_id="${item.id}"><i class="bi bi-trash black 50"></i></a></td>
+                        //     </tr>`
+                    }
+
+                    // for (const item of itemsJson) {
+                    //     table.innerHTML += `
+                    //         <tr>
+                    //             <td>#${item.id}</td>
+                    //             <td>${item.name}</td>
+                    //             <td>${item.type == 0 ? 'Tamanho' : 'Cor'}</td>
+                    //             <td><a href="#" data-grid_type="${item.type == 0 ? 0 : 1}" class="edit_${type}" data-${type}_id="${item.id}" data-${type}_name="${item.name}" ><i class="bi bi-pencil-square black 50"></i></a></td>
+                    //             <td><a href="#" class="delete_${type}" data-${type}_id="${item.id}"><i class="bi bi-trash black 50"></i></a></td>
+                    //         </tr>`
+                    // }
+
+                    $(`#new_${type}`).click(function () {
+                        $.ajax({
+                            url: `new_${type}`,
+                            type: 'POST',
+                            data: {
+                                itemName: $(`#${type}_name`).val(),
+                                itemType: $(`#${type}_type`).val()
+                            },
+                            success: function () {
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Cadastrado com sucesso',
+                                });
+                                loadingTableGrid(type, table)
+
+                            }
+                        })
+                    })
+
+                    $(`.delete_${type}`).click(function () {
+                        const itemId = $(this).data(`${type}_id`);
+                        $.confirm({
+                            title: 'Apagar!',
+                            content: `Você tem certeza?! <br>
+                                       Isso irá desvincular todos os produtos a esse grid`,
+                            buttons: {
+                                confirm: function () {
+                                    $.ajax({
+                                        url: `delete_${type}`,
+                                        type: 'POST',
+                                        data: {itemId: itemId},
+                                        success: function () {
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Apagado com sucesso',
+                                            });
+                                            loadingTableGrid(type, table)
+                                        }
+                                    })
+                                },
+                                Cancelar: function () {
+
+                                }
+
+                            }
+                        });
+
+                    })
+
+                    $('.change-status').click(function () {
+                        const productGridId = $(this).data('product-grid-id')
+
+                        $.ajax({
+                            url: `/change_product_grid_status`,
+                            type: 'POST',
+                            async: false,
+                            data: ({productGridId:productGridId}),
+                            success: function () {
+                                var tableGrid = document.getElementById('table_grid_codes');
+
+                                loadingTableGrid('grid', tableGrid)
+                                $.alert({
+                                    title: 'Sucesso!',
+                                    content: 'Alterado com sucesso',
+                                });
+                            },
+                            error: function (e) {
+                                $.alert({
+                                    title: 'Alert!',
+                                    content: 'Error!',
+                                });
+                            }
+                        });
+                    })
+
+                    $(`.edit_${type}`).click(function () {
+                        const itemId = $(this).data(`${type}_id`);
+                        const itemName = $(this).data(`${type}_name`);
+                        const itemType = $(this).data(`${type}_type`);
+
+                        $.confirm({
+                            async: true,
+                            title: 'Editar',
+                            columnClass: 'col-md-4',
+                            content: `
+                                         <div class="row col-12">
+                                             <div class="col-12">
+                                                <label for="${type}_id">Nome</label>
+                                                <input name="${type}_name" id="${type}_name_edit" data-${type}_id="${itemId}" type="text" class="col-12" value="${itemName}">
+
+                                                <label for="${type}_name">Grade tipo</label>
+                                                <div class="col-8">
+                                                    <select class="col-12" name="${type}_type" id="${type}_type_edit">
+                                                        <option value="0"${itemType == 0 ? 'selected' : ''}>Tamanho</option>
+                                                        <option value="1" ${itemType == 1 ? 'selected' : ''}>Cor</option>
+                                                    </select>
+                                                </div>
+                                             </div>
+                                         </div>
+                                    `,
+                            buttons: {
+                                Confirmar: function () {
+                                    $.ajax({
+                                        url: `edit_${type}`,
+                                        type: 'POST',
+                                        data: {
+                                            itemId: itemId,
+                                            itemName: $(`#${type}_name_edit`).val(),
+                                            itemType: $(`#${type}_type_edit`).val()
+                                        },
+
+                                        success: function () {
+                                            $.alert({
+                                                title: 'Sucesso!',
+                                                content: 'Editado com sucesso',
+                                            });
+                                            loadingTableGrid(type, table)
+                                        }
+                                    })
+
+                                },
+                                Cancelar: function () {
+                                },
+                            }
+
+                        });
+
+                    })
+
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Occoreu erro!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+
+        }
+
+
+    </script>
+
+{% endblock %}

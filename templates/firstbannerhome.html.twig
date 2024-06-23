@@ -1,0 +1,19 @@
+
+{% for image in images %}
+    {% if image.type == 'banner1' %}
+        <div data-bg-image-src="{{ image.path }}" class="with-overlay text-color-1 mad-section-banner">
+            <div class="row justify-content-center">
+                <div class="col-xl-6">
+                    <div class="content-element-5">
+                        <div class="mad-title-wrap align-center">
+
+                        </div>
+                    </div>
+                    <div class="align-center">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+{% endfor %}

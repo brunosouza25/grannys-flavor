@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{titlePage}}{% endblock %}
+
+{% block body %}
+    <div class="mad-breadcrumb">
+        <div class="container">
+            <nav class="mad-breadcrumb-path"><span><a href="{{ path('app_default') }}">Home</a></span> / <span><a href="{{ path('app_blog') }}">Noticias</a></span> / <span>
+                    {{blog.title}}</span>
+            </nav>
+        </div>
+    </div>
+    <!--================ End of Breadcrumb ================-->
+    <div class="mad-content no-pd">
+        <div class="container">
+            <div class="mad-section">
+                <div class="row justify-content-center">
+                    <main id="main" class="col-xl-9">
+                        <div class="content-element-13">
+                            <div class="mad-entities with-sidebar type-3 with-big-date with-img single-entity">
+                                <!--================ Entity ================-->
+                                <article class="mad-entity">
+                                    <div class="mad-entity-media content-element-3">
+                                        <a href="#"><img src="{{bo_url}}{{ blog.image }}" alt=""></a>
+                                    </div>
+                                    <div class="mad-entity-body">
+                                        <span class="mad-entity-date"><span>{{blog.date}}</span></span>
+                                        <div class="mad-entity-content">
+                                            <h2 class="mad-entity-title"><a href="#" class="mad-link">{{ blog.title }}</a></h2>
+                                        </div>
+                                    </div>
+                                   {{blog.text|raw}}
+                                    <div class="mad-entity-footer">
+                                        <div class="mad-share-wrap"><span>Parilhar:</span>
+                                            <div class="mad-social-icons style-2 size-small">
+                                                <ul>
+                                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                                <!--================ End of Entity ================-->
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

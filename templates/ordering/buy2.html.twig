@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RepairsAndCustomController!{% endblock %}
+
+{% block body %}
+
+    <!--================ End of Breadcrumb ================-->
+    <div class="container">
+        <form id="payment-form">
+            <div id="payment-element">
+                <!-- Elements will create form elements here -->
+            </div>
+            <button id="submit">Submit</button>
+            <div id="error-message">
+                <!-- Display error message to your customers here -->
+            </div>
+        </form>
+
+    </div>
+
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe('pk_test_51KEhhEHZ4XfjRqaJFq88c8iJM5gQgWrK1KOOsQQmwKh4rHphwFRCfkmi7vD71rVHfOwjtkPCnvEbtQzQrVoW6xYd00FNACtAVA');
+
+        const options = {
+            clientSecret: '{{ clientSecret }}',
+            // Fully customizable with appearance API.
+            // appearance: {/*...*/},
+        };
+
+        const elements = stripe.elements(options);
+        const paymentElement = elements.create('payment');
+        paymentElement.mount('#payment-element');
+    </script>
+
+{% endblock %}

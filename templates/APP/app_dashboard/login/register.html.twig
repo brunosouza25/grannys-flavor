@@ -1,0 +1,120 @@
+
+
+{% block body %}
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" id="rtl-link" type="text/css" href="{{ asset('app/assets/css/vendors/bootstrap.css') }}" />
+    <!-- Iconly Icon css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('app/assets/css/iconly.css') }}" />
+    <!-- Style css -->
+    <link rel="stylesheet" id="change-link" type="text/css" href="{{ asset('app/assets/css/style.css') }}" />
+
+    <div class="bg-pattern-wrap ratio2_1">
+        <!-- Background Image -->
+        <div class="bg-patter">
+            <img src="assets/images/banner/bg-pattern2.png" class="bg-img" alt="pattern" />
+        </div>
+    </div>
+
+    <!-- Main Start -->
+    <main class="main-wrap login-page mb-xxl">
+        <img class="logo" src="assets/images/logo/logo.png" alt="logo" />
+        <img class="logo logo-w" src="assets/images/logo/logo-w.png" alt="logo" />
+        <p class="font-sm content-color">Cria a sua Conta em 2 Passos</p>
+
+        <!-- Login Section Start -->
+        <section class="login-section p-0">
+            <!-- Login Form Start -->
+
+
+            <form id="createUser" class="custom-form">
+                <h1 class="font-md title-color fw-600">Register Account</h1>
+                <!-- Email Input start -->
+                <div class="input-box">
+                    <input type="text" placeholder="Seu Nome" name="full-name" required class="form-control" />
+                    <i class="iconly-Profile icli"></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="email" placeholder="Seu Email" name="user-email" required class="form-control" />
+                    <i data-feather="at-sign"></i>
+                </div>
+                <div class="input-box">
+                    <i class="iconly-Call icli"></i>
+                    <input type="number" placeholder="Seu Contacto (Ex 9xx xxx xxx)" name="phonenumbe" class="form-control" required="">
+                </div>
+                <!-- Email Input End -->
+
+                <!-- Password Input start -->
+                <div class="input-box">
+                    <input type="password" placeholder="Password" name="password" required class="form-control" />
+                    <i class="iconly-Hide icli showHidePassword"></i>
+                </div>
+                <!-- Password Input End -->
+
+                <button type="submit" class="btn-solid">Criar Conta</button>
+                <span class="content-color font-sm d-block text-center fw-600">Já tem Conta? <a href="{{ path('admin/app_login') }}" class="underline">Entrar </a></span>
+
+            </form>
+            <!-- Login Form End -->
+
+        </section>
+        <!-- Login Section End -->
+    </main>
+    <!-- Main End -->
+
+    <script src="{{ asset('app/assets/js/jquery-3.6.0.min.js') }}"></script>
+
+    <!-- Bootstrap Js -->
+    <script src="{{ asset('app/assets/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Feather Icon -->
+    <script src="{{ asset('app/assets/js/feather.min.js') }}"></script>
+
+    <!-- Theme Setting js -->
+{#    <script src="{{ asset('app/assets/js/theme-setting.js') }}"></script>#}
+
+    <!-- Script js -->
+    <script src="{{ asset('app/assets/js/script.js') }}"></script>
+
+    <script>
+        $("#createUser").submit(function(e) {
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('appapp_register_new_user')}}",
+                data: formData, // serializes the form's elements.
+                success: function(data)
+                {
+                    var state = data.state;
+
+
+                    if(state === '0'){
+                        alert('Conta Criada com Sucess! Agora ja pode Entrar!')
+                        location.replace('/admin');
+                    }else{
+                        alert("Utilizador com estes dados Já existe");
+                    }
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+    </script>
+
+
+{#    {{ form_start(registrationForm) }}#}
+{#    {{ form_row(registrationForm.email) }}#}
+{#    {{ form_row(registrationForm.plainPassword, {#}
+{#        label: 'Password'#}
+{#    }) }}#}
+{#    {{ form_row(registrationForm.agreeTerms) }}#}
+
+{#    <button type="submit" class="btn">Register</button>#}
+{#    {{ form_end(registrationForm) }}#}
+{% endblock %}
