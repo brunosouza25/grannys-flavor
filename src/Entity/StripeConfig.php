@@ -27,6 +27,16 @@ class StripeConfig
      */
     private $dev_token;
 
+    /**
+     * @ORM\Column(type="string", length=512, nullable=true)
+     */
+    private $dev_public_token;
+
+    /**
+     * @ORM\Column(type="string", length=512, nullable=true)
+     */
+    private $public_token;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +62,30 @@ class StripeConfig
     public function setDevToken(?string $dev_token): self
     {
         $this->dev_token = $dev_token;
+
+        return $this;
+    }
+
+    public function getDevPublicToken(): ?string
+    {
+        return $this->dev_public_token;
+    }
+
+    public function setDevPublicToken(?string $dev_public_token): self
+    {
+        $this->dev_public_token = $dev_public_token;
+
+        return $this;
+    }
+
+    public function getPublicToken(): ?string
+    {
+        return $this->public_token;
+    }
+
+    public function setPublicToken(?string $public_token): self
+    {
+        $this->public_token = $public_token;
 
         return $this;
     }

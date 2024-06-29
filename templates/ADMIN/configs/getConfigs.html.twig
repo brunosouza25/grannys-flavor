@@ -105,6 +105,17 @@
                             <input name="tokenDev" id="tokenDev" type="text" value="{{ stripe.devToken ?? '' }}" class="col-12">
                         </div>
                     </div>
+                    <div class="row mt-5">
+                        <div class="col-4">
+                            <label for="customerid">Live Public Token</label>
+                            <input name="publicToken" id="publicToken" type="text" value="{{ stripe.publicToken ?? '' }}" class="col-12">
+                        </div>
+
+                        <div class="col-4">
+                            <label for="customerid">Developer Public Token</label>
+                            <input name="publicTokenDev" id="publicTokenDev" type="text" value="{{ stripe.devPublicToken ?? '' }}" class="col-12">
+                        </div>
+                    </div>
 
 
 

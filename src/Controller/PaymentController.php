@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\MultibancoPayment;
 use App\Service\IfThenPayService;
 use App\Service\PayByrdService;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,22 +43,49 @@ class PaymentController extends AbstractController
     }
 
     /**
-     * @Route("/payment_by_ifthenpay", name="payment_by_ifthenpay")
+     * @Route("/payment_page", name="payment_page")
      */
-    public function createLinkPaymentIfThenPay(Request $request): Response
+    public function paymentPage(Request $request): Response
     {
-//        $id = '';
-//        $amount = '21.50';
-        //dd($request);
 
-        $id = $request->get('id');
-        $amount = $request->get('amount');
+        $clientSecret = $request->get('clientSecret');
+        return $this->render('ordering/buy2.html.twig', [
+            'clientSecret' => $clientSecret,
+        ]);
 
-        try {
-            $urlPagamento = $this->ifthenpayService->createLinkPayment($id, $amount);
-            return $this->json(['urlPagamento' => $urlPagamento]);
-        } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], 400);
-        }
     }
+
+    /**
+     * @Route("/get_payment_intent", name="get_payment_intent")
+     */
+    public function getPaymentIntent(Request $request)
+    {
+
+
+
+        $stripe = new \Stripe\StripeClient('sk_test_51PVkqZ00r9NE2VfE3PaSfHa5wrwTiMIsqqhgiOYoZyWvI4Rh2mCb1rIIK2YmnuMMaJpUPbur1sq4BxTXGR7QDlnz00J443MgDE');
+       $a = $stripe->paymentIntents->retrieve('pi_3PW4Xl00r9NE2VfE1TSFca7y', []);
+
+            dd($a);
+    }
+
+    /**
+     * @Route("/set_multibanco_info", name="set_multibanco_info")
+     */
+    public function setMultibancoInfo(Request $request, ManagerRegistry $doctrine)
+    {
+        $multiBancoId =  $request->get('multiBancoId');
+
+        $multiBancoPayment = $doctrine->getRepository(MultibancoPayment::class)->findOneBy(['source'=> $multiBancoId]);
+
+        $multiBancoPayment->setEntity($request->get('entity'));
+        $multiBancoPayment->setReference($request->get('reference'));
+        $multiBancoPayment->setPaymentUrl($request->get('url'));
+
+        $en = $doctrine->getManager();
+        $en->flush();
+        return new Response();
+    }
+
+
 }

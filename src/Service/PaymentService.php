@@ -22,6 +22,7 @@ use Stripe\Checkout\Session;
 use Stripe\Service\ProductService;
 use Stripe\Source;
 use Stripe\Stripe;
+use Stripe\StripeClient;
 use Symfony\Component\HttpFoundation\Response;
 
 class PaymentService
@@ -107,61 +108,20 @@ class PaymentService
             $token = $this->getToken('token');
 
         }
+        $stripe = new StripeClient($token);
 
-        $stripePayment = new Stripe();
-        $stripePayment->setApiKey($token);
+//        $stripePayment = new Stripe();
+//        $stripePayment->setApiKey($token);
 
         $user = $this->contact->getUserByOrderId($oderReference);
-
-
-//        $stripeCheckout = Source::create([
-//            "type" => "multibanco",
-//            "currency" => "eur",
-//            "owner" => [
-//                "email" => $user['email']
-//            ],
-//            "amount" => bcmul($amount, 100),
-//        ]);
-
-        //   return $stripeCheckout;
-
-        $date = new DateTime();
-        $date->modify('+7 days');
-        $expiredate = $date->format('Ymd');
-       //dd($expiredate);
-//        $url = 'https://ifthenpay.com/api/gateway/paybylink/' . 'RBAY-069657';
-        $url = 'https://ifthenpay.com/api/gateway/paybylink/' . 's';
-        $payload = [
-
-            'id' => $oderReference,
-            'amount' => $amount,
-            'expiredate' => $expiredate,
-            'accounts' => 'PAYSHOP|DUF-268669;11989|718;MBWAY|KPZ-284433',
-            'btnCloseUrl' => "https://dev.win-garden.com/",
-            'btnCloseLabel' => "Fechar"
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        curl_setopt($ch, CURLOPT_GET, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode((object)$payload));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
+        // Create a PaymentIntent with amount and currency
+        $paymentIntent = $stripe->paymentIntents->create([
+            'payment_method_types' => ['multibanco'],
+            'amount' => bcmul($amount, 100),
+            'currency' => 'eur',
         ]);
 
-        $response = curl_exec($ch);
-        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        //dd($response);
-        if ($statusCode === 200) {
-            $content = json_decode($response, true);
-            //dd($content);
-            return $content;
-        } else {
-            throw new \Exception('Erro ao criar link de pagamento: ' . $response);
-        }
+        return $paymentIntent;
 
     }
 

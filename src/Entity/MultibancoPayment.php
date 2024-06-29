@@ -52,6 +52,17 @@ class MultibancoPayment
      */
     private $receipt_url;
 
+    /**
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     */
+    private $payment_url;
+
+    /**
+     * @ORM\Column(type="string", length=512, nullable=true)
+     */
+    private $client_secret;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -140,4 +151,29 @@ class MultibancoPayment
 
         return $this;
     }
+
+    public function getPaymentUrl(): ?string
+    {
+        return $this->payment_url;
+    }
+
+    public function setPaymentUrl(?string $payment_url): self
+    {
+        $this->payment_url = $payment_url;
+
+        return $this;
+    }
+
+    public function getClientSecret(): ?string
+    {
+        return $this->client_secret;
+    }
+
+    public function setClientSecret(?string $client_secret): self
+    {
+        $this->client_secret = $client_secret;
+
+        return $this;
+    }
+
 }

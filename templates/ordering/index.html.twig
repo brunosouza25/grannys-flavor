@@ -320,8 +320,10 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    <script src="https://js.stripe.com/v3/"></script>
 
     <script>
+
 
         $(document).ready(function () {
             var cartStock;
@@ -477,25 +479,21 @@
                         var ordernr = data.ordernr;
                         location.replace('/confirmed-regular-order/' + ordernr);
                     } else {
+
                         if (paymentType == "MultiBanco") {
-                            location.replace(data.url);
+
+                            $.confirm({
+                                async: true,
+                                title: 'Pagamento',
+                                columnClass: 'col-md-8',
+                                content: `URL:/payment/payment_page?clientSecret=${data.clientSecret}`,
+                                buttons: {
+                                    fechar: function () {
 
 
-                            // var total = document.getElementById("total").innerText.trim();
-                            // var amount = parseFloat(total.replace(/[^\d.-]/g, ''));
-                            // amount = amount.toFixed(2);
-                            // debugger;
-                            // $.ajax({
-                            //     type: "POST",
-                            //     url: '/payment/payment_by_ifthenpay',
-                            //     data: ({
-                            //         id: orderId,
-                            //         amount: amount
-                            //     }),
-                            //     success: function (urlIfthenpay) {
-                            //         location.replace(urlIfthenpay.urlPagamento);
-                            //     }
-                            // });
+                                    }
+                                }
+                            });
                         } else {
                             $.ajax({
                                 type: "POST",

@@ -191,17 +191,20 @@ class ConfigsController extends AbstractController
         $configs->setFixedFee($request->get('fee'));
         $configs->setYoutubeLink($request->get('youtubeLink'));
 
-
         if (is_null($stripe)) {
 
             $newStripe = new StripeConfig();
             $newStripe->setToken($request->get('token'));
             $newStripe->setDevToken($request->get('tokenDev'));
+            $newStripe->setPublicToken($request->get('publicToken'));
+            $newStripe->setDevPublicToken($request->get('publicTokenDev'));
             $en->persist($newStripe);
 
         } else {
             $stripe->setToken($request->get('token'));
             $stripe->setDevToken($request->get('tokenDev'));
+            $stripe->setPublicToken($request->get('publicToken'));
+            $stripe->setDevPublicToken($request->get('publicTokenDev'));
         }
 
         $en->persist($configs);
