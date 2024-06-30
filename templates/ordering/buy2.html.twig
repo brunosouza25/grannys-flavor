@@ -176,21 +176,21 @@
 {% block javascripts %}
 
     <script>
-        let stripe = Stripe('pk_test_51PVkqZ00r9NE2VfE1RX56KsJLwJEoO0desSIc3lCEbE4Y2ATacujtYoA9dgDd9yO8gJIxNWHWLhOKDY36nRbidPa00RwMje7nC');
+        var stripe = Stripe('{{ token }}');
 
         document
             .querySelector("#payment-form")
             .addEventListener("submit", handleSubmit);
 
 
-        const options = {
+        var options = {
             clientSecret: '{{ clientSecret }}',
 
         };
         checkStatus();
 
-        const elements = stripe.elements(options);
-        const paymentElement = elements.create('payment');
+        var elements = stripe.elements(options);
+        var paymentElement = elements.create('payment');
         paymentElement.mount('#payment-element');
 
         async function handleSubmit(e) {

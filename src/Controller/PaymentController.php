@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\MultibancoPayment;
+use App\Entity\StripeConfig;
 use App\Service\IfThenPayService;
 use App\Service\PayByrdService;
 use Doctrine\Persistence\ManagerRegistry;
@@ -45,12 +46,20 @@ class PaymentController extends AbstractController
     /**
      * @Route("/payment_page", name="payment_page")
      */
-    public function paymentPage(Request $request): Response
+    public function paymentPage(Request $request, ManagerRegistry $doctrine): Response
     {
+        $stripeConfig = $doctrine->getManager()->getRepository(StripeConfig::class)->find(1);
+        if ($_ENV['APP_ENV'] == 'dev') {
+            $token = $stripeConfig->getDevPublicToken();
+        } else {
+            $token = $stripeConfig->getPublicKey();
+
+        }
 
         $clientSecret = $request->get('clientSecret');
         return $this->render('ordering/buy2.html.twig', [
             'clientSecret' => $clientSecret,
+            'token' => $token,
         ]);
 
     }

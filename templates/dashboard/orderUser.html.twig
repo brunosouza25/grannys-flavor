@@ -176,7 +176,7 @@
                             stripe
                                 .retrievePaymentIntent(order.multibanco.client_secret)
                                 .then(function (result) {
-                                    if (result.paymentIntent.status != 'requires_payment_method'){
+                                    if (result.paymentIntent.status != 'requires_payment_method') {
                                         $.ajax({
                                             async: false,
                                             type: "POST",
@@ -205,19 +205,23 @@
                                                 }
                                                 buildPayment(order, payment);
 
-
                                             },
                                             error: function (xhr, status, errorThrown) {
                                                 // Código para manipular o erro na requisição AJAX
                                                 console.error('Erro na requisição AJAX:', errorThrown);
                                             }
                                         });
+                                    } else {
+                                        if (order.payment.status == 0) {
+                                            payment = `<span class="text-danger">Pagamento não concluido</span>
+                                                <a href="javascript:void(0)" class="btn btn-primary" onclick="paymentPage('${order.multibanco.client_secret}')">PAGAR</a>`;
+
+                                        }
+                                        buildPayment(order, payment);
+
                                     }
 
-
                                 });
-
-
                         }
 
                     } else {
@@ -229,7 +233,23 @@
             })
         })
 
-        function buildPayment(order) {
+        function paymentPage(clientSecret) {
+            $.confirm({
+                async: true,
+                title: 'Pagamento',
+                columnClass: 'col-md-8',
+                content: `URL:/payment/payment_page?clientSecret=${clientSecret}`,
+                buttons: {
+                    fechar: function () {
+
+
+                    }
+                }
+            });
+        }
+
+        function buildPayment(order, payment) {
+            debugger
             if (order.payment.status == 0) {
                 if (!order.payment.multibanco) {
                     if (order.dev) {
@@ -241,20 +261,7 @@
 
                                     <!--<a target="_blank" href="https://checkout.stripe.com/c/pay/${order.orderCodeVW}" class="btn btn-primary">PAGAR</a>-->`;
                     }
-                } else {
-
-                    if (order.dev) {
-                        payment = `<span class="text-danger">Pagamento não concluido</span>
-
-                                    <a target="_blank" href="${order.multibanco.payment_url}" class="btn btn-primary">PAGAR</a>`;
-                    } else {
-                        payment = `<span class="text-danger">Pagamento não concluido</span>
-
-                                    <a target="_blank" href="${order.multibanco.payment_url}" class="btn btn-primary">PAGAR</a>`;
-                    }
                 }
-
-
             } else {
                 if (order.payment.multibanco) {
                     payment = `<span class="text-success col-12 me-5">Pagamento concluido</span>
