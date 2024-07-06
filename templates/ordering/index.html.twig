@@ -320,10 +320,8 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://js.stripe.com/v3/"></script>
 
     <script>
-
 
         $(document).ready(function () {
             var cartStock;
@@ -479,19 +477,15 @@
                         var ordernr = data.ordernr;
                         location.replace('/confirmed-regular-order/' + ordernr);
                     } else {
-
                         if (paymentType == "MultiBanco") {
-
                             $.confirm({
-                                async: true,
-                                title: 'Pagamento',
-                                columnClass: 'col-md-8',
-                                content: `URL:/payment/payment_page?clientSecret=${data.clientSecret}`,
+                                async: false,
+                                title: 'Multibanco',
+                                columnClass: 'col-md-4',
+                                content: data.body,
                                 buttons: {
                                     fechar: function () {
                                         location.replace('/');
-
-
                                     }
                                 }
                             });

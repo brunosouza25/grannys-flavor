@@ -116,12 +116,17 @@ class PaymentService
         $user = $this->contact->getUserByOrderId($oderReference);
         // Create a PaymentIntent with amount and currency
         $paymentIntent = $stripe->paymentIntents->create([
-            'payment_method_types' => ['multibanco'],
             'amount' => bcmul($amount, 100),
             'currency' => 'eur',
+            'confirm' => true,
+            'payment_method_types' => ['multibanco'],
+            'payment_method_data' => [
+                'type' => 'multibanco',
+                'billing_details' => ['email' => 'jenny@example.com'],
+            ],
         ]);
 
-        return $paymentIntent;
+        return $paymentIntent->next_action['multibanco_display_details'];
 
     }
 
