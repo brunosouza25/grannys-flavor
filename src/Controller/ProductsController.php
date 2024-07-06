@@ -1373,7 +1373,7 @@ class ProductsController extends AbstractController
 //            dd($productGrid);
 //            $cart->set($productInformation->getId());
             $cart->setProductId($productInformation->getId());
-            $cart->setProductGridId($productGrid->getId());
+            //$cart->setProductGridId($productGrid->getId());
 
         }
 

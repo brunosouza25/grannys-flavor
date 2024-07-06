@@ -66,7 +66,9 @@
                     transition: 500ms;
                 }
 
-
+                .custom-background {
+                    background-color: #1c346c;
+                }
             </style>
             <div class="col-lg-2 col-sm-12 me-2 d-none d-lg-block pd-0 not">
                 <div class="button-group d-flex justify-content-end divButtons">
@@ -106,6 +108,23 @@
     </div>
 </nav>
 
+<!-- Separate section for smaller screens -->
+<div class="container d-lg-none mt-2 custom-background">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between">
+                <button id="loginSmall" type="button" class="btn text-white">Login</button>
+                <button id="registerSmall" type="button" class="btn text-white">Register</button>
+                <a type="button" href="/cart" id="cartSmall" class="btn btn-light position-relative p-0 ms-2">
+                    <i class="bi bi-cart3 fs-4"></i>
+                    <span id="lblCartCountSmall"
+                          class="lblCartCount position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">0</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--     ..-.. -->
 </body>
 
@@ -122,9 +141,24 @@
 <script>
 
 
+    document.getElementById('register').addEventListener('click', function () {
+        location.replace('/register_costumer');
+    })
+    document.getElementById('login').addEventListener('click', function () {
+        location.replace('/login')
+    })
     document.getElementById('cart').addEventListener('click', function () {
         location.replace('/cart')
+    });
 
+    document.getElementById('cartSmall').addEventListener('click', function () {
+        location.replace('/cart')
+    });
+    document.getElementById('loginSmall').addEventListener('click', function () {
+        location.replace('/login')
+    })
+    document.getElementById('registerSmall').addEventListener('click', function () {
+        location.replace('/register_costumer');
     })
 
     function updateCartQuantity(quantity) {

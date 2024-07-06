@@ -124,8 +124,6 @@
 
         getImages();
         getProduct();
-        getColors();
-        getSizes();
         var stock = 0;
         var grid = false;
         /**
@@ -146,148 +144,10 @@
                         $("#mainImage").attr('src', `/${productJson.image}`)
                         $("#info").text(`${productJson.brandName != null ? productJson.brandName : ''} / ${productJson.categoryName != null ? productJson.categoryName : ''}`)
 
-                        if (!productJson.grid) {
-                            grid = false;
-                            //$("#productStock").text("Restam " + productJson.stock + " itens no estoque")
-                            stock = productJson.stock;
-                        }
                     }, error: function (e) {
                         console.log(e)
                     }
                 });
-        }
-
-        /**
-         * Função para buscar as cores do produto
-         */
-        function getColors() {
-            const productId = {{ productId }}
-                $.ajax({
-                    type: "POST",
-                    url: "{{ path('get_colors', {'productId': productId}) }}",
-                    success: function (colorsJson) {
-                        if (colorsJson.length < 1) {
-                            return;
-                        }
-                        const divColors = document.getElementById('colors');
-                        divColors.innerHTML = `<div class="col-12 zero-height">
-                        </div>`;
-                        for (const color of colorsJson) {
-                            divColors.innerHTML += `
-                                <div class="col-5 col-lg-3 st text-center" style="border-radius: 50%; border-width: 1px;">
-
-                                    <img class="col-lg-6 col-12 color grid p-2 border border-2" data-id="${color.grid_id}" src="/${color.image_color}"  alt="Gold">
-                                <div>
-                                                                    <span style="display: block; min-height: 45px">${color.name}</span>
-
-</div>
-                                </div>
-                            `;
-                        }
-
-                        $('.color').click(function () {
-                            //remove a classe de todos
-                            $('.color.border-primary').removeClass('border-primary');
-                            $('.color.active').removeClass('active');
-
-                            //adiciona onde você clicou
-                            $(this).addClass('border-primary');
-                            $(this).addClass('active');
-                        });
-
-                        $('.grid').click(function () {
-
-                            if ($('.size').length > 0 & $('.size.active').length < 1) {
-                                return 0
-
-                            }
-
-                            if ($('.color').length > 0 & $('.color.active').length < 1) {
-                                return 0;
-                            }
-
-                            const colorId = $('.color.active').data('id');
-                            const sizeId = $('.size.active').data('id');
-
-                            getGridStock(colorId, sizeId, productId);
-
-                        });
-
-
-                    }
-                });
-        }
-
-
-        /**
-         * Função para buscar os tamanhos do produto
-         */
-        function getSizes() {
-            const productId = {{ productId }}
-                $.ajax({
-                    type: "POST",
-                    url: "{{ path('get_sizes', {'productId': productId}) }}",
-                    success: function (sizesJson) {
-                        if (sizesJson.length < 1) {
-                            return;
-                        }
-                        const divSizes = document.getElementById('sizes');
-                        divSizes.innerHTML = `                   <div class="col-12 zero-height">
-                        <span>Tamanhos</span>
-                    </div>`;
-                        for (const size of sizesJson) {
-                            divSizes.innerHTML += `
-                            <div class="col-5 col-lg-4 border grid inputText border-2 border-dark rounded me-2 p-3 size" data-id="${size.grid_id}" >${size.name}</div>`
-                        }
-
-                        $('.size').click(function () {
-                            $('.size.active').removeClass('active')
-                            $(this).addClass('active');
-                        });
-
-
-                        $('.grid').click(function () {
-
-                            if ($('.size').length > 0 & $('.size.active').length < 1) {
-                                return 0
-
-                            }
-
-                            if ($('.color').length > 0 & $('.color.active').length < 1) {
-                                return 0;
-                            }
-
-                            const colorId = $('.color.active').data('id');
-                            const sizeId = $('.size.active').data('id');
-
-                            getGridStock(colorId, sizeId, productId);
-
-                        });
-
-
-                    }
-                });
-        }
-
-        function getGridStock(colorId, sizeId, productId) {
-            $.ajax({
-                type: "POST",
-                url: "/check_grid_stock",
-                data: {colorId: colorId, sizeId: sizeId, productId: productId},
-                success: function (stockJson) {
-                    $stockProduct = stockJson.stock;
-                    $code = stockJson.code;
-
-                    if(stockJson.code === ''){
-                       $code = " ";
-                       $stockProduct = 0;
-                    }
-
-                    //$("#productStock").text(`Restam ${$stockProduct} itens no estoque!`);
-                    $("#productCode").text("Código: " + $code)
-                    stock = $stockProduct;
-                }
-            });
         }
         
         /**
@@ -367,18 +227,8 @@
         $('#addToCart').click(function () {
 
             const productId = $(this).data('id');
-            const colorId = $('.color.active').data('id');
-            const sizeId = $('.size.active').data('id');
             const productQuantity = $('#productQuantity').val();
-
-            // if(grid) {
-            //     getGridStock(colorId, sizeId);
-            // }
-            // if (stock < productQuantity){
-            //     Swal.fire('Estoque indisponível!')
-            //     return;
-            // }
-            const product = {productId: productId, colorId: colorId, sizeId: sizeId, productQuantity: productQuantity}
+            const product = {productId: productId, sizeId: sizeId, productQuantity: productQuantity}
 
             addToCart(product);
 
@@ -390,11 +240,9 @@
         $('#buyNow').click(function () {
 
             const productId = $(this).data('id');
-            const colorId = $('.color.active').data('id');
-            const sizeId = $('.size.active').data('id');
             const productQuantity = $('#productQuantity').val();
 
-            const product = {productId: productId, colorId: colorId, sizeId: sizeId, productQuantity: productQuantity}
+            const product = {productId: productId, productQuantity: productQuantity}
 
             var again = addToCart(product);
 
@@ -402,7 +250,6 @@
                 location.replace('/cart');
 
             }
-
 
         });
 

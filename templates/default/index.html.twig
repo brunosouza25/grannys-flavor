@@ -577,53 +577,42 @@
                             </div>
                         `
                     } else {
-                        var moreTag = '';
                         for (const product of productsJson) {
                             let colorDivs = '';
+                            let moreTag = '';  // Defina o moreTag, caso seja usado em algum lugar.
                             let cont = 0;
 
-                            const imagesArray = product.gridColors;
-                            //debugger
-                            if (typeof imagesArray != 'undefined') {
-                                for (const image of imagesArray) {
-                                    if (cont >= 4) {
-                                        break;
-                                    }
-                                    colorDivs += `<img style='width: 25px; height: 25px; margin-right: 5px; border-radius: 50%;' src="${image.image}" alt="" class="">`;
-                                    cont++;
-                                }
-                                const quantity = imagesArray.length - cont;
-                                moreTag = imagesArray.length > 4 ? `<p>mais ${quantity}</p>` : '';
-
-                            }
-
-                            divProducts.innerHTML +=
-                                `
-                            <div class="card card-size col-md-4 col-sm-12 ml-2 mb-2 shadow">
-                                    <a href="{{ bo_url }}product/${product.id}">
-                                    <div class="info-card d-flex justify-content-between mx-4 mt-2">
-                                        <p class="text-light mt-3 px-2 py-1 rounded" style="background-color: #1c346c;">Novo</p>
-                                        <p class="fx-10">
-                                        <i ${product.isFavorite ? 'class="favorite bi bi-heart-fill text-danger' : 'class="favorite bi bi-suit-heart'}" data-product-id="${product.id}"></i>                                        </p>
-                                    </div>
-                                    <img width="500" style="object-fit: contain;" height="200" class="card-img-top image-fit" src="${product.image}"
-                                        alt="Card image cap">
-                                    <div class="card-body text-dark">
-                                        <span class="card-title d-block" ${colorDivs.length > 0 ? 'style="min-height: 46px"' : 'style="min-height: 70px"'}>${product.name}</span>
-                                        <h6 class="card-text card-price">${(Number(product.price)).toFixed(2)}€</h6>
-                                        <p class="card-text">
-                                        <small class="text-muted">${product.categoryName}</small>
-                                        </p>
-                                        <div class="mb-3">
-                                            <div class="color-options d-flex justify-content-start rounded-3">${colorDivs} ${moreTag}</div> <!-- Exibe os círculos de imagem -->
-                                        </div>
-                                    </div>
-                                    <div class="button-cart d-flex justify-content-center mb-3 ">
-                                    <button type="button" class="btn btn-dark w-75"  ${product.stock < 1 ? 'disabled' : ''} style="${product.stock < 1 ? 'background-color: #636161;' : 'background-color:#1c346c;'} position: relative; bottom: 6px;">${product.stock < 1 ? 'Sem Estoque' : 'Cart'}</button>
-                                    </div>
-                                </a>
-                            </div>
-                        `;
+                            divProducts.innerHTML += `
+        <div class="card card-size col-md-4 col-sm-12 ml-2 mb-2 shadow">
+            <a href="{{ bo_url }}product/${product.id}">
+                <div class="info-card d-flex justify-content-between mx-4 mt-2">
+                    <p class="bg-success text-light mt-3 px-2 py-1 rounded">Novo</p>
+                    <p class="fx-10">
+                        <i class="${product.isFavorite ? 'favorite bi bi-heart-fill text-danger' : 'favorite bi bi-suit-heart'}" data-product-id="${product.id}"></i>
+                    </p>
+                </div>
+                <img width="500" style="object-fit: contain;" height="200" class="card-img-top image-fit" src="${product.image ? product.image : '/uploads/images/logo1.png'}" alt="Card image cap">
+                <div class="card-body text-dark">
+                    <span class="card-title d-block" ${colorDivs.length > 0 ? 'style="min-height: 46px"' : 'style="min-height: 70px"'}>${product.name}</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="card-text card-price mb-0">${(product.price)}€</h6>
+                        <small class="text-muted"></small>
+                    </div>
+                    <p class="card-text">
+                        <small class="text-muted">${product.categoryName}</small>
+                    </p>
+                    <div class="mb-3">
+                        <div class="color-options d-flex justify-content-start rounded-3">${colorDivs} ${moreTag}</div>
+                    </div>
+                </div>
+            </a>
+            <div class="button-cart d-flex justify-content-center mb-3">
+                <button type="button" class="btn btn-success w-75 addProductToCart" data-product-id="${product.id}" ${product.stock < 1 ? 'disabled' : ''} style="${product.stock < 1 ? 'background-color: #636161;' : 'background-color: #000000;'}">
+                    ${product.stock < 1 ? 'Sem stock' : 'Carrinho'}
+                </button>
+            </div>
+        </div>
+    `;
                         }
 
                         $(".favorite").click(function (event) {

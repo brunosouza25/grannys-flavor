@@ -145,7 +145,7 @@
             <div class="col-xl-12 text-center col-sm-12">
                 <h5 id="producutsQuantity">Foram encontrados .</h5>
             </div>
-            <div class="col-1 btn btn-success d-block d-lg-none mb-3 vertical-button  ps-0 pe-4 fixed-left ps-2"
+            <div class="col-1 btn btn-dark d-block d-lg-none mb-3 vertical-button  ps-0 pe-4 fixed-left ps-2"
                  type="button" data-bs-toggle="offcanvas" data-bs-target="#menuAside">
                 Filtrar produtos
             </div>
@@ -163,8 +163,8 @@
                                 <div class="nano-content">
                                     <ul class="gw-nav gw-nav-list">
                                         <!-- Title -->
-                                        <li class="init-un-active " style="background-color: green"><a
-                                                    style="background-color: green" href="javascript:void(0)"> <span
+                                        <li class="init-un-active " style="background-color: #7494c4"><a
+                                                    style="background-color:#7494c4" href="javascript:void(0)"> <span
                                                         class="gw-menu-text text-light fs-5">FILTROS</span> </a></li>
                                         <!-- CATEGORIES -->
                                         <li class="init-arrow-down"><a href="javascript:void(0)"> <span
@@ -174,15 +174,6 @@
 
                                             </ul>
                                         </li>
-                                        <!-- FIM CATEGORIES -->
-
-                                        {#                                        <!-- EQUPAMENTOS --> #}
-                                        {#                                       <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Equipamentos</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                        {#                                           <ul class="gw-submenu" id="equipaments-filter-mobile"> #}
-
-                                        {#                                           </ul> #}
-                                        {#                                       </li> #}
-                                        {#                                       <!-- FIM EQUPAMENTOS --> #}
 
                                         <!-- PREÇO -->
                                         <li class=" init-arrow-down"><a href="javascript:void(0)"> <span
@@ -198,60 +189,20 @@
                                         </li>
                                         <!-- FIM PREÇO -->
 
-
                                         <!-- BRANDS -->
-                                        {#                                        <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Marcas</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                        {#                                            <ul class="gw-submenu" id="brands-filter-mobile"> #}
+                                        <li class="init-arrow-down"><a href="javascript:void(0)"> <span
+                                                        class="gw-menu-text text-dark fs-5">Marcas</span> <b
+                                                        class="gw-arrow icon-arrow-up8"></b> </a>
+                                            <ul class="gw-submenu" id="brands-filter-mobile">
 
-                                        {#                                            </ul> #}
-                                        {#                                        </li> #}
+                                            </ul>
+                                        </li>
                                         <!-- FIM BRANDS -->
-
-                                        {#                                        <!-- Models --> #}
-                                        {#                                        <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Modelos</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                        {#                                            <ul class="gw-submenu" id="models-filter-mobile"> #}
-
-                                        {#                                            </ul> #}
-                                        {#                                        </li> #}
-                                        <!-- FIM Models -->
-
-                                        <!-- CALIBRES
-                                        <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Calibres</span> <b class="gw-arrow icon-arrow-up8"></b> </a>
-                                            <ul class="gw-submenu" id="bores-filter-mobile">
-
-                                            </ul>
-                                        </li>
-                                         FIM CALIBRES -->
-
-                                        <!-- TAGS
-                                        <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Tags</span> <b class="gw-arrow icon-arrow-up8"></b> </a>
-                                            <ul class="gw-submenu" id="tags-filter-mobile">
-
-                                            </ul>
-                                        </li>
-                                         FIM TAGS -->
-
-
-                                        {#                                        <!-- TAMANHO --> #}
-                                        {#                                        <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Tamanhos</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                        {#                                            <ul class="gw-submenu" id="sizes-filter-mobile"> #}
-
-                                        {#                                            </ul> #}
-                                        {#                                        </li> #}
-                                        {#                                        <!-- FIM TAMANHO --> #}
-
-                                        {#                                        <!-- COR --> #}
-                                        {#                                        <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Cores</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                        {#                                            <ul class="gw-submenu" id="colors-filter-mobile"> #}
-
-                                        {#                                            </ul> #}
-                                        {#                                        </li> #}
-                                        {#                                        <!-- FIM COR --> #}
-
 
                                         <li>
                                             <div class="row ">
-                                                <button id="apply" class="btn btn-success" onclick="FilterProducts(1)">
+                                                <button id="apply" style="background-color: #1c346c; color: #FFFFFF; border-style: none"
+                                                        onclick="FilterProducts(1)">
                                                     Aplicar filtros selecionados
                                                 </button>
                                             </div>
@@ -270,8 +221,8 @@
                         <div class="nano-content">
                             <ul class="gw-nav gw-nav-list">
                                 <!-- Title -->
-                                <li class="init-un-active" style="background-color: green"><a
-                                            style="background-color: green" href="javascript:void(0)"> <span
+                                <li class="init-un-active" style="background-color: #7494c4"><a
+                                            style="background-color:#7494c4" href="javascript:void(0)"> <span
                                                 class="gw-menu-text text-light fs-5">Filtros</span> </a></li>
                                 <!-- CATEGORIES -->
                                 <li class="init-arrow-down"><a href="javascript:void(0)"> <span
@@ -283,13 +234,6 @@
                                 </li>
                                 <!-- FIM CATEGORIES -->
 
-                                {#                                <!-- EQUPAMENTOS --> #}
-                                {#                                <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Equipamentos</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                {#                                    <ul class="gw-submenu" id="equipaments-filter"> #}
-
-                                {#                                    </ul> #}
-                                {#                                </li> #}
-                                {#                                <!-- FIM EQUPAMENTOS --> #}
 
                                 <!-- PREÇO -->
                                 <li class=" init-arrow-down"><a href="javascript:void(0)"> <span
@@ -304,69 +248,19 @@
                                 </li>
                                 <!-- FIM PREÇO -->
 
-
                                 <!-- BRANDS -->
-                                {#                                <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Marcas</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                {#                                    <ul class="gw-submenu" id="brands-filter"> #}
+                                <li class="init-arrow-down"><a href="javascript:void(0)"> <span
+                                                class="gw-menu-text text-dark fs-5">Marcas</span> <b
+                                                class="gw-arrow icon-arrow-up8"></b> </a>
+                                    <ul class="gw-submenu" id="brands-filter-mobile">
 
-                                {#                                    </ul> #}
-                                {#                                </li> #}
+                                    </ul>
+                                </li>
                                 <!-- FIM BRANDS -->
-
-                                <!-- Models -->
-                                {#                                <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Modelos</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                {#                                    <ul class="gw-submenu" id="models-filter"> #}
-
-                                {#                                    </ul> #}
-                                {#                                </li> #}
-                                <!-- FIM Models -->
-
-                                <!-- TYPES
-                                <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Tipos</span> <b class="gw-arrow icon-arrow-up8"></b> </a>
-                                    <ul class="gw-submenu" id="types-filter">
-
-                                    </ul>
-                                </li>
-                                 FIM TYPES -->
-
-                                <!-- CALIBRES
-                                <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Calibres</span> <b class="gw-arrow icon-arrow-up8"></b> </a>
-                                    <ul class="gw-submenu" id="bores-filter">
-
-                                    </ul>
-                                </li>
-                                 FIM CALIBRES -->
-
-                                <!-- TAGS
-                                <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Tags</span> <b class="gw-arrow icon-arrow-up8"></b> </a>
-                                    <ul class="gw-submenu" id="tags-filter">
-
-                                    </ul>
-                                </li>
-                                 FIM TAGS -->
-
-
-                                {#                                <!-- TAMANHO --> #}
-                                {#                                <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Tamanhos</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                {#                                    <ul class="gw-submenu" id="sizes-filter"> #}
-
-                                {#                                    </ul> #}
-                                {#                                </li> #}
-                                {#                                <!-- FIM TAMANHO --> #}
-
-                                {#                                <!-- COR --> #}
-                                {#                                <li class="init-arrow-down"> <a href="javascript:void(0)"> <span class="gw-menu-text text-dark fs-5">Cores</span> <b class="gw-arrow icon-arrow-up8"></b> </a> #}
-                                {#                                    <ul class="gw-submenu" id="colors-filter"> #}
-
-                                {#                                    </ul> #}
-                                {#                                </li> #}
-                                {#                                <!-- FIM COR --> #}
-
 
                                 <li>
                                     <div class="row ">
-                                        <button id="apply" class="btn btn-success" onclick="FilterProducts(0)">Aplicar
-                                            filtros selecionados
+                                        <button id="apply" class="" onclick="FilterProducts(0)" style="background-color: #1c346c; color: #FFFFFF; border-style: none">Aplicar filtros selecionados</button>
                                         </button>
                                     </div>
                                 </li>
@@ -437,10 +331,12 @@
 
                         if (data.searchName == 'false') {
 
-                            $('#producutsQuantity').text(`Foram encontrados ${data.quantity} produtos`);
+                            $('#producutsQuantity').text(`Foram encontrados ${data.products.length} produtos`);
+                            //debugger;
                         } else {
 
                             $('#producutsQuantity').text(`Foram encontrados ${data.products.length} produtos de "${data.searchName.toUpperCase()}"`);
+                            //debugger;
                         }
 
                         var divProducts = document.getElementById('products');
@@ -669,8 +565,8 @@
                 <div class="card-body text-dark">
                     <span class="card-title d-block" ${colorDivs.length > 0 ? 'style="min-height: 46px"' : 'style="min-height: 70px"'}>${product.name}</span>
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="card-text card-price mb-0">${(product.price).toFixed(2)}€</h6>
-                        <small class="text-muted">* IVA incluído</small>
+                        <h6 class="card-text card-price mb-0">${(product.price)}€</h6>
+                        <small class="text-muted"></small>
                     </div>
                     <p class="card-text">
                         <small class="text-muted">${product.categoryName}</small>
@@ -1018,7 +914,7 @@
             $(".btn-search-div").click(function () {
                 // $("#products").removeClass("slick-initialized slick-slider");
                 // getProducts($('.search-bar').val(), '');
-                debugger;
+                //debugger;
                 location.replace(`/store?search=${$('.search-bar').val()}`)
 
             })
