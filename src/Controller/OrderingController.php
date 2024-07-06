@@ -100,7 +100,457 @@ class OrderingController extends AbstractController
         $this->vouchersService = $vouchersService;
     }
 
+    /**
+     * @Route("/ordering", name="app_ordering")
+     */
+    public function index(ManagerRegistry $doctrine, ParameterBagInterface $parameterBagInterface): Response
+    {
 
+        $session = $this->sessionService->checkSession();
+
+        $en = $doctrine->getManager();
+
+        $qb = $en->createQueryBuilder();
+
+        $query = $qb->select('a')
+            ->from('App\Entity\Categories', 'a')
+            ->where('a.timeinm <= :timeinm')
+            ->andWhere('a.timeoutm >= :timeoutm')
+            ->orWhere("a.timeinm = '' AND a.timeoutm = ''")
+            ->andWhere('a.menustate = :menustate')
+            ->setParameter('menustate', 1)
+            ->setParameter('timeinm', date('H:i'))
+            ->setParameter('timeoutm', date('H:i'))
+            ->orderBy('a.id', 'ASC')
+            ->getQuery();
+
+        $categories = $query->getResult();
+        $qb2 = $en->createQueryBuilder();
+
+        $query = $qb2->select('a')
+            ->from('App\Entity\Products', 'a')
+            ->where('a.timeinm <= :timeinm')
+            ->andWhere('a.timeoutm >= :timeoutm')
+            ->orWhere("a.timeinm = '' AND a.timeoutm = ''")
+            ->andWhere('a.menustate = :menustate')
+            ->setParameter('menustate', 1)
+            ->setParameter('timeinm', date('H:i'))
+            ->setParameter('timeoutm', date('H:i'))
+            ->orderBy('a.category_id', 'ASC')
+            ->getQuery();
+
+        $items = $query->getResult();
+
+        $sizes = $doctrine->getRepository(Foodmenuitemsmultiple::class)->findAll();
+        $foodadicionaCat = $doctrine->getRepository(Foodadicionalcategory::class)->findAll();
+//        $foodConAdicional = $doctrine->getRepository(Foodadicionalconnection::class)->findAll();
+//        $foodAdicionalItems = $doctrine->getRepository(Foodadicionalitems::class)->findAll();
+//        $foodadicionalconnectionintem = $doctrine->getRepository(Foodadicionalconnectionintem::class)->findAll();
+//        $foodAdicionalConMultipe = $doctrine->getRepository(Foodadicionalconnectionitemmultiple::class)->findAll();
+        $getPositions = $doctrine->getRepository(Housedata::class)->find(1);
+        $getZones = $doctrine->getRepository(Zonemap::class)->findAll();
+        $getCordinates = $doctrine->getRepository(Zonemapdrawing::class)->findAll();
+        $getcontactData = $doctrine->getRepository(Guestcontact::class)->findOneBy(array('session' => $session));
+//        $getsliders = $doctrine->getRepository(Sliderscategory::class)->findAll();
+//dd($items);
+
+        /**
+         * as linhas abaixo foram feitas para remover o exesso de processamento no twig "pode se melhorar utilizando joins"
+         * para cada categoria busca se os produtos, dos pordutos busca se os adicionais e dos adicionais busca se os produtos dos adicionais
+         * no twig terá categorias->produtos->adicionais->produtosdosadicionais
+         */
+        foreach ($categories as $category) {
+            $category->sliders = $doctrine->getRepository(Sliderscategory::class)->findBy(['idcategory' => $category->getId()]);
+
+            $qb3 = $en->createQueryBuilder();
+            $query = $qb3->select('a')
+                ->from('App\Entity\Products', 'a')
+                ->where('a.timeinm <= :timeinm')
+                ->andWhere('a.timeoutm >= :timeoutm')
+                ->orWhere("a.timeinm = '' AND a.timeoutm = ''")
+                ->andWhere('a.menustate = :menustate')
+                ->andWhere('a.category_id = :category_id')
+                ->setParameter('menustate', 1)
+                ->setParameter('timeinm', date('H:i'))
+                ->setParameter('timeoutm', date('H:i'))
+                ->setParameter('category_id', $category->getId())
+                ->orderBy('a.category_id', 'ASC')
+                ->getQuery();
+            $products = $query->getResult();
+
+            foreach ($products as $product) {
+                $sizess = $doctrine->getRepository(Foodmenuitemsmultiple::class)->findBy(['idfooditem' => $product->getId()]);
+                foreach ($sizess as $size) {
+                    $foodAdicionalConMultiple = $doctrine->getRepository(Foodadicionalconnectionitemmultiple::class)->findBy(['iditem' => $product->getId(), 'iditemmultiple' => $size->getId()]);
+                    foreach ($foodAdicionalConMultiple as $foodAdicionalConMultipleItem) {
+                        $catAdicionals = $doctrine->getRepository(Foodadicionalcategory::class)->findBy(['id' => $foodAdicionalConMultipleItem->getIdadicional()]);
+                        foreach ($catAdicionals as $adicional) {
+                            $adicional->foodAdicionaItems = $doctrine->getRepository(Foodadicionalitems::class)->findBy(['idadicional' => $adicional->getId()]);
+                        }
+                        $foodAdicionalConMultipleItem->catAdicional = $catAdicionals;
+                    }
+                    $size->foodAdiicionalMultiple = $foodAdicionalConMultiple;
+                }
+
+                $product->sizes = $doctrine->getRepository(Foodmenuitemsmultiple::class)->findBy(['idfooditem' => $product->getId()]);
+
+                $qb4 = $en->createQueryBuilder();
+
+                $query = $qb4->select('a')
+                    ->from('App\Entity\Foodadicionalconnection', 'a')
+                    ->where("a.idcategoryfood = :idcategoryfood")
+                    ->setParameter('idcategoryfood', $category->getId())
+                    ->getQuery();
+
+
+                $productAdicionaisCategory = $query->getResult();
+
+                $productAdicionais = $doctrine->getRepository(Foodadicionalconnectionintem::class)->findBy(['iditem' => $product->getId(), 'idcategoryfood' => $category->getId()]);
+
+                $add = [];
+
+                /**
+                 * esse laço busca todos os adicionais da categoria, pois pode se ter adicional na categoria para todos os produtos
+                 * categoria tem adicionais e esses adicionais ficam nos produtos
+                 */
+                foreach ($productAdicionaisCategory as $productAdicionaiss) {
+                    $adicional2 = $doctrine->getRepository(Foodadicionalcategory::class)->findOneBy(['id' => $productAdicionaiss->getIdadicional()]);
+
+                    $adicional2->foodAdicionaItems = $doctrine->getRepository(Foodadicionalitems::class)->findBy(['idadicional' => $productAdicionaiss->getIdadicional()]);
+                    $add[] = $adicional2;
+
+                }
+
+                /**
+                 * esse laço busca todos os adicionais do produto
+                 * produto->adicionais->produtosadicionais
+                 */
+                foreach ($productAdicionais as $adicionall) {
+                    $adicional = $doctrine->getRepository(Foodadicionalcategory::class)->findOneBy(['id' => $adicionall->getIdadicional()]);
+
+                    $adicional->foodAdicionaItems = $doctrine->getRepository(Foodadicionalitems::class)->findBy(['idadicional' => $adicionall->getIdadicional()]);
+
+                    $add[] = $adicional;
+                }
+                $product->catAdicional = $add;
+            }
+
+            $category->products = $products;
+        }
+
+        $orders = [];
+
+        if (!is_null($getcontactData)) {
+            $orders = $doctrine->getRepository(Apporders::class)->findBy(['userid' => $getcontactData->getId()]);
+
+        }
+
+        foreach ($orders as $order) {
+
+            if ($order->getPaymenttype() == 'VivaWallet' && $order->getPaymentstatus() == 0) {
+
+                unset($orders[array_search($order, $orders)]);
+                continue;
+            }
+
+            $order->ordersProducts = $doctrine->getRepository(Apporderitems::class)->findBy(['orderid' => $order->getId()]);
+            foreach ($order->ordersProducts as $product) {
+                $product->orderExtras = $doctrine->getRepository(Orderlistextra::class)->findBy(['orderid' => $product->getId()]);
+            }
+
+        }
+        if ($getcontactData == null) {
+            $getcontactData = '0';
+        }
+
+        $getcontactAddress = $doctrine->getRepository(Guestcontactaddress::class)->findOneBy(array('session' => $session));
+
+        $ltd = $getPositions->getLat();
+        $lng = $getPositions->getLng();
+
+        $cart = $doctrine->getRepository(Cart::class)->findBy(array('session' => $session));
+        $cartextras = $doctrine->getRepository(Ordercartextras::class)->findAll();
+        $cartmultiple = $doctrine->getRepository(GridCart::class)->findAll();
+        $deliveryPermission = 0;
+
+        if ($getcontactAddress != null) {
+            $getzoneDelivery = $doctrine->getRepository(Zonemap::class)->find($getcontactAddress->getDeliveryzoneid());
+
+            if ($getzoneDelivery == null) {
+                $taxadelivery = 0;
+            } else {
+                $deliveryPermission = 1;
+
+                $taxadelivery = $getzoneDelivery->getPrice();
+            }
+
+        } else {
+            $taxadelivery = 0;
+        }
+
+        $subtotal = 0;
+        $totalExtras = 0;
+        foreach ($cart as $valuep) {
+            $subtotal += +(float)$valuep->getPrice() * $valuep->getQtd();
+        }
+//        dd($cart);
+
+        $saco = 1;
+
+        $subtotal += $totalExtras;
+
+        $totalPay = ($subtotal + $saco + $taxadelivery);
+
+        return $this->render('ordering/index.html.twig', [
+            'titlePage' => 'Encomendar',
+            'categories' => $categories,
+            'items' => $items,
+            'sizes' => $sizes,
+//            'conAdicional' => $foodConAdicional,
+            'catAdicional' => $foodadicionaCat,
+//            'foodAdicionaItems' => $foodAdicionalItems,
+//            'foodAdiicionalMultiple' => $foodAdicionalConMultipe,
+//            'foodadicionalconnectionintem' => $foodadicionalconnectionintem,
+            'ltd' => $ltd,
+            'lng' => $lng,
+            'zones' => $getZones,
+            'cordinates' => $getCordinates,
+            'carts' => $cart,
+            'cartextras' => $cartextras,
+            'cartmultiple' => $cartmultiple,
+            'guests' => $getcontactData,
+            'guestsAddress' => $getcontactAddress,
+            'subtotal' => $subtotal,
+            'bag' => $saco,
+            'delivery' => $taxadelivery,
+            'total' => $totalPay,
+//            'sliders' => $getsliders,
+            'deliveryPermission' => $deliveryPermission,
+            'orders' => $orders
+
+        ]);
+    }
+
+    /**
+     * @Route("/ordering-get-options", name="app_ordering_get_options")
+     */
+    public function getOptionsOrdering(ManagerRegistry $doctrine, Request $request): Response
+    {
+
+        $idItem = $request->get('targetMultipe');
+        $itemCon = $doctrine->getRepository(Foodadicionalconnectionitemmultiple::class)->findBy(array('iditemmultiple' => $idItem));
+        $itemsT = $doctrine->getRepository(Foodadicionalcategory::class)->findAll();
+        $itemsL = $doctrine->getRepository(Foodadicionalitems::class)->findAll();
+
+
+        return $this->json([
+            'item' => $itemCon,
+            'itemst' => $itemsT,
+            'itemsl' => $itemsL
+        ]);
+
+    }
+
+
+    /**
+     * @Route("/ordering-save-contact-guest", name="app_ordering_save_contact_guest")
+     */
+    public function saveContactGuest(ManagerRegistry $doctrine, Request $request): Response
+    {
+
+        $name = $request->get('guest-name');
+        $lastname = $request->get('guest-lastname');
+        $guestemail = $request->get('guest-email');
+        $guestcontact = $request->get('guest-number');
+        $idcontact = $request->get('idcontact');
+
+        $code = rand(00000, 99999);
+        $session = $this->sessionService->checkSession();
+
+        $getContactGuest = $doctrine->getRepository(Guestcontact::class)->find($idcontact);
+
+
+        if ($getContactGuest == null) {
+
+            $addGuestData = new Guestcontact();
+            $addGuestData->setName($name);
+            $addGuestData->setSession($session);
+            $addGuestData->setEmail($guestemail);
+            $addGuestData->setLastname($lastname);
+            $addGuestData->setContact($guestcontact);
+            $addGuestData->setState(0);
+            $addGuestData->setCode($code);
+            $doctrine->getManager()->persist($addGuestData);
+            $doctrine->getManager()->flush();
+
+            return new JsonResponse([
+                'state' => '0'
+            ]);
+
+        } else {
+
+            $updtContactGuest = $doctrine->getRepository(Guestcontact::class)->find($getContactGuest->getId());
+
+            if ($guestcontact != $updtContactGuest->getContact()) {
+                $updtContactGuest->setState(0);
+                $updtContactGuest->setCode($code);
+            }
+
+
+            $updtContactGuest->setName($name);
+            $updtContactGuest->setSession($session);
+            $updtContactGuest->setEmail($guestemail);
+            $updtContactGuest->setLastname($lastname);
+            $updtContactGuest->setContact($guestcontact);
+            $updtContactGuest->setSession($session);
+            $doctrine->getManager()->persist($updtContactGuest);
+            $doctrine->getManager()->flush();
+
+            $changeAddresSession = $doctrine->getRepository(Guestcontactaddress::class)->findOneBy(array('idcontact' => $getContactGuest->getId()));
+            $changeAddresSession->setSession($getContactGuest->getSession());
+
+            $doctrine->getManager()->persist($changeAddresSession);
+            $doctrine->getManager()->flush();
+
+
+            return new JsonResponse([
+                'state' => '1'
+            ]);
+        }
+
+
+//        setcookie("TestCookie", $value);
+//        setcookie("TestCookie", $value, time()+(10*365*24*60*60));  /* expire in 1 hour */
+//        setcookie("TestCookie", $value, time()+3600, "/~rasmus/", "example.com", 1);
+
+
+    }
+
+
+    /**
+     * @Route("/ordering-add-to-cart", name="app_ordering_add_to_cart")
+     */
+    public function addToCartOrder(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $itemtype = $request->get('itemtype');
+
+        $totalItemPrice = 0;
+
+        if ($itemtype == 'multiple') {
+
+            $itemsize = $request->get('itemsize');
+            $commentitem = $request->get('comment-item');
+            $qtd = $request->get('qtd-to-add');
+
+            $getitem = $doctrine->getRepository(Foodmenuitemsmultiple::class)->find($itemsize);
+            $productItem = $doctrine->getRepository(Products::class)->find($getitem->getIdfooditem());
+
+            $session = $this->sessionService->checkSession();
+
+            $orderCart = $this->orderCartService->checkSessionOrderCart($session);
+
+            $addItem = new Cart();
+            $addItem->setSession($session);
+            $addItem->setProductName($productItem->getName());
+            $addItem->setProductId($productItem->getId());
+            $addItem->setQtd($qtd);
+            $addItem->setPrice($request->get('total-price-item'));
+            $addItem->setImage($productItem->getImage());
+            $addItem->setType('multiple');
+            $addItem->setComment($commentitem);
+            $addItem->setOrderCartId($orderCart['id']);
+
+            $doctrine->getManager()->persist($addItem);
+            $doctrine->getManager()->flush();
+
+            $addcartMultiple = new GridCart();
+            $addcartMultiple->setIdorder($addItem->getId());
+            $addcartMultiple->setName($getitem->getItemname());
+            $addcartMultiple->setPrice($getitem->getItemprice());
+            $addcartMultiple->setIdZoneSoft($getitem->getZonesoftcode());
+
+            $doctrine->getManager()->persist($addcartMultiple);
+            $doctrine->getManager()->flush();
+
+            $itemPrice = 0;
+
+            $getSize = $doctrine->getRepository(GridCart::class)->findOneBy(array('idorder' => $addItem->getId()));
+
+            $priceSize = $getSize->getPrice();
+            $getExtras = $doctrine->getRepository(Ordercartextras::class)->findBy(array('idorder' => $addItem->getId()));
+
+            foreach ($getExtras as $price) {
+                $itemPrice = $itemPrice + $price->getPrice();
+            };
+
+            $totalItemPrice = ($priceSize + $itemPrice);
+
+
+        } else {
+
+            $commentitem = $request->get('comment-item');
+            $qtd = $request->get('qtd-to-add');
+
+            $productItem = $doctrine->getRepository(Products::class)->find($request->get('itemId'));
+
+            $session = $this->sessionService->checkSession();
+
+            $orderCart = $this->orderCartService->checkSessionOrderCart($session);
+
+            $addItem = new Cart();
+
+            $addItem->setSession($session);
+            $addItem->setProductName($productItem->getName());
+            $addItem->setProductId($productItem->getId());
+            $addItem->setQtd($qtd);
+            $addItem->setPrice($request->get('total-price-item'));
+            $addItem->setImage($productItem->getImage());
+            $addItem->setType('single');
+            $addItem->setComment($commentitem);
+            $addItem->setOrderCartId($orderCart['id']);
+
+            $doctrine->getManager()->persist($addItem);
+            $doctrine->getManager()->flush();
+
+            $itemPrice = $productItem->getPrice();
+
+            $getExtras = $doctrine->getRepository(Ordercartextras::class)->findBy(array('idorder' => $addItem->getId()));
+
+            if (!empty($getExtras)) {
+                foreach ($getExtras as $price) {
+                    $totalItemPrice += (float)$itemPrice + (float)$price->getPrice();
+                };
+            } else {
+                $totalItemPrice = $productItem->getPrice();
+            }
+
+        }
+
+        $extras = $request->get('extras');
+
+        if ($extras != null) {
+            foreach ($extras as $value) {
+                $addItemExtras = new Ordercartextras();
+                $addItemExtras->setIdorder($addItem->getId());
+                $getextrasList = $doctrine->getRepository(Foodadicionalitems::class)->find($value);
+                $addItemExtras->setName($getextrasList->getName());
+                $addItemExtras->setPrice($getextrasList->getPrice());
+                $addItemExtras->setQtd('1');
+                $addItemExtras->setIdadicional($getextrasList->getIdadicional());
+                $doctrine->getManager()->persist($addItemExtras);
+                $doctrine->getManager()->flush();
+            }
+        }
+
+        $setPriceItem = $doctrine->getRepository(Cart::class)->find($addItem->getId());
+        $qtdUpdate = $setPriceItem->getQtd();
+//        $setPriceItem->setPrice((float)$totalItemPrice * (float)$qtdUpdate);
+        $doctrine->getManager()->persist($setPriceItem);
+        $doctrine->getManager()->flush();
+
+        return new Response();
+
+    }
 
 
     /**
@@ -118,6 +568,62 @@ class OrderingController extends AbstractController
 
         return new JsonResponse();
     }
+
+    /**
+     * @Route("/ordering-save-guest-address", name="app_ordering_save_guest_address")
+     */
+    public function saveGuestAddress(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $street = $request->get('Gstreet');
+        $city = $request->get('Gcity');
+        $postalcode = $request->get('Gpostal');
+        $referencePoint = $request->get('GreferencePoint');
+        $lantitude = $request->get('Gltd');
+        $longitude = $request->get('Glng');
+
+        $session = $this->sessionService->checkSession();
+
+        $getcontact = $doctrine->getRepository(Guestcontact::class)->findOneBy(array('session' => $session));
+
+        $checkAddress = $doctrine->getRepository(Guestcontactaddress::class)->findOneBy(array('session' => $session));
+
+        if ($checkAddress == null) {
+
+            $addAddress = new Guestcontactaddress();
+            $addAddress->setSession($session);
+            $addAddress->setStreet($street);
+            $addAddress->setCity($city);
+            $addAddress->setIdcontact($getcontact->getId());
+            $addAddress->setPostalcode($postalcode);
+            $addAddress->setReferencecode($referencePoint);
+            $addAddress->setLantitude($lantitude);
+            $addAddress->setLongitude($longitude);
+
+            $doctrine->getManager()->persist($addAddress);
+            $doctrine->getManager()->flush();
+
+        } else {
+
+
+            $checkAddress->setSession($session);
+            $checkAddress->setStreet($street);
+            $checkAddress->setCity($city);
+            $checkAddress->setIdcontact($getcontact->getId());
+            $checkAddress->setPostalcode($postalcode);
+            $checkAddress->setReferencecode($referencePoint);
+            $checkAddress->setLantitude($lantitude);
+            $checkAddress->setLongitude($longitude);
+
+            $doctrine->getManager()->persist($checkAddress);
+            $doctrine->getManager()->flush();
+
+        }
+
+
+        return new JsonResponse();
+
+    }
+
 
     /**
      * @Route("/create_order", name="/create_order")
@@ -306,39 +812,40 @@ class OrderingController extends AbstractController
                 $info = new \stdClass();
                 $company = new \stdClass();
 
-//                $info->entity = $multibancoResponse->multibanco->entity;
-//                $info->reference = $multibancoResponse->multibanco->reference;
-//                $info->amount = $multibancoResponse->amount;
+                $info->entity = $multibancoResponse['entity'];
+                $info->reference = $multibancoResponse['reference'];
+                $info->amount = bcmul($amount, 100);
 
-//                $company->phone = $companyInfo->getPhone1();
-//                $company->email = $companyInfo->getEmailusername();
-//
-//                $multiBancoInfo->info = $info;
-//                $multiBancoInfo->company = $company;
-//
+                $company->phone = $companyInfo->getPhone1();
+                $company->email = $companyInfo->getEmailusername();
+
+                $multiBancoInfo->info = $info;
+                $multiBancoInfo->company = $company;
+
                 $multiBanco = new MultibancoPayment();
                 $multiBanco->setTotal($amount);
-                $multiBanco->setSource($multibancoResponse->id);
+                $multiBanco->setSource($multibancoResponse['id']);
                 $multiBanco->setPaymentId($payment->getId());
+                $multiBanco->setEntity($multibancoResponse['entity']);
+                $multiBanco->setReference($multibancoResponse['reference']);
                 $multiBanco->setStatus(1);
-                $multiBanco->setClientSecret($multibancoResponse->client_secret);
-//
+
                 $en->persist($multiBanco);
                 $en->flush();
 
-//                $email = $this->emailService;
-//
-//                $email->body($multiBancoInfo, 'multiBanco');
-//
-//                $email->setCostumerInfo([ 'destinationEmail' => $getcontactData->getEmail(), 'destinationName' => $getcontactData->getName()]);
-//                $email->setSubject("New order number: #" . $order->getId());
-//                $email->setEmailInfo();
-//                $email->saveInDataBase();
-//
-//                $body = $email->getBody();
+                $email = $this->emailService;
+
+                $email->body($multiBancoInfo, 'multiBanco');
+
+                $email->setCostumerInfo([ 'destinationEmail' => $getcontactData->getEmail(), 'destinationName' => $getcontactData->getName()]);
+                $email->setSubject("New order number: #" . $order->getId());
+                $email->setEmailInfo();
+                $email->saveInDataBase();
+
+                $body = $email->getBody();
 
                 return new JsonResponse([
-                    'clientSecret' => $multibancoResponse->client_secret,
+                    'body' => $body,
                 ]);
 
             } else {
@@ -783,23 +1290,27 @@ class OrderingController extends AbstractController
         $order->fee = number_format($fee, 2);
         $order->products = $productsArray;
         $order->comments = $comments;
+//
+//        if ($payment['multibanco']) {
+//            $multibanco = $conn->query("SELECT * FROM multibanco_payment WHERE payment_id = ".$payment['id'])->fetch();
+//
+//            $order->multibanco = $multibanco;
+//
+//            $token = '';
+//            if ($_ENV['APP_VIVAWALLET'] == "dev") {
+//                $token = $this->paymentService->getToken('dev_token');
+//
+//            } else {
+//                $token = $this->paymentService->getToken('token');
+//
+//            }
+//
+//            $stripePayment = new Stripe();
+//            $stripePayment->setApiKey($token);
+//            $stripeCheckout = Source::retrieve($multibanco['source']) ;
+//        }
 
-        if ($payment['multibanco']) {
-            $multibanco = $conn->query("SELECT * FROM multibanco_payment WHERE payment_id = ".$payment['id'])->fetch();
-
-            $order->multibanco = $multibanco;
-
-            $token = '';
-            if ($_ENV['APP_VIVAWALLET'] == "dev") {
-                $token = $this->paymentService->getToken('dev_token');
-
-            } else {
-                $token = $this->paymentService->getToken('token');
-
-            }
-
-        }
-
+        //dd($payment);
 
         $order->payment = $payment;
         $order->dev = $_ENV['APP_VIVAWALLET'];
@@ -991,26 +1502,6 @@ class OrderingController extends AbstractController
             'ordercode' => $orderCode,
             'env' => $_ENV['APP_VIVAWALLET'],
         ]);
-    }
-
-    /**
-     * @Route("/get_token", name="get_token")
-     */
-    public function getToken(ManagerRegistry $doctrine, Request $request): Response
-    {
-        $en = $doctrine->getManager();
-
-            $conn = $en->getConnection();
-
-            if ($_ENV['APP_VIVAWALLET'] == "dev") {
-                $token = $this->paymentService->getToken('dev_token');
-
-            } else {
-                $token = $this->paymentService->getToken('token');
-
-            }
-
-        return new JsonResponse('');
     }
 
 }
